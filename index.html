@@ -1,677 +1,142 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Canary — The Canary in the Data Mine</title>
-  <meta name="description" content="Transaction monitoring for Square merchants. Enterprise retail expertise applied to the SMB market. Connect your Square account. See where you're losing money.">
-  <link rel="canonical" href="https://canary.growdirect.io/">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Canary — Loss Prevention for Square</title>
+<meta name="description" content="Real-time fraud detection, case management, and immutable audit trails for Square merchants.">
+<link rel="canonical" href="https://canary.growdirect.io/">
+<meta property="og:title" content="Canary — Loss Prevention for Square">
+<meta property="og:description" content="Real-time fraud detection, case management, and immutable audit trails for Square merchants.">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://canary.growdirect.io/">
+<meta name="twitter:card" content="summary">
+<!-- GA4 -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-ELPTR2ZLP3"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+  gtag('config', 'G-ELPTR2ZLP3');
+</script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: 'Space Grotesk', system-ui, sans-serif;
+    background: #0D1117;
+    color: #E6EDF3;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 100vh;
+    text-align: center;
+    -webkit-font-smoothing: antialiased;
+  }
+  .splash { max-width: 480px; padding: 24px; }
+  .bird { margin-bottom: 32px; filter: drop-shadow(0 0 32px rgba(251,191,36,0.25)); }
+  h1 {
+    font-size: clamp(28px, 5vw, 40px);
+    font-weight: 700;
+    line-height: 1.15;
+    margin-bottom: 12px;
+  }
+  .sub {
+    font-size: 17px;
+    color: #8B949E;
+    line-height: 1.5;
+    margin-bottom: 36px;
+  }
+  .cta {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 16px 36px;
+    border: none;
+    border-radius: 12px;
+    background: linear-gradient(135deg, #FBBF24, #F59E0B);
+    color: #0a0a0a;
+    font-size: 17px;
+    font-weight: 700;
+    font-family: inherit;
+    text-decoration: none;
+    cursor: pointer;
+    transition: transform 0.1s, box-shadow 0.2s;
+    box-shadow: 0 0 24px rgba(251,191,36,0.15);
+  }
+  .cta:hover { transform: translateY(-1px); box-shadow: 0 0 40px rgba(251,191,36,0.25); }
+  .trust {
+    margin-top: 20px;
+    font-size: 13px;
+    color: #6B7280;
+  }
+  .byline {
+    margin-top: 48px;
+    font-size: 13px;
+    color: #30363D;
+  }
+  .byline a { color: #30363D; text-decoration: none; }
+  .byline a:hover { color: #FBBF24; }
 
-  <!-- Open Graph -->
-  <meta property="og:title" content="Canary — The Canary in the Data Mine">
-  <meta property="og:description" content="Transaction monitoring for Square merchants. Enterprise retail expertise applied to the SMB market. Connect your Square account. See where you're losing money.">
-  <meta property="og:type" content="website">
-  <meta property="og:url" content="https://canary.growdirect.io/">
-
-  <!-- Twitter Card -->
-  <meta name="twitter:card" content="summary_large_image">
-
-  <!-- Favicon -->
-  <link rel="icon" type="image/svg+xml" href="/img/canary-icon.svg">
-
-  <!-- Google Fonts -->
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
-
-  <!-- Google Analytics -->
-  <script async src="https://www.googletagmanager.com/gtag/js?id=G-ELPTR2ZLP3"></script>
-  <script>
-    window.dataLayer = window.dataLayer || [];
-    function gtag(){dataLayer.push(arguments);}
-    gtag('js', new Date());
-    gtag('config', 'G-ELPTR2ZLP3');
-  </script>
-
-  <style>
-    :root {
-      --bg-ink: #0D1117;
-      --bg-surface: #161B22;
-      --bg-card: #1C2128;
-      --border: #30363D;
-      --border-light: #21262D;
-      --gold: #FBBF24;
-      --amber: #F59E0B;
-      --gold-glow: rgba(251, 191, 36, 0.15);
-      --gold-glow-strong: rgba(251, 191, 36, 0.25);
-      --green: #059669;
-      --green-glow: rgba(5, 150, 105, 0.15);
-      --text-primary: #E6EDF3;
-      --text-secondary: #8B949E;
-      --text-muted: #6B7280;
-      --font: 'Space Grotesk', system-ui, -apple-system, sans-serif;
+  @media (prefers-reduced-motion: no-preference) {
+    @keyframes gentle-bob {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-4px); }
     }
-
-    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-    html { scroll-behavior: smooth; }
-    body {
-      font-family: var(--font);
-      background: var(--bg-ink);
-      color: var(--text-primary);
-      line-height: 1.6;
-      -webkit-font-smoothing: antialiased;
+    @keyframes beak-open {
+      0%, 40%, 100% { transform: rotate(0deg); }
+      10%, 30% { transform: rotate(-8deg); }
     }
-    a { color: var(--gold); text-decoration: none; }
-    a:hover { text-decoration: underline; }
-    .container { max-width: 720px; margin: 0 auto; padding: 0 24px; }
-    .container-wide { max-width: 960px; margin: 0 auto; padding: 0 24px; }
-    .skip-link {
-      position: absolute; left: -9999px; top: auto;
-      width: 1px; height: 1px; overflow: hidden;
+    @keyframes beak-close {
+      0%, 40%, 100% { transform: rotate(0deg); }
+      10%, 30% { transform: rotate(6deg); }
     }
-    .skip-link:focus {
-      position: fixed; top: 10px; left: 10px;
-      width: auto; height: auto;
-      padding: 8px 16px;
-      background: var(--gold); color: #0a0a0a;
-      z-index: 9999; border-radius: 4px;
+    @keyframes wave-pulse {
+      0% { opacity: 0; transform: scale(0.7); }
+      30% { opacity: 0.8; }
+      100% { opacity: 0; transform: scale(1.3); }
     }
-    :focus-visible { outline: 2px solid var(--gold); outline-offset: 2px; }
-
-    .nav {
-      display: flex; align-items: center; justify-content: space-between;
-      padding: 20px 24px; max-width: 960px; margin: 0 auto;
-    }
-    .nav-brand {
-      display: flex; align-items: center; gap: 10px;
-      font-size: 18px; font-weight: 700; color: var(--gold);
-    }
-    .nav-brand svg { flex-shrink: 0; }
-    .nav-links { display: flex; align-items: center; gap: 24px; }
-    .nav-links a {
-      color: var(--text-secondary); font-size: 14px; font-weight: 500;
-      text-decoration: none;
-    }
-    .nav-links a:hover { color: var(--gold); text-decoration: none; }
-    .btn-nav-cta {
-      padding: 8px 16px !important; border: 1px solid var(--gold) !important;
-      border-radius: 8px; color: var(--gold) !important; font-weight: 600 !important;
-    }
-    .btn-nav-cta:hover { background: rgba(251, 191, 36, 0.1); }
-    .nav-hamburger {
-      display: none; background: none; border: none; cursor: pointer;
-      flex-direction: column; gap: 5px; padding: 8px;
-    }
-    .nav-hamburger span {
-      display: block; width: 22px; height: 2px; background: var(--text-secondary);
-      transition: transform 0.2s;
-    }
-    @media (max-width: 768px) {
-      .nav-links { display: none; position: absolute; top: 64px; left: 0; right: 0;
-        flex-direction: column; background: var(--bg-surface);
-        border-bottom: 1px solid var(--border); padding: 16px 24px; gap: 16px; z-index: 100;
-      }
-      .nav-links.nav-open { display: flex; }
-      .nav-hamburger { display: flex; }
-    }
-
-    .hero { text-align: center; padding: 80px 24px 60px; }
-    @media (max-width: 600px) { .hero { padding: 48px 20px 40px; } }
-    .hero-bird { margin-bottom: 28px; filter: drop-shadow(0 0 32px var(--gold-glow-strong)); }
-    .hero h1 {
-      font-size: clamp(28px, 5vw, 42px); font-weight: 700;
-      line-height: 1.15; margin-bottom: 16px; color: var(--text-primary);
-    }
-    .hero-sub {
-      font-size: clamp(16px, 2.5vw, 19px); color: var(--text-secondary);
-      max-width: 560px; margin: 0 auto 36px; line-height: 1.5;
-    }
-    .hero-cta-group { display: flex; flex-direction: column; align-items: center; gap: 12px; }
-    .hero-trust { font-size: 13px; color: var(--text-muted); margin-top: 24px; }
-    .btn-primary {
-      display: inline-flex; align-items: center; gap: 8px;
-      padding: 16px 32px; border: none; border-radius: 12px;
-      background: linear-gradient(135deg, var(--gold), var(--amber));
-      color: #0a0a0a; font-size: 17px; font-weight: 700; font-family: var(--font);
-      cursor: pointer; transition: transform 0.1s, box-shadow 0.2s;
-      box-shadow: 0 0 24px var(--gold-glow); text-decoration: none;
-    }
-    .btn-primary:hover { transform: translateY(-1px); box-shadow: 0 0 40px var(--gold-glow-strong); text-decoration: none; }
-    .btn-primary:active { transform: scale(0.98); }
-    .btn-secondary {
-      display: inline-flex; align-items: center; gap: 6px;
-      padding: 12px 24px; border: 1px solid var(--border); border-radius: 10px;
-      background: transparent; color: var(--text-secondary);
-      font-size: 14px; font-weight: 500; font-family: var(--font);
-      cursor: pointer; transition: border-color 0.15s, color 0.15s; text-decoration: none;
-    }
-    .btn-secondary:hover { border-color: var(--gold); color: var(--gold); text-decoration: none; }
-
-    @media (prefers-reduced-motion: no-preference) {
-      @keyframes gentle-bob {
-        0%, 100% { transform: translateY(0); }
-        50% { transform: translateY(-4px); }
-      }
-      @keyframes beak-open {
-        0%, 40%, 100% { transform: rotate(0deg); }
-        10%, 30% { transform: rotate(-8deg); }
-      }
-      @keyframes beak-close {
-        0%, 40%, 100% { transform: rotate(0deg); }
-        10%, 30% { transform: rotate(6deg); }
-      }
-      @keyframes wave-pulse {
-        0% { opacity: 0; transform: scale(0.7); }
-        30% { opacity: 0.8; }
-        100% { opacity: 0; transform: scale(1.3); }
-      }
-      .hero-bird svg > g.bird-body { animation: gentle-bob 3s ease-in-out infinite; }
-      .beak-upper { animation: beak-open 2.2s ease-in-out infinite; }
-      .beak-lower { animation: beak-close 2.2s ease-in-out infinite; }
-      .sound-wave { animation: wave-pulse 2.2s ease-out infinite; }
-      .sound-wave:nth-child(2) { animation-delay: 0.15s; }
-      .sound-wave:nth-child(3) { animation-delay: 0.3s; }
-    }
-    @media (max-width: 480px) {
-      .hero-bird svg { width: 80px; height: auto; }
-      .hero-bird { filter: drop-shadow(0 0 16px var(--gold-glow)); }
-    }
-
-    .report-section { padding: 80px 24px; }
-    .report-card {
-      max-width: 480px; margin: 0 auto;
-      background: var(--bg-card); border: 1px solid var(--border);
-      border-radius: 16px; box-shadow: 0 0 40px var(--gold-glow);
-      padding: 28px; overflow: hidden;
-    }
-    .report-card-header {
-      display: flex; align-items: center; gap: 10px;
-      font-size: 13px; font-weight: 600; color: var(--text-secondary);
-      margin-bottom: 20px; padding-bottom: 16px;
-      border-bottom: 1px solid var(--border-light);
-    }
-    .report-card-header svg { flex-shrink: 0; }
-    .report-hero-num { margin-bottom: 20px; }
-    .report-hero-num .amount {
-      display: block; font-size: 48px; font-weight: 700;
-      color: var(--gold); line-height: 1;
-    }
-    .report-hero-num .label {
-      display: block; font-size: 15px; color: var(--text-secondary);
-      margin-top: 4px;
-    }
-    .report-body {
-      font-size: 14px; color: var(--text-secondary);
-      line-height: 1.6; margin-bottom: 16px;
-    }
-    .report-body strong { color: var(--text-primary); }
-    .report-action {
-      padding: 12px 16px; border-radius: 8px;
-      background: rgba(5, 150, 105, 0.1);
-      border: 1px solid rgba(5, 150, 105, 0.2);
-      font-size: 13px; color: #34D399; line-height: 1.5;
-    }
-    .report-action-label {
-      font-weight: 700; font-size: 11px; text-transform: uppercase;
-      letter-spacing: 0.04em; margin-bottom: 4px; color: #059669;
-    }
-    @media (max-width: 480px) {
-      .report-card { padding: 20px; margin: 0 -8px; border-radius: 12px; }
-    }
-
-    .detection-examples { max-width: 560px; margin: 64px auto 0; }
-    .detection-examples h2 { font-size: 22px; font-weight: 600; margin-bottom: 24px; }
-    .detection-list { display: flex; flex-direction: column; gap: 16px; }
-    .detection-item { display: flex; gap: 12px; align-items: baseline; }
-    .detection-marker {
-      width: 6px; height: 6px; background: var(--gold);
-      border-radius: 50%; flex-shrink: 0; margin-top: 8px;
-    }
-    .detection-item p { font-size: 16px; color: var(--text-secondary); line-height: 1.5; }
-
-    .credentials { padding: 80px 24px; border-top: 1px solid var(--border-light); }
-    .credentials-grid {
-      display: grid; grid-template-columns: repeat(3, 1fr);
-      gap: 32px; max-width: 800px; margin: 0 auto;
-    }
-    .credential-block h3 {
-      font-size: 16px; font-weight: 600; color: var(--gold); margin-bottom: 8px;
-    }
-    .credential-block p {
-      font-size: 14px; color: var(--text-secondary); line-height: 1.6;
-    }
-    @media (max-width: 768px) {
-      .credentials-grid { grid-template-columns: 1fr; gap: 24px; }
-    }
-
-    .platform { padding: 80px 24px; border-top: 1px solid var(--border-light); }
-    .platform h2 { font-size: 24px; font-weight: 700; margin-bottom: 32px; }
-    .platform-flow {
-      display: flex; flex-wrap: wrap; align-items: center;
-      gap: 8px; margin-bottom: 40px; font-size: 14px; color: var(--text-secondary);
-    }
-    .flow-arrow { color: var(--gold); font-weight: 700; }
-    .arch-cards {
-      display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
-      gap: 16px; margin-bottom: 32px;
-    }
-    .arch-card {
-      padding: 20px; background: var(--bg-surface);
-      border: 1px solid var(--border); border-radius: 10px;
-    }
-    .arch-card h4 { font-size: 14px; font-weight: 600; color: var(--text-primary); margin-bottom: 4px; }
-    .arch-card p { font-size: 13px; color: var(--text-secondary); }
-    .stack-tags { display: flex; flex-wrap: wrap; gap: 8px; }
-    .stack-tags span {
-      padding: 4px 12px; border: 1px solid var(--border);
-      border-radius: 6px; font-size: 12px; color: var(--text-muted);
-    }
-
-    .vision { padding: 80px 24px; border-top: 1px solid var(--border-light); }
-    .vision-block { max-width: 640px; margin: 0 auto 48px; }
-    .vision-block:last-child { margin-bottom: 0; }
-    .vision-block h3 { font-size: 18px; font-weight: 600; color: var(--text-primary); margin-bottom: 12px; }
-    .vision-block p { font-size: 15px; color: var(--text-secondary); line-height: 1.6; margin-bottom: 8px; }
-    .vision-block p:last-child { margin-bottom: 0; }
-
-    .partner-section {
-      padding: 80px 24px;
-      background: linear-gradient(180deg, var(--bg-ink) 0%, rgba(5, 150, 105, 0.05) 100%);
-    }
-    .partner-section h2 {
-      font-size: 28px; font-weight: 700; color: var(--green);
-      margin-bottom: 40px; text-align: center;
-    }
-    .partner-paths {
-      display: grid; grid-template-columns: repeat(2, 1fr);
-      gap: 32px; max-width: 720px; margin: 0 auto 48px;
-    }
-    .partner-path {
-      padding: 24px; background: var(--bg-surface);
-      border: 1px solid var(--border); border-radius: 12px;
-    }
-    .partner-path h3 { font-size: 18px; font-weight: 600; color: var(--text-primary); margin-bottom: 12px; }
-    .partner-path p { font-size: 14px; color: var(--text-secondary); line-height: 1.6; margin-bottom: 16px; }
-    .btn-partner {
-      display: inline-block; padding: 10px 20px;
-      border: 1px solid var(--green); border-radius: 8px;
-      color: var(--green); font-weight: 600; font-size: 14px;
-      text-decoration: none;
-    }
-    .btn-partner:hover { background: rgba(5, 150, 105, 0.1); text-decoration: none; }
-    .partner-section :focus-visible { outline-color: var(--green); }
-    .partner-form { max-width: 560px; margin: 0 auto; }
-    .form-row { display: grid; grid-template-columns: repeat(2, 1fr); gap: 16px; margin-bottom: 16px; }
-    .form-field { display: flex; flex-direction: column; }
-    .form-field:only-child { margin-bottom: 16px; }
-    .form-field label {
-      font-size: 13px; font-weight: 500; color: var(--text-secondary);
-      margin-bottom: 4px;
-    }
-    .form-field input,
-    .form-field textarea {
-      width: 100%; padding: 12px 14px;
-      background: var(--bg-surface); border: 1px solid var(--border);
-      border-radius: 8px; color: var(--text-primary);
-      font-family: var(--font); font-size: 15px;
-    }
-    .form-field input:focus,
-    .form-field textarea:focus { border-color: var(--green); outline: none; }
-    .form-field input::placeholder,
-    .form-field textarea::placeholder { color: var(--text-muted); }
-    .btn-submit {
-      background: linear-gradient(135deg, var(--green), #047857) !important;
-      margin-top: 16px; width: 100%;
-    }
-    .form-success {
-      display: none; padding: 16px 20px; border-radius: 10px;
-      background: rgba(5, 150, 105, 0.1);
-      border: 1px solid rgba(5, 150, 105, 0.25);
-      color: #34D399; font-size: 15px; font-weight: 600;
-      max-width: 560px; margin: 0 auto;
-    }
-    @media (max-width: 768px) {
-      .partner-paths { grid-template-columns: 1fr; }
-      .form-row { grid-template-columns: 1fr; }
-    }
-
-    .footer {
-      padding: 32px 24px; border-top: 1px solid var(--border-light);
-      text-align: center;
-    }
-    .footer-brand {
-      display: inline-flex; align-items: center; gap: 8px;
-      font-size: 14px; font-weight: 600; color: var(--text-secondary);
-      margin-bottom: 8px;
-    }
-    .footer p { font-size: 12px; color: var(--text-muted); }
-    .footer a { color: var(--text-muted); }
-    .footer a:hover { color: var(--gold); }
-  </style>
+    .bird svg > g.bird-body { animation: gentle-bob 3s ease-in-out infinite; }
+    .beak-upper { animation: beak-open 2.2s ease-in-out infinite; }
+    .beak-lower { animation: beak-close 2.2s ease-in-out infinite; }
+    .sound-wave { animation: wave-pulse 2.2s ease-out infinite; }
+    .sound-wave:nth-child(2) { animation-delay: 0.15s; }
+    .sound-wave:nth-child(3) { animation-delay: 0.3s; }
+  }
+</style>
 </head>
 <body>
-  <a href="#main" class="skip-link">Skip to content</a>
-
-  <nav class="nav" aria-label="Main navigation">
-    <div class="nav-brand">
-      <svg width="28" height="28" viewBox="0 0 130 100" fill="none">
+<div class="splash">
+  <div class="bird">
+    <svg width="120" height="100" viewBox="0 0 160 100" fill="none">
+      <g class="bird-body">
         <circle cx="42" cy="33" r="18" fill="#FBBF24"/>
         <ellipse cx="50" cy="58" rx="25" ry="19" fill="#FBBF24"/>
         <path d="M36 47 Q16 56 26 74 Q38 66 48 54 Z" fill="#F59E0B"/>
         <circle cx="48" cy="30" r="4" fill="#0D1117"/>
         <circle cx="46.5" cy="28.8" r="1.5" fill="#FBBF24"/>
-        <path d="M58 30 L73 24 L63 34 Z" fill="#E8A317"/>
-        <path d="M58 37 L71 40 L63 37 Z" fill="#D97706"/>
-        <path d="M28 66 Q12 78 18 88 Q28 80 36 72 Z" fill="#F59E0B"/>
-      </svg>
-      Canary
-    </div>
-    <div class="nav-links">
-      <a href="#how-it-works">How It Works</a>
-      <a href="#background">Background</a>
-      <a href="#partner" class="btn-nav-cta">Partner With Us</a>
-    </div>
-    <button class="nav-hamburger" aria-label="Toggle menu" aria-expanded="false">
-      <span></span><span></span><span></span>
-    </button>
-  </nav>
-
-  <main id="main">
-  <section class="hero" aria-label="Introduction">
-    <div class="hero-bird">
-      <svg width="120" height="100" viewBox="0 0 160 100" fill="none">
-        <g class="bird-body">
-          <circle cx="42" cy="33" r="18" fill="#FBBF24"/>
-          <ellipse cx="50" cy="58" rx="25" ry="19" fill="#FBBF24"/>
-          <path d="M36 47 Q16 56 26 74 Q38 66 48 54 Z" fill="#F59E0B"/>
-          <circle cx="48" cy="30" r="4" fill="#0D1117"/>
-          <circle cx="46.5" cy="28.8" r="1.5" fill="#FBBF24"/>
-          <g class="beak-upper" transform-origin="58 34">
-            <path d="M58 30 L73 24 L63 34 Z" fill="#E8A317"/>
-          </g>
-          <g class="beak-lower" transform-origin="58 36">
-            <path d="M58 37 L71 40 L63 37 Z" fill="#D97706"/>
-          </g>
-          <path d="M28 66 Q12 78 18 88 Q28 80 36 72 Z" fill="#F59E0B"/>
+        <g class="beak-upper" transform-origin="58 34">
+          <path d="M58 30 L73 24 L63 34 Z" fill="#E8A317"/>
         </g>
-        <!-- Sound waves emanating from beak -->
-        <g class="sound-waves" transform="translate(78, 28)">
-          <path class="sound-wave" d="M0 0 Q8 -6 8 0 Q8 6 0 0" fill="none" stroke="#FBBF24" stroke-width="2.5" stroke-linecap="round" opacity="0"/>
-          <path class="sound-wave" d="M6 -4 Q18 -12 18 0 Q18 12 6 4" fill="none" stroke="#F59E0B" stroke-width="2" stroke-linecap="round" opacity="0"/>
-          <path class="sound-wave" d="M12 -8 Q28 -18 28 0 Q28 18 12 8" fill="none" stroke="#059669" stroke-width="1.5" stroke-linecap="round" opacity="0"/>
+        <g class="beak-lower" transform-origin="58 36">
+          <path d="M58 37 L71 40 L63 37 Z" fill="#D97706"/>
         </g>
-      </svg>
-    </div>
-    <h1>The Canary in the Data Mine</h1>
-    <p class="hero-sub">
-      Transaction monitoring for Square merchants. Connect your account.
-      Get a weekly report showing exactly where you're losing money.
-    </p>
-    <div class="hero-cta-group">
-      <a href="#how-it-works" class="btn-primary">See How It Works</a>
-      <a href="#partner" class="btn-secondary">Partner With Us</a>
-    </div>
-    <p class="hero-trust">Built on Square APIs · Read-only access · Your data stays yours</p>
-  </section>
-  <section class="report-section" id="how-it-works" aria-label="What Canary finds">
-    <div class="container">
-      <div class="report-card">
-        <div class="report-card-header">
-          <svg width="24" height="22" viewBox="0 0 130 100" fill="none">
-            <circle cx="42" cy="33" r="18" fill="#FBBF24"/>
-            <ellipse cx="50" cy="58" rx="25" ry="19" fill="#FBBF24"/>
-            <path d="M36 47 Q16 56 26 74 Q38 66 48 54 Z" fill="#F59E0B"/>
-            <circle cx="48" cy="30" r="4" fill="#0D1117"/>
-            <circle cx="46.5" cy="28.8" r="1.5" fill="#FBBF24"/>
-            <path d="M58 30 L73 24 L63 34 Z" fill="#E8A317"/>
-            <path d="M58 37 L71 40 L63 37 Z" fill="#D97706"/>
-            <path d="M28 66 Q12 78 18 88 Q28 80 36 72 Z" fill="#F59E0B"/>
-          </svg>
-          <span>Canary Weekly Report — Mar 24-30</span>
-        </div>
-        <div class="report-hero-num">
-          <span class="amount">$437</span>
-          <span class="label">in potential losses found this week</span>
-        </div>
-        <div class="report-body">
-          <strong>Biggest driver:</strong> Your Tuesday and Thursday evening refund rate is 3.8x your store average. That pattern has been consistent for three weeks and accounts for about $280 of this week's total. The remaining $157 came from two post-sale voids on Wednesday.
-        </div>
-        <div class="report-action">
-          <div class="report-action-label">Recommended action</div>
-          Review the 6 flagged refunds with your Tuesday/Thursday closing staff.
-        </div>
-      </div>
-      <div class="detection-examples">
-        <h2>What Canary flags</h2>
-        <div class="detection-list">
-          <div class="detection-item">
-            <span class="detection-marker"></span>
-            <p>A voided sale 3 minutes after the customer left</p>
-          </div>
-          <div class="detection-item">
-            <span class="detection-marker"></span>
-            <p>A $300 payment processed at 2 AM — you close at 10</p>
-          </div>
-          <div class="detection-item">
-            <span class="detection-marker"></span>
-            <p>One employee's discount rate is 5x the store average</p>
-          </div>
-          <div class="detection-item">
-            <span class="detection-marker"></span>
-            <p>Refunds filed faster than a real return takes</p>
-          </div>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <section class="credentials" id="background" aria-label="Background">
-    <div class="container">
-      <div class="credentials-grid">
-        <div class="credential-block">
-          <h3>Enterprise retail background</h3>
-          <p>30 years. IBM 4690 POS systems, national chains, high-volume production environments. Transaction processing at scale.</p>
-        </div>
-        <div class="credential-block">
-          <h3>Big 5 process capability</h3>
-          <p>Enterprise-grade methodology and support practices, applied to the SMB market through automation.</p>
-        </div>
-        <div class="credential-block">
-          <h3>Data integrity</h3>
-          <p>If we flag something, we have the evidence. Every finding is backed by immutable, timestamped records.</p>
-        </div>
-      </div>
-    </div>
-  </section>
-  <section class="platform" aria-label="How Canary works">
-    <div class="container">
-      <h2>How Canary works</h2>
-      <div class="platform-flow">
-        <span>Connect Square</span>
-        <span class="flow-arrow">&rarr;</span>
-        <span>Transactions flow in real-time</span>
-        <span class="flow-arrow">&rarr;</span>
-        <span>Detection engine evaluates every event</span>
-        <span class="flow-arrow">&rarr;</span>
-        <span>Patterns surface as plain-language insights</span>
-        <span class="flow-arrow">&rarr;</span>
-        <span>Evidence sealed and timestamped</span>
-      </div>
-      <div class="arch-cards">
-        <div class="arch-card">
-          <h4>Square webhook ingestion</h4>
-          <p>Real-time event stream with HMAC verification</p>
-        </div>
-        <div class="arch-card">
-          <h4>Detection engine</h4>
-          <p>Configurable rules per merchant</p>
-        </div>
-        <div class="arch-card">
-          <h4>Immutable evidence store</h4>
-          <p>INSERT-only, hash-chained, trigger-enforced</p>
-        </div>
-        <div class="arch-card">
-          <h4>Case management</h4>
-          <p>Court-ready documentation</p>
-        </div>
-        <div class="arch-card">
-          <h4>AI analysis</h4>
-          <p>Pattern narrative generation</p>
-        </div>
-      </div>
-      <div class="stack-tags">
-        <span>Python</span><span>Flask</span><span>PostgreSQL</span><span>Square SDK</span><span>Docker</span>
-      </div>
-    </div>
-  </section>
-
-  <section class="vision" aria-label="Vision">
-    <div class="container">
-      <div class="vision-block">
-        <h3>The tLog problem</h3>
-        <p>IBM created the transaction log in 1986. Every POS system since uses the same model: a mutable record on a server someone controls. The log can be edited. It happens.</p>
-        <p>Canary's evidence store is different. INSERT-only. Hash-chained. Merkle roots anchored to Bitcoin. Records can't be altered after the fact.</p>
-      </div>
-      <div class="vision-block">
-        <h3>The gLog</h3>
-        <p>Canary is building the successor to the tLog — an immutable transaction record that works from one receipt to one billion.</p>
-        <p>Not blockchain for its own sake. A direct fix for a specific problem in how retail transactions have been recorded for 40 years.</p>
-      </div>
-      <div class="vision-block">
-        <h3>Open source</h3>
-        <p>The detection logic, evidence storage, and data handling will be public. Transparency is the standard. Execution is the differentiator.</p>
-      </div>
-    </div>
-  </section>
-
-  <section class="partner-section" id="partner" aria-label="Partner with us">
-    <div class="container">
-      <h2>Partner with us</h2>
-      <div class="partner-paths">
-        <div class="partner-path">
-          <h3>Merchant partner</h3>
-          <p>You run a Square operation. We need a merchant willing to connect their account, work with real data, and help refine the product. Any size. Read-only access. No commitment beyond trying it.</p>
-          <a href="#partner-form" class="btn-partner" data-source="merchant-partner">Get in touch</a>
-        </div>
-        <div class="partner-path">
-          <h3>Team / service partner</h3>
-          <p>We're building enterprise-level retail tooling for the SMB market — multi-location support, a canonical retail data model for back-office integrations, and detection at scale. Looking for people or firms who want to work in this space.</p>
-          <a href="#partner-form" class="btn-partner" data-source="team-partner">Get in touch</a>
-        </div>
-      </div>
-      <form class="partner-form" id="partner-form" action="https://formspree.io/f/xbdqlakw" method="POST">
-        <input type="hidden" name="_source" id="partnerSource" value="direct">
-        <div class="form-row">
-          <div class="form-field">
-            <label for="pname">Name</label>
-            <input type="text" id="pname" name="name" required>
-          </div>
-          <div class="form-field">
-            <label for="pemail">Email</label>
-            <input type="email" id="pemail" name="email" required>
-          </div>
-        </div>
-        <div class="form-row">
-          <div class="form-field">
-            <label for="pbusiness">Business name</label>
-            <input type="text" id="pbusiness" name="business">
-          </div>
-          <div class="form-field">
-            <label for="plocations">Number of locations</label>
-            <input type="text" id="plocations" name="locations" placeholder="Optional">
-          </div>
-        </div>
-        <div class="form-field">
-          <label for="pmessage">Message</label>
-          <textarea id="pmessage" name="message" rows="4"></textarea>
-        </div>
-        <button type="submit" class="btn-primary btn-submit">Send</button>
-      </form>
-      <div class="form-success" id="partnerFormSuccess">
-        Received. We'll be in touch.
-      </div>
-    </div>
-  </section>
-
-  </main>
-
-  <footer class="footer">
-    <div class="footer-brand">
-      <svg width="18" height="16" viewBox="0 0 130 100" fill="none">
-        <circle cx="42" cy="33" r="18" fill="#FBBF24"/>
-        <ellipse cx="50" cy="58" rx="25" ry="19" fill="#FBBF24"/>
-        <path d="M36 47 Q16 56 26 74 Q38 66 48 54 Z" fill="#F59E0B"/>
-        <circle cx="48" cy="30" r="4" fill="#0D1117"/>
-        <circle cx="46.5" cy="28.8" r="1.5" fill="#FBBF24"/>
-        <path d="M58 30 L73 24 L63 34 Z" fill="#E8A317"/>
-        <path d="M58 37 L71 40 L63 37 Z" fill="#D97706"/>
         <path d="M28 66 Q12 78 18 88 Q28 80 36 72 Z" fill="#F59E0B"/>
-      </svg>
-      Canary by GrowDirect
-    </div>
-    <p><a href="mailto:gclyle@growdirect.io">gclyle@growdirect.io</a> &middot; <a href="https://growdirect.io">growdirect.io</a></p>
-  </footer>
-
-  <script>
-    document.querySelector('.nav-hamburger').addEventListener('click', function() {
-      var nav = document.querySelector('.nav-links');
-      var expanded = this.getAttribute('aria-expanded') === 'true';
-      this.setAttribute('aria-expanded', !expanded);
-      nav.classList.toggle('nav-open');
-    });
-
-    // Partner source attribution
-    document.querySelectorAll('.btn-partner').forEach(function(btn) {
-      btn.addEventListener('click', function(e) {
-        e.preventDefault();
-        document.getElementById('partnerSource').value = this.dataset.source;
-        document.getElementById('partner-form').scrollIntoView({ behavior: 'smooth' });
-      });
-    });
-
-    // URL param source attribution
-    var urlSource = new URLSearchParams(window.location.search).get('from');
-    if (urlSource) {
-      document.getElementById('partnerSource').value = urlSource;
-    }
-
-    // Form submission via AJAX
-    document.getElementById('partner-form').addEventListener('submit', function(e) {
-      e.preventDefault();
-      var form = this;
-      var data = new FormData(form);
-      fetch(form.action, {
-        method: 'POST',
-        body: data,
-        headers: { 'Accept': 'application/json' }
-      }).then(function(response) {
-        if (response.ok) {
-          form.style.display = 'none';
-          document.getElementById('partnerFormSuccess').style.display = 'block';
-          gtag('event', 'partner_form_submit', { source: data.get('_source') });
-        } else {
-          window.location.href = 'mailto:gclyle@growdirect.io?subject=Canary%20Partnership&body='
-            + encodeURIComponent('Name: ' + data.get('name') + '\nEmail: ' + data.get('email')
-            + '\nBusiness: ' + data.get('business') + '\nMessage: ' + data.get('message'));
-        }
-      }).catch(function() {
-        window.location.href = 'mailto:gclyle@growdirect.io?subject=Canary%20Partnership';
-      });
-    });
-
-    // Section scroll tracking via Intersection Observer
-    var trackedSections = {};
-    var observer = new IntersectionObserver(function(entries) {
-      entries.forEach(function(entry) {
-        if (entry.isIntersecting && !trackedSections[entry.target.id]) {
-          trackedSections[entry.target.id] = true;
-          gtag('event', 'section_scroll', { section: entry.target.id });
-        }
-      });
-    }, { threshold: 0.5 });
-    document.querySelectorAll('section[id]').forEach(function(section) {
-      observer.observe(section);
-    });
-  </script>
+      </g>
+      <g class="sound-waves" transform="translate(78, 28)">
+        <path class="sound-wave" d="M0 0 Q8 -6 8 0 Q8 6 0 0" fill="none" stroke="#FBBF24" stroke-width="2.5" stroke-linecap="round" opacity="0"/>
+        <path class="sound-wave" d="M6 -4 Q18 -12 18 0 Q18 12 6 4" fill="none" stroke="#F59E0B" stroke-width="2" stroke-linecap="round" opacity="0"/>
+        <path class="sound-wave" d="M12 -8 Q28 -18 28 0 Q28 18 12 8" fill="none" stroke="#059669" stroke-width="1.5" stroke-linecap="round" opacity="0"/>
+      </g>
+    </svg>
+  </div>
+  <h1>Canary</h1>
+  <p class="sub">Loss prevention for Square merchants. Real-time detection, case management, and immutable audit trails.</p>
+  <a href="https://growdirect.io/canary/" class="cta">See How It Works</a>
+  <p class="trust">Built on Square APIs · 37 detection rules live</p>
+  <div class="byline"><a href="https://growdirect.io">GrowDirect</a></div>
+</div>
 </body>
 </html>
