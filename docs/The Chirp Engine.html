@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>The Chirp Engine — Canary Technical Library</title>
+<meta name="description" content="Detection at the edge — Canary LP technical documentation.">
+<meta name="robots" content="noindex, nofollow">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@300;400;500;600&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../css/canary-docs.css">
+</head>
+<body>
+<header class="site-header">
+  <a class="site-logo" href="/">
+    <img src="/img/canary-icon-512.png" alt="" width="28" height="28">
+    <span>Canary <span class="site-logo-dim">/ Technical Library</span></span>
+  </a>
+  <a class="demo-cta" href="https://dev.growdirect.app" target="_blank" rel="noopener">Launch Demo →</a>
+</header>
+<nav class="doc-nav"><a href="The CRDM.html">The CRDM</a><a href="Platform Architecture.html">Platform Architecture</a><a href="The Chirp Engine.html" class="active">The Chirp Engine</a><a href="El Jeffe Protocol.html">El Jeffe Protocol</a><a href="How We Build.html">How We Build</a><a href="/roadshow/">Technical Roadshow</a></nav>
+<main class="doc-main">
+  <div class="doc-header">
+    <div class="doc-kicker">Canary LP · Technical Library</div>
+    <h1 class="doc-title">The Chirp Engine</h1>
+    <p class="doc-subtitle">Detection at the edge</p>
+  </div>
+  <article class="doc-body">
+<em>Spine: ACT 3C | Manifesto: III.3</em></p>
+<p><strong>Status:</strong> 📝 DRAFT — Extracted from Manifesto III.3 + Strategic Thesis v1.0. Awaiting Jeffe review.</p>
+
+<h2>The Interface Between Detection and Action</h2>
+<p>Loss prevention has always had a last-mile problem. Enterprise systems detect anomalies. They generate reports. They populate dashboards. Then they wait — for someone with the training, the time, and the analytical fluency to interpret the data and decide what to do. For a single-location merchant running a restaurant or retail shop, that person does not exist. There is no loss prevention department. There is no data analyst. There is the owner, and there are the eighteen other things the owner is already doing.</p>
+<p>The Chirp solves the last mile.</p>
+<p>A Chirp is a plain-language alert delivered to the merchant's phone. It does not say "anomaly detected." It does not present a chart. It says: <em>Your drawer was short $18 on the morning shift. Maria Santos was on register. Want to look into it?</em></p>
+<p>Concrete. Specific. Actionable. The merchant knows what happened, who was involved, and what to do about it — in a single sentence.</p>
+<h2>One Tap to Resolution</h2>
+<p>One tap on the Chirp launches a guided investigation wizard. Six steps. Under eight minutes from alert to documented resolution. The wizard walks the merchant through the entire process:</p>
+<ul class="wc-list"><li>Acknowledge the alert</li><li>Review the detection details</li><li>Capture the merchant's response</li><li>Document evidence or notes</li><li>Record the outcome</li><li>Close the investigation</li></ul>
+<p>Every action is timestamped. Every step writes to the Fox evidence chain — INSERT-only, hash-chained, and anchored to the Bitcoin time chain via Ordinal inscription. The merchant finishes the wizard. The investigation is documented. The evidence is permanent and tamper-proof. No legal pad. No memory. No "I'll deal with it later."</p>
+<p>The merchant does not need training. They do not need to understand forensic accounting. They follow the wizard and produce an evidence-grade record that would hold up in any employment dispute, insurance claim, or legal proceeding.</p>
+<h2>The Product Is the Analyst</h2>
+<p>Enterprise loss prevention requires specialists to interpret data — analysts who translate statistical outputs into business actions. That model works at scale, where the cost of a dedicated LP team is a rounding error on revenue. It does not work for the 3.7 million Square merchants who operate at thin margins and cannot justify a single additional headcount for shrinkage.</p>
+<p>Canary's Chirps use AI to collapse the interpretation layer. The detection engine evaluates 26 rules across eight fraud categories — payment anomalies, cash drawer variances, refund patterns, void abuse, timecard irregularities, gift card manipulation, discount abuse, and loyalty fraud. When a rule fires, the system does not output a statistical alert. It translates the detection event into plain English, identifies the who, what, when, and where, and delivers a Chirp that requires no interpretation.</p>
+<p>The merchant does not need to be a data analyst. The product is the analyst.</p>
+<h2>Connect, Toggle, Watch</h2>
+<p>Onboarding to Chirps is frictionless by design. The merchant connects their Square account via OAuth — a single authorization flow. They toggle on the alert categories they care about. Canary starts watching.</p>
+<p>There is no BI tool to learn. No reports to configure. No dashboards to build. No IT department to call. The detection engine runs continuously against the merchant's live transaction data, evaluating every webhook event against the active rule set. When something fires, a Chirp appears on the merchant's phone. When nothing fires, the system is silent.</p>
+<p>This is not a monitoring platform the merchant logs into. It is a guardian that speaks up only when something needs attention.</p>
+<h2>What Sits Underneath</h2>
+<p>The Chirp is the surface. Underneath it sits the Canary Retail Data Model — a three-database PostgreSQL architecture that normalizes Square's raw API events into a canonical retail data warehouse. Every transaction, every refund, every timecard punch, every cash drawer event flows through the Triple Subscriber Pipeline: hashed and sealed for immutability, parsed and routed for detection, batched and inscribed for permanent anchoring.</p>
+<p>The detection engine is the first application on this foundation. But the CRDM enables everything that comes after: demand forecasting, labor optimization, inventory management, vendor analysis, menu engineering, seasonal trend detection. The merchant signs up for loss prevention alerts. They stay for the data platform.</p>
+<p>The Chirp is how they walk in the door.</p>
+
+<p><strong>Source:</strong> Strategic Thesis v1.0 + Manifesto III.3
+<strong>Manifesto tag:</strong> `Manifesto: III.3`
+<strong>Filled:</strong> February 27, 2026 — ALX (B-059 Phase 1)
+</p>
+  </article>
+</main>
+<footer class="site-footer">
+  <div class="footer-inner">
+    <div>&copy; 2026 GrowDirect DAO LLC · Canary LP</div>
+    <div class="footer-links">
+      <a href="/">canary.growdirect.io</a>
+      <a href="https://dev.growdirect.app" target="_blank" rel="noopener">Live Demo</a>
+    </div>
+  </div>
+</footer>
+</body>
+</html>
