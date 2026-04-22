@@ -1,0 +1,789 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>The Mermaid Atlas — Canary Technical Library</title>
+<meta name="description" content="52+ architecture diagrams — pipeline, lifecycle, orchestration, infrastructure, protocol. Every Canary subsystem, visualized.">
+<meta name="robots" content="noindex, nofollow">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@300;400;500;600&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../css/canary-docs.css">
+<style>
+.atlas-hero {
+  max-width: 960px; margin: 0 auto;
+  padding: 72px clamp(20px, 5vw, 48px) 32px;
+  text-align: center;
+}
+.atlas-hero .kicker {
+  font-family: 'Space Mono', monospace;
+  font-size: 11px; color: var(--canary);
+  letter-spacing: 0.14em; text-transform: uppercase;
+  margin-bottom: 18px;
+}
+.atlas-hero h1 {
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: clamp(36px, 6vw, 64px);
+  line-height: 1.05; font-weight: 700;
+  letter-spacing: -0.02em;
+  margin-bottom: 16px; color: var(--text);
+}
+.atlas-hero p {
+  font-size: clamp(16px, 2vw, 19px);
+  color: var(--text-2); line-height: 1.6;
+  max-width: 720px; margin: 0 auto;
+}
+.atlas-toc {
+  max-width: 1200px; margin: 24px auto 0;
+  padding: 0 clamp(20px, 5vw, 48px);
+  display: flex; gap: 8px; flex-wrap: wrap;
+  justify-content: center;
+}
+.toc-chip {
+  font-family: 'Space Mono', monospace;
+  font-size: 11px;
+  color: var(--text-3); background: var(--card);
+  padding: 8px 14px;
+  border-radius: 20px; border: 1px solid var(--border);
+  text-decoration: none;
+  letter-spacing: 0.04em;
+  transition: color 0.2s, border-color 0.2s;
+}
+.toc-chip span {
+  display: inline-block;
+  margin-left: 6px;
+  color: var(--canary);
+  font-weight: 700;
+}
+.toc-chip:hover { color: var(--text); border-color: var(--border-hover); }
+.atlas-section {
+  max-width: 1400px; margin: 0 auto;
+  padding: 56px clamp(20px, 5vw, 48px) 24px;
+}
+.atlas-section-head {
+  margin-bottom: 28px; padding-bottom: 20px;
+  border-bottom: 1px solid var(--border);
+}
+.atlas-cat-label {
+  font-family: 'Space Mono', monospace;
+  font-size: 11px; color: var(--canary);
+  letter-spacing: 0.12em; text-transform: uppercase;
+  margin-bottom: 10px;
+}
+.atlas-section-head h2 {
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 28px; font-weight: 600;
+  letter-spacing: -0.01em;
+  margin-bottom: 8px;
+  color: var(--text);
+}
+.atlas-section-head p { color: var(--text-2); font-size: 15px; }
+.atlas-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 20px;
+}
+.atlas-card {
+  margin: 0;
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  overflow: hidden;
+  cursor: pointer;
+  transition: border-color 0.2s, transform 0.2s;
+  display: flex; flex-direction: column;
+}
+.atlas-card:hover {
+  border-color: var(--border-hover);
+  transform: translateY(-2px);
+}
+.atlas-thumb {
+  background: #fff;
+  aspect-ratio: 4 / 3;
+  display: flex; align-items: center; justify-content: center;
+  overflow: hidden;
+  padding: 8px;
+}
+.atlas-thumb img {
+  max-width: 100%; max-height: 100%;
+  display: block;
+  object-fit: contain;
+}
+.atlas-thumb .missing {
+  color: #888; font-family: 'Space Mono', monospace;
+  font-size: 12px; text-align: center;
+}
+.atlas-card figcaption {
+  padding: 14px 16px 18px;
+  display: flex; flex-direction: column; gap: 4px;
+}
+.atlas-fignum {
+  font-family: 'Space Mono', monospace;
+  font-size: 10px; color: var(--canary);
+  letter-spacing: 0.12em; text-transform: uppercase;
+}
+.atlas-figtitle {
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 15px; font-weight: 600;
+  color: var(--text); line-height: 1.35;
+}
+.atlas-figtype {
+  font-size: 12px; color: var(--text-4);
+  text-transform: lowercase;
+  font-family: 'Space Mono', monospace;
+  letter-spacing: 0.04em;
+}
+
+/* Modal */
+.atlas-modal {
+  display: none;
+  position: fixed; inset: 0;
+  background: rgba(6, 6, 8, 0.94);
+  z-index: 999;
+  padding: 40px 20px;
+  overflow: auto;
+}
+.atlas-modal.open { display: flex; flex-direction: column; align-items: center; }
+.atlas-modal-head {
+  width: 100%; max-width: 1400px;
+  display: flex; justify-content: space-between; align-items: center;
+  margin-bottom: 20px;
+  padding: 0 8px;
+}
+.atlas-modal-meta {
+  font-family: 'Space Mono', monospace;
+  color: var(--canary); font-size: 12px;
+  letter-spacing: 0.1em;
+}
+.atlas-modal-meta strong {
+  color: var(--text); font-weight: 600;
+  margin-left: 14px; text-transform: none;
+  letter-spacing: 0;
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 16px;
+}
+.atlas-modal-close {
+  background: transparent; border: 1px solid var(--border);
+  color: var(--text); cursor: pointer;
+  padding: 8px 16px; border-radius: 4px;
+  font-family: 'Space Mono', monospace;
+  font-size: 11px; letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+.atlas-modal-close:hover { border-color: var(--canary); color: var(--canary); }
+.atlas-modal-body {
+  width: 100%; max-width: 1400px;
+  background: #fff; border-radius: 8px;
+  padding: 24px; box-sizing: border-box;
+  display: flex; align-items: center; justify-content: center;
+}
+.atlas-modal-body img {
+  max-width: 100%; height: auto; display: block;
+}
+</style>
+</head>
+<body>
+<header class="site-header">
+  <a class="site-logo" href="/">
+    <img src="/img/canary-icon-512.png" alt="" width="28" height="28">
+    <span>Canary <span class="site-logo-dim">/ Mermaid Atlas</span></span>
+  </a>
+  <a class="demo-cta" href="/docs/">Tech Library →</a>
+</header>
+
+<section class="atlas-hero">
+  <div class="kicker">Canary LP · Mermaid Atlas</div>
+  <h1>Every subsystem, visualized.</h1>
+  <p>52 architecture diagrams across eight categories — pipeline, lifecycle, orchestration, infrastructure, decision, protocol, journey, and the legacy research manifesto. Click any figure to expand.</p>
+  <nav class="atlas-toc">
+<a href="#cat-A" class="toc-chip">Legacy <span>14</span></a>
+<a href="#cat-O" class="toc-chip">Orchestration & MCP <span>5</span></a>
+<a href="#cat-L" class="toc-chip">Data Lifecycle <span>5</span></a>
+<a href="#cat-P" class="toc-chip">Pipeline Internals <span>8</span></a>
+<a href="#cat-D" class="toc-chip">Decision Trees <span>5</span></a>
+<a href="#cat-I" class="toc-chip">Infrastructure <span>5</span></a>
+<a href="#cat-J" class="toc-chip">User Journey <span>5</span></a>
+<a href="#cat-R" class="toc-chip">Protocol & Bitcoin <span>5</span></a>
+  </nav>
+</section>
+
+
+<section class="atlas-section" id="cat-A">
+  <div class="atlas-section-head">
+    <div class="atlas-cat-label">Category A · 14 figures</div>
+    <h2>Legacy</h2>
+    <p>Investor-facing diagrams from the Research Manifesto — architecture, economics, governance.</p>
+  </div>
+  <div class="atlas-grid">
+
+<figure class="atlas-card" data-figid="A-01" onclick="openModal('svg/fig-a01-six-node-architecture.svg', 'A-01', 'Six-Node Architecture')">
+  <div class="atlas-thumb"><img src="svg/fig-a01-six-node-architecture.svg" alt="Six-Node Architecture" loading="lazy"></div>
+  <figcaption>
+    <span class="atlas-fignum">Fig. A-01</span>
+    <span class="atlas-figtitle">Six-Node Architecture</span>
+    <span class="atlas-figtype">flowchart</span>
+  </figcaption>
+</figure>
+
+<figure class="atlas-card" data-figid="A-02" onclick="openModal('svg/fig-a02-triple-subscriber-pipeline.svg', 'A-02', 'Triple Subscriber Pipeline')">
+  <div class="atlas-thumb"><img src="svg/fig-a02-triple-subscriber-pipeline.svg" alt="Triple Subscriber Pipeline" loading="lazy"></div>
+  <figcaption>
+    <span class="atlas-fignum">Fig. A-02</span>
+    <span class="atlas-figtitle">Triple Subscriber Pipeline</span>
+    <span class="atlas-figtype">flowchart</span>
+  </figcaption>
+</figure>
+
+<figure class="atlas-card" data-figid="A-03" onclick="openModal('svg/fig-a03-protocol-pipe-end-to-end.svg', 'A-03', 'The Protocol Pipe (End-to-End)')">
+  <div class="atlas-thumb"><img src="svg/fig-a03-protocol-pipe-end-to-end.svg" alt="The Protocol Pipe (End-to-End)" loading="lazy"></div>
+  <figcaption>
+    <span class="atlas-fignum">Fig. A-03</span>
+    <span class="atlas-figtitle">The Protocol Pipe (End-to-End)</span>
+    <span class="atlas-figtype">sequence</span>
+  </figcaption>
+</figure>
+
+<figure class="atlas-card" data-figid="A-04" onclick="openModal('svg/fig-a04-three-layer-protocol-stack.svg', 'A-04', 'Three-Layer Protocol Stack')">
+  <div class="atlas-thumb"><img src="svg/fig-a04-three-layer-protocol-stack.svg" alt="Three-Layer Protocol Stack" loading="lazy"></div>
+  <figcaption>
+    <span class="atlas-fignum">Fig. A-04</span>
+    <span class="atlas-figtitle">Three-Layer Protocol Stack</span>
+    <span class="atlas-figtype">flowchart</span>
+  </figcaption>
+</figure>
+
+<figure class="atlas-card" data-figid="A-05" onclick="openModal('svg/fig-a05-hybrid-chain-architecture.svg', 'A-05', 'Hybrid Chain Architecture')">
+  <div class="atlas-thumb"><img src="svg/fig-a05-hybrid-chain-architecture.svg" alt="Hybrid Chain Architecture" loading="lazy"></div>
+  <figcaption>
+    <span class="atlas-fignum">Fig. A-05</span>
+    <span class="atlas-figtitle">Hybrid Chain Architecture</span>
+    <span class="atlas-figtype">flowchart</span>
+  </figcaption>
+</figure>
+
+<figure class="atlas-card" data-figid="A-06" onclick="openModal('svg/fig-a06-the-economic-loop.svg', 'A-06', 'The Economic Loop')">
+  <div class="atlas-thumb"><img src="svg/fig-a06-the-economic-loop.svg" alt="The Economic Loop" loading="lazy"></div>
+  <figcaption>
+    <span class="atlas-fignum">Fig. A-06</span>
+    <span class="atlas-figtitle">The Economic Loop</span>
+    <span class="atlas-figtype">flowchart</span>
+  </figcaption>
+</figure>
+
+<figure class="atlas-card" data-figid="A-07" onclick="openModal('svg/fig-a07-revenue-layer-stack.svg', 'A-07', 'Revenue Layer Stack')">
+  <div class="atlas-thumb"><img src="svg/fig-a07-revenue-layer-stack.svg" alt="Revenue Layer Stack" loading="lazy"></div>
+  <figcaption>
+    <span class="atlas-fignum">Fig. A-07</span>
+    <span class="atlas-figtitle">Revenue Layer Stack</span>
+    <span class="atlas-figtype">flowchart</span>
+  </figcaption>
+</figure>
+
+<figure class="atlas-card" data-figid="A-08" onclick="openModal('svg/fig-a08-tlog-to-glog-evolution.svg', 'A-08', 'The gLog: tLog to gLog Evolution')">
+  <div class="atlas-thumb"><img src="svg/fig-a08-tlog-to-glog-evolution.svg" alt="The gLog: tLog to gLog Evolution" loading="lazy"></div>
+  <figcaption>
+    <span class="atlas-fignum">Fig. A-08</span>
+    <span class="atlas-figtitle">The gLog: tLog to gLog Evolution</span>
+    <span class="atlas-figtype">flowchart</span>
+  </figcaption>
+</figure>
+
+<figure class="atlas-card" data-figid="A-09" onclick="openModal('svg/fig-a09-dao-governance-phases.svg', 'A-09', 'DAO Governance Phases')">
+  <div class="atlas-thumb"><img src="svg/fig-a09-dao-governance-phases.svg" alt="DAO Governance Phases" loading="lazy"></div>
+  <figcaption>
+    <span class="atlas-fignum">Fig. A-09</span>
+    <span class="atlas-figtitle">DAO Governance Phases</span>
+    <span class="atlas-figtype">flowchart</span>
+  </figcaption>
+</figure>
+
+<figure class="atlas-card" data-figid="A-10" onclick="openModal('svg/fig-a10-l402-validation-gate-flow.svg', 'A-10', 'L402 Validation Gate Flow')">
+  <div class="atlas-thumb"><img src="svg/fig-a10-l402-validation-gate-flow.svg" alt="L402 Validation Gate Flow" loading="lazy"></div>
+  <figcaption>
+    <span class="atlas-fignum">Fig. A-10</span>
+    <span class="atlas-figtitle">L402 Validation Gate Flow</span>
+    <span class="atlas-figtype">sequence</span>
+  </figcaption>
+</figure>
+
+<figure class="atlas-card" data-figid="A-11" onclick="openModal('svg/fig-a11-the-fee-window.svg', 'A-11', 'The Fee Window')">
+  <div class="atlas-thumb"><img src="svg/fig-a11-the-fee-window.svg" alt="The Fee Window" loading="lazy"></div>
+  <figcaption>
+    <span class="atlas-fignum">Fig. A-11</span>
+    <span class="atlas-figtitle">The Fee Window</span>
+    <span class="atlas-figtype">flowchart</span>
+  </figcaption>
+</figure>
+
+<figure class="atlas-card" data-figid="A-12" onclick="openModal('svg/fig-a12-competitive-positioning.svg', 'A-12', 'Competitive Positioning')">
+  <div class="atlas-thumb"><img src="svg/fig-a12-competitive-positioning.svg" alt="Competitive Positioning" loading="lazy"></div>
+  <figcaption>
+    <span class="atlas-fignum">Fig. A-12</span>
+    <span class="atlas-figtitle">Competitive Positioning</span>
+    <span class="atlas-figtype">quadrantChart</span>
+  </figcaption>
+</figure>
+
+<figure class="atlas-card" data-figid="A-13" onclick="openModal('svg/fig-a13-dao-treasury-allocation.svg', 'A-13', 'DAO Treasury Allocation at Maturity')">
+  <div class="atlas-thumb"><img src="svg/fig-a13-dao-treasury-allocation.svg" alt="DAO Treasury Allocation at Maturity" loading="lazy"></div>
+  <figcaption>
+    <span class="atlas-fignum">Fig. A-13</span>
+    <span class="atlas-figtitle">DAO Treasury Allocation at Maturity</span>
+    <span class="atlas-figtype">pie</span>
+  </figcaption>
+</figure>
+
+<figure class="atlas-card" data-figid="A-14" onclick="openModal('svg/fig-a14-appendix-c-status-map.svg', 'A-14', 'Appendix C Status Map')">
+  <div class="atlas-thumb"><img src="svg/fig-a14-appendix-c-status-map.svg" alt="Appendix C Status Map" loading="lazy"></div>
+  <figcaption>
+    <span class="atlas-fignum">Fig. A-14</span>
+    <span class="atlas-figtitle">Appendix C Status Map</span>
+    <span class="atlas-figtype">flowchart</span>
+  </figcaption>
+</figure>
+  </div>
+</section>
+<section class="atlas-section" id="cat-O">
+  <div class="atlas-section-head">
+    <div class="atlas-cat-label">Category O · 5 figures</div>
+    <h2>Orchestration & MCP</h2>
+    <p>How the 16 canonical services and MCP tools compose into agent workflows.</p>
+  </div>
+  <div class="atlas-grid">
+
+<figure class="atlas-card" data-figid="O-01" onclick="openModal('svg/fig-o01-service-mesh.svg', 'O-01', 'Canary Service Mesh')">
+  <div class="atlas-thumb"><img src="svg/fig-o01-service-mesh.svg" alt="Canary Service Mesh" loading="lazy"></div>
+  <figcaption>
+    <span class="atlas-fignum">Fig. O-01</span>
+    <span class="atlas-figtitle">Canary Service Mesh</span>
+    <span class="atlas-figtype">flowchart</span>
+  </figcaption>
+</figure>
+
+<figure class="atlas-card" data-figid="O-02" onclick="openModal('svg/fig-o02-mcp-tool-composition.svg', 'O-02', 'MCP Tool Composition')">
+  <div class="atlas-thumb"><img src="svg/fig-o02-mcp-tool-composition.svg" alt="MCP Tool Composition" loading="lazy"></div>
+  <figcaption>
+    <span class="atlas-fignum">Fig. O-02</span>
+    <span class="atlas-figtitle">MCP Tool Composition</span>
+    <span class="atlas-figtype">flowchart</span>
+  </figcaption>
+</figure>
+
+<figure class="atlas-card" data-figid="O-03" onclick="openModal('svg/fig-o03-agent-handoff.svg', 'O-03', 'Agent-to-Agent Handoff')">
+  <div class="atlas-thumb"><img src="svg/fig-o03-agent-handoff.svg" alt="Agent-to-Agent Handoff" loading="lazy"></div>
+  <figcaption>
+    <span class="atlas-fignum">Fig. O-03</span>
+    <span class="atlas-figtitle">Agent-to-Agent Handoff</span>
+    <span class="atlas-figtype">sequence</span>
+  </figcaption>
+</figure>
+
+<figure class="atlas-card" data-figid="O-04" onclick="openModal('svg/fig-o04-webhook-to-insight.svg', 'O-04', 'Webhook-to-Insight Pipeline')">
+  <div class="atlas-thumb"><img src="svg/fig-o04-webhook-to-insight.svg" alt="Webhook-to-Insight Pipeline" loading="lazy"></div>
+  <figcaption>
+    <span class="atlas-fignum">Fig. O-04</span>
+    <span class="atlas-figtitle">Webhook-to-Insight Pipeline</span>
+    <span class="atlas-figtype">flowchart</span>
+  </figcaption>
+</figure>
+
+<figure class="atlas-card" data-figid="O-05" onclick="openModal('svg/fig-o05-session-lifecycle.svg', 'O-05', 'Session Lifecycle')">
+  <div class="atlas-thumb"><img src="svg/fig-o05-session-lifecycle.svg" alt="Session Lifecycle" loading="lazy"></div>
+  <figcaption>
+    <span class="atlas-fignum">Fig. O-05</span>
+    <span class="atlas-figtitle">Session Lifecycle</span>
+    <span class="atlas-figtype">sequence</span>
+  </figcaption>
+</figure>
+  </div>
+</section>
+<section class="atlas-section" id="cat-L">
+  <div class="atlas-section-head">
+    <div class="atlas-cat-label">Category L · 5 figures</div>
+    <h2>Data Lifecycle</h2>
+    <p>End-to-end journeys of core entities through the system.</p>
+  </div>
+  <div class="atlas-grid">
+
+<figure class="atlas-card" data-figid="L-01" onclick="openModal('svg/fig-l01-transaction-lifecycle.svg', 'L-01', 'Transaction Lifecycle')">
+  <div class="atlas-thumb"><img src="svg/fig-l01-transaction-lifecycle.svg" alt="Transaction Lifecycle" loading="lazy"></div>
+  <figcaption>
+    <span class="atlas-fignum">Fig. L-01</span>
+    <span class="atlas-figtitle">Transaction Lifecycle</span>
+    <span class="atlas-figtype">stateDiagram</span>
+  </figcaption>
+</figure>
+
+<figure class="atlas-card" data-figid="L-02" onclick="openModal('svg/fig-l02-alert-lifecycle.svg', 'L-02', 'Alert Lifecycle')">
+  <div class="atlas-thumb"><img src="svg/fig-l02-alert-lifecycle.svg" alt="Alert Lifecycle" loading="lazy"></div>
+  <figcaption>
+    <span class="atlas-fignum">Fig. L-02</span>
+    <span class="atlas-figtitle">Alert Lifecycle</span>
+    <span class="atlas-figtype">stateDiagram</span>
+  </figcaption>
+</figure>
+
+<figure class="atlas-card" data-figid="L-03" onclick="openModal('svg/fig-l03-case-lifecycle.svg', 'L-03', 'Case Lifecycle')">
+  <div class="atlas-thumb"><img src="svg/fig-l03-case-lifecycle.svg" alt="Case Lifecycle" loading="lazy"></div>
+  <figcaption>
+    <span class="atlas-fignum">Fig. L-03</span>
+    <span class="atlas-figtitle">Case Lifecycle</span>
+    <span class="atlas-figtype">stateDiagram</span>
+  </figcaption>
+</figure>
+
+<figure class="atlas-card" data-figid="L-04" onclick="openModal('svg/fig-l04-merchant-data-sync.svg', 'L-04', 'Merchant Data Sync')">
+  <div class="atlas-thumb"><img src="svg/fig-l04-merchant-data-sync.svg" alt="Merchant Data Sync" loading="lazy"></div>
+  <figcaption>
+    <span class="atlas-fignum">Fig. L-04</span>
+    <span class="atlas-figtitle">Merchant Data Sync</span>
+    <span class="atlas-figtype">sequence</span>
+  </figcaption>
+</figure>
+
+<figure class="atlas-card" data-figid="L-05" onclick="openModal('svg/fig-l05-entity-risk-score.svg', 'L-05', 'Entity Risk Score Computation')">
+  <div class="atlas-thumb"><img src="svg/fig-l05-entity-risk-score.svg" alt="Entity Risk Score Computation" loading="lazy"></div>
+  <figcaption>
+    <span class="atlas-fignum">Fig. L-05</span>
+    <span class="atlas-figtitle">Entity Risk Score Computation</span>
+    <span class="atlas-figtype">flowchart</span>
+  </figcaption>
+</figure>
+  </div>
+</section>
+<section class="atlas-section" id="cat-P">
+  <div class="atlas-section-head">
+    <div class="atlas-cat-label">Category P · 8 figures</div>
+    <h2>Pipeline Internals</h2>
+    <p>Deep-dive into TSP subscribers, Valkey streams, and ingestion mechanics.</p>
+  </div>
+  <div class="atlas-grid">
+
+<figure class="atlas-card" data-figid="P-00" onclick="openModal('svg/fig-p00-tsp-orchestration.svg', 'P-00', 'TSP Orchestration Overview')">
+  <div class="atlas-thumb"><img src="svg/fig-p00-tsp-orchestration.svg" alt="TSP Orchestration Overview" loading="lazy"></div>
+  <figcaption>
+    <span class="atlas-fignum">Fig. P-00</span>
+    <span class="atlas-figtitle">TSP Orchestration Overview</span>
+    <span class="atlas-figtype">flowchart</span>
+  </figcaption>
+</figure>
+
+<figure class="atlas-card" data-figid="P-01" onclick="openModal('svg/fig-p01-sub1-hash-seal.svg', 'P-01', 'TSP Sub 1 — Hash & Seal Flow')">
+  <div class="atlas-thumb"><img src="svg/fig-p01-sub1-hash-seal.svg" alt="TSP Sub 1 — Hash & Seal Flow" loading="lazy"></div>
+  <figcaption>
+    <span class="atlas-fignum">Fig. P-01</span>
+    <span class="atlas-figtitle">TSP Sub 1 — Hash & Seal Flow</span>
+    <span class="atlas-figtype">flowchart</span>
+  </figcaption>
+</figure>
+
+<figure class="atlas-card" data-figid="P-02" onclick="openModal('svg/fig-p02-sub2-parse-route.svg', 'P-02', 'TSP Sub 2 — Parse & Route Flow')">
+  <div class="atlas-thumb"><img src="svg/fig-p02-sub2-parse-route.svg" alt="TSP Sub 2 — Parse & Route Flow" loading="lazy"></div>
+  <figcaption>
+    <span class="atlas-fignum">Fig. P-02</span>
+    <span class="atlas-figtitle">TSP Sub 2 — Parse & Route Flow</span>
+    <span class="atlas-figtype">flowchart</span>
+  </figcaption>
+</figure>
+
+<figure class="atlas-card" data-figid="P-03" onclick="openModal('svg/fig-p03-sub3-merkle-batcher.svg', 'P-03', 'TSP Sub 3 — Merkle Batcher & Ordinal Minter')">
+  <div class="atlas-thumb"><img src="svg/fig-p03-sub3-merkle-batcher.svg" alt="TSP Sub 3 — Merkle Batcher & Ordinal Minter" loading="lazy"></div>
+  <figcaption>
+    <span class="atlas-fignum">Fig. P-03</span>
+    <span class="atlas-figtitle">TSP Sub 3 — Merkle Batcher & Ordinal Minter</span>
+    <span class="atlas-figtype">flowchart</span>
+  </figcaption>
+</figure>
+
+<figure class="atlas-card" data-figid="P-04" onclick="openModal('svg/fig-p04-sub4-chirp-detection.svg', 'P-04', 'TSP Sub 4 — Chirp Detection Engine')">
+  <div class="atlas-thumb"><img src="svg/fig-p04-sub4-chirp-detection.svg" alt="TSP Sub 4 — Chirp Detection Engine" loading="lazy"></div>
+  <figcaption>
+    <span class="atlas-fignum">Fig. P-04</span>
+    <span class="atlas-figtitle">TSP Sub 4 — Chirp Detection Engine</span>
+    <span class="atlas-figtype">flowchart</span>
+  </figcaption>
+</figure>
+
+<figure class="atlas-card" data-figid="P-05" onclick="openModal('svg/fig-p05-valkey-stream-topology.svg', 'P-05', 'Valkey Stream Topology')">
+  <div class="atlas-thumb"><img src="svg/fig-p05-valkey-stream-topology.svg" alt="Valkey Stream Topology" loading="lazy"></div>
+  <figcaption>
+    <span class="atlas-fignum">Fig. P-05</span>
+    <span class="atlas-figtitle">Valkey Stream Topology</span>
+    <span class="atlas-figtype">flowchart</span>
+  </figcaption>
+</figure>
+
+<figure class="atlas-card" data-figid="P-06" onclick="openModal('svg/fig-p06-webhook-ingestion-gate.svg', 'P-06', 'Webhook Ingestion Gate')">
+  <div class="atlas-thumb"><img src="svg/fig-p06-webhook-ingestion-gate.svg" alt="Webhook Ingestion Gate" loading="lazy"></div>
+  <figcaption>
+    <span class="atlas-fignum">Fig. P-06</span>
+    <span class="atlas-figtitle">Webhook Ingestion Gate</span>
+    <span class="atlas-figtype">sequence</span>
+  </figcaption>
+</figure>
+
+<figure class="atlas-card" data-figid="P-07" onclick="openModal('svg/fig-p07-dead-letter-recovery.svg', 'P-07', 'Dead Letter Queue Recovery')">
+  <div class="atlas-thumb"><img src="svg/fig-p07-dead-letter-recovery.svg" alt="Dead Letter Queue Recovery" loading="lazy"></div>
+  <figcaption>
+    <span class="atlas-fignum">Fig. P-07</span>
+    <span class="atlas-figtitle">Dead Letter Queue Recovery</span>
+    <span class="atlas-figtype">stateDiagram</span>
+  </figcaption>
+</figure>
+  </div>
+</section>
+<section class="atlas-section" id="cat-D">
+  <div class="atlas-section-head">
+    <div class="atlas-cat-label">Category D · 5 figures</div>
+    <h2>Decision Trees</h2>
+    <p>Rule evaluation, scoring, escalation, and classification logic.</p>
+  </div>
+  <div class="atlas-grid">
+
+<figure class="atlas-card" data-figid="D-01" onclick="openModal('svg/fig-d01-chirp-rule-evaluation.svg', 'D-01', 'Chirp Rule Evaluation Engine')">
+  <div class="atlas-thumb"><img src="svg/fig-d01-chirp-rule-evaluation.svg" alt="Chirp Rule Evaluation Engine" loading="lazy"></div>
+  <figcaption>
+    <span class="atlas-fignum">Fig. D-01</span>
+    <span class="atlas-figtitle">Chirp Rule Evaluation Engine</span>
+    <span class="atlas-figtype">flowchart</span>
+  </figcaption>
+</figure>
+
+<figure class="atlas-card" data-figid="D-02" onclick="openModal('svg/fig-d02-risk-score-classification.svg', 'D-02', 'Risk Score Classification')">
+  <div class="atlas-thumb"><img src="svg/fig-d02-risk-score-classification.svg" alt="Risk Score Classification" loading="lazy"></div>
+  <figcaption>
+    <span class="atlas-fignum">Fig. D-02</span>
+    <span class="atlas-figtitle">Risk Score Classification</span>
+    <span class="atlas-figtype">flowchart</span>
+  </figcaption>
+</figure>
+
+<figure class="atlas-card" data-figid="D-03" onclick="openModal('svg/fig-d03-fox-case-escalation.svg', 'D-03', 'Fox Case Escalation Logic')">
+  <div class="atlas-thumb"><img src="svg/fig-d03-fox-case-escalation.svg" alt="Fox Case Escalation Logic" loading="lazy"></div>
+  <figcaption>
+    <span class="atlas-fignum">Fig. D-03</span>
+    <span class="atlas-figtitle">Fox Case Escalation Logic</span>
+    <span class="atlas-figtype">flowchart</span>
+  </figcaption>
+</figure>
+
+<figure class="atlas-card" data-figid="D-04" onclick="openModal('svg/fig-d04-alert-severity-matrix.svg', 'D-04', 'Alert Severity Decision Matrix')">
+  <div class="atlas-thumb"><img src="svg/fig-d04-alert-severity-matrix.svg" alt="Alert Severity Decision Matrix" loading="lazy"></div>
+  <figcaption>
+    <span class="atlas-fignum">Fig. D-04</span>
+    <span class="atlas-figtitle">Alert Severity Decision Matrix</span>
+    <span class="atlas-figtype">flowchart</span>
+  </figcaption>
+</figure>
+
+<figure class="atlas-card" data-figid="D-05" onclick="openModal('svg/fig-d05-merchant-onboarding.svg', 'D-05', 'Merchant Onboarding Decision Flow')">
+  <div class="atlas-thumb"><img src="svg/fig-d05-merchant-onboarding.svg" alt="Merchant Onboarding Decision Flow" loading="lazy"></div>
+  <figcaption>
+    <span class="atlas-fignum">Fig. D-05</span>
+    <span class="atlas-figtitle">Merchant Onboarding Decision Flow</span>
+    <span class="atlas-figtype">flowchart</span>
+  </figcaption>
+</figure>
+  </div>
+</section>
+<section class="atlas-section" id="cat-I">
+  <div class="atlas-section-head">
+    <div class="atlas-cat-label">Category I · 5 figures</div>
+    <h2>Infrastructure</h2>
+    <p>Docker stack, database schemas, network topology, deploy pipeline.</p>
+  </div>
+  <div class="atlas-grid">
+
+<figure class="atlas-card" data-figid="I-01" onclick="openModal('svg/fig-i01-docker-stack-topology.svg', 'I-01', 'Docker Stack Topology')">
+  <div class="atlas-thumb"><img src="svg/fig-i01-docker-stack-topology.svg" alt="Docker Stack Topology" loading="lazy"></div>
+  <figcaption>
+    <span class="atlas-fignum">Fig. I-01</span>
+    <span class="atlas-figtitle">Docker Stack Topology</span>
+    <span class="atlas-figtype">flowchart</span>
+  </figcaption>
+</figure>
+
+<figure class="atlas-card" data-figid="I-02" onclick="openModal('svg/fig-i02-database-schema-architecture.svg', 'I-02', 'Database Schema Architecture')">
+  <div class="atlas-thumb"><img src="svg/fig-i02-database-schema-architecture.svg" alt="Database Schema Architecture" loading="lazy"></div>
+  <figcaption>
+    <span class="atlas-fignum">Fig. I-02</span>
+    <span class="atlas-figtitle">Database Schema Architecture</span>
+    <span class="atlas-figtype">erDiagram</span>
+  </figcaption>
+</figure>
+
+<figure class="atlas-card" data-figid="I-03" onclick="openModal('svg/fig-i03-network-tunnel-topology.svg', 'I-03', 'Network & Tunnel Topology')">
+  <div class="atlas-thumb"><img src="svg/fig-i03-network-tunnel-topology.svg" alt="Network & Tunnel Topology" loading="lazy"></div>
+  <figcaption>
+    <span class="atlas-fignum">Fig. I-03</span>
+    <span class="atlas-figtitle">Network & Tunnel Topology</span>
+    <span class="atlas-figtype">flowchart</span>
+  </figcaption>
+</figure>
+
+<figure class="atlas-card" data-figid="I-04" onclick="openModal('svg/fig-i04-deploy-pipeline.svg', 'I-04', 'Deploy Pipeline')">
+  <div class="atlas-thumb"><img src="svg/fig-i04-deploy-pipeline.svg" alt="Deploy Pipeline" loading="lazy"></div>
+  <figcaption>
+    <span class="atlas-fignum">Fig. I-04</span>
+    <span class="atlas-figtitle">Deploy Pipeline</span>
+    <span class="atlas-figtype">flowchart</span>
+  </figcaption>
+</figure>
+
+<figure class="atlas-card" data-figid="I-05" onclick="openModal('svg/fig-i05-gunicorn-worker-model.svg', 'I-05', 'Gunicorn Worker Model')">
+  <div class="atlas-thumb"><img src="svg/fig-i05-gunicorn-worker-model.svg" alt="Gunicorn Worker Model" loading="lazy"></div>
+  <figcaption>
+    <span class="atlas-fignum">Fig. I-05</span>
+    <span class="atlas-figtitle">Gunicorn Worker Model</span>
+    <span class="atlas-figtype">flowchart</span>
+  </figcaption>
+</figure>
+  </div>
+</section>
+<section class="atlas-section" id="cat-J">
+  <div class="atlas-section-head">
+    <div class="atlas-cat-label">Category J · 5 figures</div>
+    <h2>User Journey</h2>
+    <p>Merchant-facing workflows, dashboards, and conversational architecture.</p>
+  </div>
+  <div class="atlas-grid">
+
+<figure class="atlas-card" data-figid="J-01" onclick="openModal('svg/fig-j01-merchant-end-to-end.svg', 'J-01', 'Merchant End-to-End Journey')">
+  <div class="atlas-thumb"><img src="svg/fig-j01-merchant-end-to-end.svg" alt="Merchant End-to-End Journey" loading="lazy"></div>
+  <figcaption>
+    <span class="atlas-fignum">Fig. J-01</span>
+    <span class="atlas-figtitle">Merchant End-to-End Journey</span>
+    <span class="atlas-figtype">flowchart</span>
+  </figcaption>
+</figure>
+
+<figure class="atlas-card" data-figid="J-02" onclick="openModal('svg/fig-j02-dashboard-info-architecture.svg', 'J-02', 'Dashboard Information Architecture')">
+  <div class="atlas-thumb"><img src="svg/fig-j02-dashboard-info-architecture.svg" alt="Dashboard Information Architecture" loading="lazy"></div>
+  <figcaption>
+    <span class="atlas-fignum">Fig. J-02</span>
+    <span class="atlas-figtitle">Dashboard Information Architecture</span>
+    <span class="atlas-figtype">flowchart</span>
+  </figcaption>
+</figure>
+
+<figure class="atlas-card" data-figid="J-03" onclick="openModal('svg/fig-j03-alert-investigation.svg', 'J-03', 'Alert Investigation Workflow')">
+  <div class="atlas-thumb"><img src="svg/fig-j03-alert-investigation.svg" alt="Alert Investigation Workflow" loading="lazy"></div>
+  <figcaption>
+    <span class="atlas-fignum">Fig. J-03</span>
+    <span class="atlas-figtitle">Alert Investigation Workflow</span>
+    <span class="atlas-figtype">sequence</span>
+  </figcaption>
+</figure>
+
+<figure class="atlas-card" data-figid="J-04" onclick="openModal('svg/fig-j04-chirpjpt-conversational.svg', 'J-04', 'ChirpJPT Conversational Flow (Target Architecture)')">
+  <div class="atlas-thumb"><img src="svg/fig-j04-chirpjpt-conversational.svg" alt="ChirpJPT Conversational Flow (Target Architecture)" loading="lazy"></div>
+  <figcaption>
+    <span class="atlas-fignum">Fig. J-04</span>
+    <span class="atlas-figtitle">ChirpJPT Conversational Flow (Target Architecture)</span>
+    <span class="atlas-figtype">sequence</span>
+  </figcaption>
+</figure>
+
+<figure class="atlas-card" data-figid="J-05" onclick="openModal('svg/fig-j05-owl-search-drill.svg', 'J-05', 'Owl Search & Drill Path')">
+  <div class="atlas-thumb"><img src="svg/fig-j05-owl-search-drill.svg" alt="Owl Search & Drill Path" loading="lazy"></div>
+  <figcaption>
+    <span class="atlas-fignum">Fig. J-05</span>
+    <span class="atlas-figtitle">Owl Search & Drill Path</span>
+    <span class="atlas-figtype">flowchart</span>
+  </figcaption>
+</figure>
+  </div>
+</section>
+<section class="atlas-section" id="cat-R">
+  <div class="atlas-section-head">
+    <div class="atlas-cat-label">Category R · 5 figures</div>
+    <h2>Protocol & Bitcoin</h2>
+    <p>Bitcoin-native infrastructure — RaaS, Ordinals, sidechains, L402, the gLog.</p>
+  </div>
+  <div class="atlas-grid">
+
+<figure class="atlas-card" data-figid="R-01" onclick="openModal('svg/fig-r01-raas-architecture.svg', 'R-01', 'RaaS (Receipts-as-a-Service) Architecture')">
+  <div class="atlas-thumb"><img src="svg/fig-r01-raas-architecture.svg" alt="RaaS (Receipts-as-a-Service) Architecture" loading="lazy"></div>
+  <figcaption>
+    <span class="atlas-fignum">Fig. R-01</span>
+    <span class="atlas-figtitle">RaaS (Receipts-as-a-Service) Architecture</span>
+    <span class="atlas-figtype">flowchart</span>
+  </figcaption>
+</figure>
+
+<figure class="atlas-card" data-figid="R-02" onclick="openModal('svg/fig-r02-ordinals-inscription-flow.svg', 'R-02', 'Ordinals Inscription Flow')">
+  <div class="atlas-thumb"><img src="svg/fig-r02-ordinals-inscription-flow.svg" alt="Ordinals Inscription Flow" loading="lazy"></div>
+  <figcaption>
+    <span class="atlas-fignum">Fig. R-02</span>
+    <span class="atlas-figtitle">Ordinals Inscription Flow</span>
+    <span class="atlas-figtype">sequence</span>
+  </figcaption>
+</figure>
+
+<figure class="atlas-card" data-figid="R-03" onclick="openModal('svg/fig-r03-sidechain-hybrid-architecture.svg', 'R-03', 'Sidechain & Hybrid Architecture')">
+  <div class="atlas-thumb"><img src="svg/fig-r03-sidechain-hybrid-architecture.svg" alt="Sidechain & Hybrid Architecture" loading="lazy"></div>
+  <figcaption>
+    <span class="atlas-fignum">Fig. R-03</span>
+    <span class="atlas-figtitle">Sidechain & Hybrid Architecture</span>
+    <span class="atlas-figtype">flowchart</span>
+  </figcaption>
+</figure>
+
+<figure class="atlas-card" data-figid="R-04" onclick="openModal('svg/fig-r04-l402-validation-gate.svg', 'R-04', 'L402 Validation Gate')">
+  <div class="atlas-thumb"><img src="svg/fig-r04-l402-validation-gate.svg" alt="L402 Validation Gate" loading="lazy"></div>
+  <figcaption>
+    <span class="atlas-fignum">Fig. R-04</span>
+    <span class="atlas-figtitle">L402 Validation Gate</span>
+    <span class="atlas-figtype">sequence</span>
+  </figcaption>
+</figure>
+
+<figure class="atlas-card" data-figid="R-05" onclick="openModal('svg/fig-r05-tlog-to-glog-evolution.svg', 'R-05', 'tLog to gLog Evolution')">
+  <div class="atlas-thumb"><img src="svg/fig-r05-tlog-to-glog-evolution.svg" alt="tLog to gLog Evolution" loading="lazy"></div>
+  <figcaption>
+    <span class="atlas-fignum">Fig. R-05</span>
+    <span class="atlas-figtitle">tLog to gLog Evolution</span>
+    <span class="atlas-figtype">flowchart</span>
+  </figcaption>
+</figure>
+  </div>
+</section>
+
+<footer class="site-footer">
+  <div class="footer-inner">
+    <div>&copy; 2026 GrowDirect DAO LLC · Canary LP · Mermaid Atlas v2.0</div>
+    <div class="footer-links">
+      <a href="/docs/">Tech Library</a>
+      <a href="/">canary.growdirect.io</a>
+    </div>
+  </div>
+</footer>
+
+<div class="atlas-modal" id="atlasModal" onclick="if(event.target===this)closeModal()">
+  <div class="atlas-modal-head">
+    <div class="atlas-modal-meta">FIG. <span id="modalFigId">—</span><strong id="modalTitle">—</strong></div>
+    <button class="atlas-modal-close" onclick="closeModal()">CLOSE ESC</button>
+  </div>
+  <div class="atlas-modal-body">
+    <img id="modalImg" src="" alt="">
+  </div>
+</div>
+
+<script>
+function openModal(src, figId, title) {
+  document.getElementById('modalImg').src = src;
+  document.getElementById('modalFigId').textContent = figId;
+  document.getElementById('modalTitle').textContent = title;
+  document.getElementById('atlasModal').classList.add('open');
+  document.body.style.overflow = 'hidden';
+}
+function closeModal() {
+  document.getElementById('atlasModal').classList.remove('open');
+  document.getElementById('modalImg').src = '';
+  document.body.style.overflow = '';
+}
+document.addEventListener('keydown', e => { if (e.key === 'Escape') closeModal(); });
+</script>
+</body>
+</html>
