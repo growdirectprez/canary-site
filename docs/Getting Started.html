@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Getting Started — Canary Technical Library</title>
+<meta name="description" content="Get from landing page to a working mental model of Canary LP in 15 minutes — a guided tour of the Technical Library for engineers evaluating the platform.">
+<meta name="robots" content="noindex, nofollow">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@300;400;500;600&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../css/canary-docs.css">
+</head>
+<body>
+<header class="site-header">
+  <a class="site-logo" href="/">
+    <img src="/img/canary-icon-512.png" alt="" width="28" height="28">
+    <span>Canary <span class="site-logo-dim">/ Technical Library</span></span>
+  </a>
+  <a class="demo-cta" href="/prototype/">Launch Demo →</a>
+</header>
+<nav class="doc-nav"><a href="/atlas/">Mermaid Atlas</a><a href="Getting%20Started.html">Getting Started</a><a href="Architecture.html">Architecture</a><a href="The CRDM.html">The CRDM</a><a href="The Field Registry.html">Field Registry</a><a href="The Detection Catalog.html">Detection Catalog</a><a href="The Risk Dictionary.html">Risk Dictionary</a><a href="API.html">API</a></nav>
+<main class="doc-main">
+  <div class="doc-header">
+    <div class="doc-kicker">Canary LP · Technical Library</div>
+    <h1 class="doc-title">Getting Started</h1>
+    <p class="doc-subtitle">Fifteen minutes from landing here to a working mental model of the system.</p>
+  </div>
+  <article class="doc-body">
+
+<h2>What this is</h2>
+<p>Canary LP is a loss-prevention analytics platform for Square merchants. It ingests every webhook event Square emits — payments, refunds, voids, discounts, cash drawer events, timecards, inventory adjustments — and evaluates them against <strong>37 detection rules</strong> across ten categories. When patterns look wrong, Canary raises alerts in plain English and opens a forensic case with a hash-chained evidence trail.</p>
+<p>The platform is built on a canonical data model (the CRDM) that descends from three generations of enterprise loss-prevention systems — Tesco's TDS, Walmart International's SMART System, and Canary itself. The Square integration is the <em>reference implementation</em>, not the product; the canonical layer is source-agnostic and designed to absorb any POS.</p>
+
+<h2>The 15-minute tour</h2>
+<p>In order, the shortest path from "never heard of Canary" to "I could ask a real question about it":</p>
+
+<h3>Minutes 0–2 · The Mermaid Atlas</h3>
+<p>Open <a href="/atlas/">the Atlas</a>. Skip straight to the <strong>Infrastructure</strong> category (fig I-01, I-02, I-03) — Docker stack, database schema, network topology. You'll see one Postgres with three schemas, Valkey for streams + cache, Ollama for embeddings, and where each service lives. Then glance at <strong>Pipeline Internals</strong> (fig P-00 through P-07) — the Triple Subscriber Pipeline end-to-end.</p>
+<p>Atlas is <strong>52 diagrams</strong>. Don't try to read them all; just build a shape in your head.</p>
+
+<h3>Minutes 2–7 · The CRDM</h3>
+<p>Open <a href="The%20CRDM.html">The CRDM</a>. Read §1 (Provenance), §2 (Seven Canonical Data Sources), and §3 (Evidence Chain). Skim §4 (Chirp Detection Registry).</p>
+<p>The big idea: you see the same seven data domains in every retail LP system ever built, and the CRDM maps Square's API to those domains with explicit coverage percentages. "Enterprise DNA, SMB integration."</p>
+
+<h3>Minutes 7–10 · The Field Registry</h3>
+<p>Open <a href="The%20Field%20Registry.html">The Field Registry</a>. Use your browser's find-in-page. Search for a table you care about — <code>transactions</code>, <code>alerts</code>, <code>fox_cases</code>. Every column has a label, description, type, searchable flag, and i18n key.</p>
+<p>This is the metadata layer that feeds Owl natural-language search, UI rendering, and the OpenAPI contract. It's the most <em>boring</em> part of the system, and also the most important — everything downstream depends on it being correct.</p>
+
+<h3>Minutes 10–13 · The Detection Catalog</h3>
+<p>Open <a href="The%20Detection%20Catalog.html">The Detection Catalog</a>. Skim the tier headers: <strong>Tier 1</strong> (stateless, microsecond), <strong>Tier 2</strong> (stateful aggregates), <strong>Tier 3</strong> (composite). Pick one rule from each tier and read its default threshold.</p>
+<p>Notice: C-001 (Rapid Refund — 15 min window) is a single-event evaluation. C-002 (Excessive Refund Rate) needs a shift-level aggregation. C-801+ composite rules correlate primary hits. All three tiers run in the same pipeline, and merchants can tune any threshold via <code>merchant_rule_config</code>.</p>
+
+<h3>Minutes 13–15 · The Prototype</h3>
+<p>Open <a href="/prototype/">the prototype</a>. This is the original product concept — a clickable UI that shows the design intent: sidebar, dashboard, alerts list, Fox cases, Owl chat, Goose wallet. No backend, no real data, just the shape of what the app is.</p>
+<p>If you want to see it running with real sandbox data, the <em>Launch Demo</em> button on any library page goes to the live application.</p>
+
+<h2>Pick a path by interest</h2>
+<p>The five tiles in the library aren't sequential — pick what matches what you're evaluating:</p>
+
+<h3>Evaluating for a merchant integration</h3>
+<p>Start with the <a href="The%20CRDM.html">CRDM</a> (data shape) → <a href="The%20Field%20Registry.html">Field Registry</a> (field-level detail) → <a href="API.html">API</a> (endpoints you'll call).</p>
+
+<h3>Evaluating the architecture</h3>
+<p>Start with <a href="Architecture.html">Architecture</a> (end-to-end walkthrough) → <a href="/atlas/">Atlas</a> (visual backup) → the Infrastructure and Pipeline SDDs via the Atlas cross-references.</p>
+
+<h3>Evaluating the detection logic</h3>
+<p>Start with <a href="The%20Detection%20Catalog.html">Detection Catalog</a> (the rules) → <a href="The%20Risk%20Dictionary.html">Risk Dictionary</a> (z-score queries over the rule output) → <a href="/atlas/">Atlas</a> category D (decision trees).</p>
+
+<h3>Evaluating case management</h3>
+<p>Start with <a href="/atlas/">Atlas</a> figure L-03 (Case Lifecycle) → Fox case schema in <a href="The%20Field%20Registry.html">Field Registry</a> → <a href="The%20CRDM.html">CRDM</a> §3 (Evidence Chain).</p>
+
+<h3>Evaluating the data platform itself</h3>
+<p>Start with <a href="The%20Field%20Registry.html">Field Registry</a> (every table, every column) → <a href="The%20CRDM.html">CRDM</a> (the lineage story) → <a href="/atlas/">Atlas</a> figure I-02 (Database Schema Architecture).</p>
+
+<h2>Sources of truth</h2>
+<p>Every document in this library is generated from or verified against live source:</p>
+<ul class="wc-list">
+  <li><strong>Atlas</strong> — 52 Mermaid SVGs from <code>Canary/docs/atlas/</code></li>
+  <li><strong>CRDM</strong> — authored narrative; the lineage sections are hand-written history</li>
+  <li><strong>Field Registry</strong> — rendered from <code>Canary/docs/field-registry.md</code> (generated from SQLAlchemy models)</li>
+  <li><strong>Detection Catalog</strong> — AST-parsed from <code>canary/services/chirp/rule_definitions.py</code></li>
+  <li><strong>Risk Dictionary</strong> — AST-parsed from <code>canary/services/risk_dictionary.py</code></li>
+  <li><strong>API</strong> — Redoc rendering <code>canary-api-v1.yaml</code> (OpenAPI 3.0.3, audited against <code>app.url_map</code>)</li>
+</ul>
+<p>If a library doc drifts from reality, it's a build-script bug, not a writing bug. Re-run the generator.</p>
+
+<h2>Contact</h2>
+<p>If something in this library is unclear or wrong, email <a href="mailto:lyle@growdirect.io">lyle@growdirect.io</a>. The library is treated like code — issues get filed, fixes get shipped.</p>
+
+  </article>
+</main>
+<footer class="site-footer">
+  <div class="footer-inner">
+    <div>&copy; 2026 GrowDirect DAO LLC · Canary LP</div>
+    <div class="footer-links">
+      <a href="/">canary.growdirect.io</a>
+      <a href="/docs/">Tech Library</a>
+    </div>
+  </div>
+</footer>
+</body>
+</html>

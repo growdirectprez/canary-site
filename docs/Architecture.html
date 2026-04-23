@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Architecture — Canary Technical Library</title>
+<meta name="description" content="End-to-end walkthrough of the Canary LP platform — ingress, pipeline, detection, investigation, search, metrics, and deployment shape. Source-of-truth product documentation.">
+<meta name="robots" content="noindex, nofollow">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@300;400;500;600&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../css/canary-docs.css">
+<style>
+.doc-body figure { margin: 2em 0; padding: 0; }
+.doc-body figure img { background: #fff; border-radius: 6px; padding: 12px; width: 100%; max-width: 900px; display: block; margin: 0 auto; }
+.doc-body figure figcaption { font-family: 'Space Mono', monospace; font-size: 11px; color: var(--text-3); letter-spacing: 0.08em; text-transform: uppercase; text-align: center; margin-top: 10px; }
+.doc-body figure figcaption a { border: none; }
+</style>
+</head>
+<body>
+<header class="site-header">
+  <a class="site-logo" href="/">
+    <img src="/img/canary-icon-512.png" alt="" width="28" height="28">
+    <span>Canary <span class="site-logo-dim">/ Technical Library</span></span>
+  </a>
+  <a class="demo-cta" href="/prototype/">Launch Demo →</a>
+</header>
+<nav class="doc-nav"><a href="/atlas/">Mermaid Atlas</a><a href="Getting%20Started.html">Getting Started</a><a href="Architecture.html" class="active">Architecture</a><a href="The CRDM.html">The CRDM</a><a href="The Field Registry.html">Field Registry</a><a href="The Detection Catalog.html">Detection Catalog</a><a href="The Risk Dictionary.html">Risk Dictionary</a><a href="API.html">API</a></nav>
+<main class="doc-main">
+  <div class="doc-header">
+    <div class="doc-kicker">Canary LP · Technical Library</div>
+    <h1 class="doc-title">Architecture</h1>
+    <p class="doc-subtitle">End-to-end walkthrough of what Canary LP is, how it ingests events, how it detects loss, and how it's deployed.</p>
+  </div>
+  <article class="doc-body">
+
+<h2>System context</h2>
+<p>Canary LP is a loss-prevention analytics platform for Square-POS merchants. The user-facing product is an AI-assisted dashboard that watches every transaction, refund, void, cash-drawer event, discount, and timecard change in real time — and surfaces plain-English alerts when a pattern looks wrong.</p>
+<p>The platform is built on a canonical data model (the CRDM) that descends from three generations of enterprise retail LP systems. Square is the first POS integration; the canonical layer is source-agnostic by design, so additional POS integrations are a parser and a field-mapping rather than a rewrite.</p>
+<p>It is not a payment processor. It is not a POS replacement. It is not a rule-authoring engine that replaces human judgement. It is a <em>layer on top of</em> the POS that reads everything Square emits, applies decades of LP pattern knowledge, and writes back nothing. Canary is a lens.</p>
+
+<h2>Component map</h2>
+<p>At the highest level, Canary is a Python 3.12 Flask app with 29 blueprints, 12 MCP servers, a four-stage stream pipeline, and a PostgreSQL+Valkey data plane. It runs as a Docker Compose stack locally and behind a Cloudflare tunnel in hosted dev.</p>
+
+<figure>
+  <img src="/atlas/svg/fig-o01-service-mesh.svg" alt="Canary service mesh — the 12 MCP servers and the Flask app">
+  <figcaption>Fig. O-01 · <a href="/atlas/#cat-O">Service Mesh</a></figcaption>
+</figure>
+
+<p>Traffic flows in three broad directions:</p>
+<ul class="wc-list">
+  <li><strong>Square → Canary</strong> — webhooks hit the TSP ingress at <code>/webhooks</code>. Four subscribers (Sub1 Seal, Sub2 Parse, Sub3 Merkle, Sub4 Chirp) process each event through append-only Postgres writes and Valkey streams. <a href="/atlas/#cat-P">Atlas category P</a> maps every step.</li>
+  <li><strong>Merchant → Canary</strong> — the dashboard and Owl chat run on Flask + Jinja2 + Alpine. Frontend reads via the <code>/api/*</code> and <code>/bff/*</code> blueprints. Owl accepts natural language and translates it to structured queries over the CRDM.</li>
+  <li><strong>Canary → Square</strong> — outbound is narrow: OAuth token refresh (<code>/oauth/*</code>) and the merchant reset flow. Canary never writes merchant-facing POS data back to Square.</li>
+</ul>
+
+<h2>Data architecture</h2>
+<p>One Postgres database named <code>canary</code> with three schemas:</p>
+<ul class="wc-list">
+  <li><code>app</code> — identity, config, detection rules, alerts, Fox cases, Owl memory, webhooks, audit logs</li>
+  <li><code>sales</code> — transactions, tenders, line items, refund links, evidence records, cash drawer events, employee timecards, disputes, gift cards, loyalty events, inventory adjustments</li>
+  <li><code>metrics</code> — daily/period metrics, hourly metrics, risk scores, baselines, scorecards</li>
+</ul>
+<p>The split is enforced through <code>search_path</code> at session open; foreign keys cross schemas freely. The <a href="The%20Field%20Registry.html">Field Registry</a> catalogs every column in every table across all three schemas.</p>
+
+<figure>
+  <img src="/atlas/svg/fig-i02-database-schema-architecture.svg" alt="Database schema architecture — 3 schemas, cross-schema FKs, 98 tables">
+  <figcaption>Fig. I-02 · <a href="/atlas/#cat-I">Database Schema Architecture</a></figcaption>
+</figure>
+
+<p><strong>Three tiers of immutability</strong> keep the evidence chain honest:</p>
+<ol class="wc-list">
+  <li><strong>Financial ledger (append-only).</strong> <code>sales.transactions</code>, <code>sales.refund_links</code>, <code>sales.cash_drawer_events</code>. No UPDATE, no DELETE. Enforced by the seed-time trigger <code>prevent_mutation()</code>.</li>
+  <li><strong>Evidentiary (insert-only).</strong> <code>app.fox_evidence</code>, <code>app.fox_evidence_access_log</code>, <code>sales.evidence_records</code>, <code>sales.event_inscriptions</code>. If the platform accuses someone, the evidence chain must be unbroken.</li>
+  <li><strong>Audit trail (hash-chained).</strong> Every write to <code>app.audit_log</code> and <code>app.fox_evidence</code> gets a SHA-256 chain hash linking it to the previous row. Tamper with one entry, the chain breaks downstream.</li>
+</ol>
+<p>Row-Level Security is enabled on every merchant-scoped table. Every session sets <code>canary.current_merchant_id</code>; every query is scoped to that merchant by Postgres, not by application code.</p>
+
+<h2>The detection pipeline — TSP</h2>
+<p>TSP stands for Triple Subscriber Pipeline (the name predates the fourth subscriber). Webhooks arrive at <code>POST /webhooks/square</code>; HMAC is validated; the raw payload is sealed into Postgres as an append-only evidence record and published to the <code>canary:events</code> Valkey stream. Four consumer groups read from that stream and do non-overlapping work:</p>
+
+<figure>
+  <img src="/atlas/svg/fig-p00-tsp-orchestration.svg" alt="TSP orchestration — 4 subscribers, Valkey streams, canonical tables">
+  <figcaption>Fig. P-00 · <a href="/atlas/#cat-P">TSP Orchestration Overview</a></figcaption>
+</figure>
+
+<ul class="wc-list">
+  <li><strong>Sub 1 — Hash & Seal.</strong> Validates fields, recomputes SHA-256, writes the immutable <code>sales.evidence_records</code> entry with per-merchant chain hash. Never transforms or parses. If the hash doesn't match, the event goes to the dead-letter stream.</li>
+  <li><strong>Sub 2 — Parse & Route.</strong> Parses the JSON payload, maps it to CRDM columns, writes to the domain tables (<code>sales.transactions</code>, <code>sales.transaction_tenders</code>, <code>sales.cash_drawer_events</code>, etc.), and publishes routing messages for detection.</li>
+  <li><strong>Sub 3 — Merkle Batcher.</strong> Accumulates events for Bitcoin inscription. Every 100 events or every hour, constructs a Merkle root over the evidence records and writes to <code>sales.inscription_pool</code>. Inscription is optional per-merchant.</li>
+  <li><strong>Sub 4 — Chirp Detection.</strong> Evaluates each event against the relevant detection rules (filtered by rule category and source table) and writes <code>app.alerts</code> + <code>app.alert_history</code>. This is where the 37 rules in the <a href="The%20Detection%20Catalog.html">Detection Catalog</a> run.</li>
+</ul>
+
+<p>Detection runs in three execution tiers. <strong>Tier 1 (stateless)</strong> fires from a single webhook payload with zero lookups — microsecond evaluation, the fast path. <strong>Tier 2 (stateful)</strong> needs shift-level or session-level aggregation, such as employee refund rate. <strong>Tier 3 (composite)</strong> correlates multiple primary-rule hits into higher-order patterns. All three tiers share the same <code>detection_rules</code> catalog and merchant-specific thresholds in <code>merchant_rule_config</code>.</p>
+
+<h2>Investigation lifecycle</h2>
+<p>An alert is the beginning of a narrative, not the end. A critical-severity rule (C-104 After-Hours Drawer, C-204 Untendered Order, C-301 Off-Clock Transaction, C-502 Post-Void) auto-opens a Fox case. Non-critical alerts sit in the Alert Queue until a merchant reviews them.</p>
+<p>A Fox case has a case number (<code>CASE-2026-NNNNN</code>), a status lifecycle (open → investigating → escalated → closed | dismissed), an assigned reviewer, an evidence locker, and a hash-chained timeline. Evidence types include screenshots, register tapes, CCTV links, employee statements, and the triggering alerts themselves.</p>
+<ul class="wc-list">
+  <li>Every evidence upload writes an immutable <code>fox_evidence</code> row with chain-hash linkage and a SHA-256 of the file content.</li>
+  <li>Every access to evidence logs a row to <code>fox_evidence_access_log</code> — who read it, when, from where.</li>
+  <li>Every status change writes a <code>fox_case_timeline</code> event with actor, description, and timestamp.</li>
+  <li>Closing a case records the total loss in cents and a resolution note.</li>
+</ul>
+<p>The lifecycle diagram is <a href="/atlas/#cat-L">Atlas figure L-03</a>. Field-level detail for every Fox table is in the <a href="The%20Field%20Registry.html">Field Registry</a> under the App domain.</p>
+
+<h2>Search & metrics</h2>
+<p><strong>Owl</strong> is the AI assistant layer. It accepts natural-language questions ("What employees have the highest refund rate this week?") and translates them to structured queries over the CRDM. Owl uses the <a href="The%20Field%20Registry.html">Field Registry</a> as a typed schema, applies tenant-scoped RLS, and returns an answer with citations back to the underlying rows.</p>
+<p>The <a href="The%20Risk%20Dictionary.html">Risk Dictionary</a> is a curated set of 21 predefined z-score outlier queries — the drill-down entry points merchants see on the dashboard. Each entry maps a question to a drill order (by_employee / by_location / by_day) and a set of canonical filters. No pre-built SQL; the drill engine handles query construction at runtime.</p>
+<p><strong>Metrics</strong> are computed in <code>metrics</code> schema via daily + period aggregation:</p>
+<ul class="wc-list">
+  <li><code>metrics.daily_metrics</code> — per-location, per-day rollups (sales, transactions, refunds, voids, discounts, shrink indicators)</li>
+  <li><code>metrics.employee_daily_metrics</code> — per-employee, per-day (with a <code>risk_score_snapshot</code>)</li>
+  <li><code>metrics.period_metrics</code> — weekly + monthly rollups for dashboard trend lines</li>
+  <li><code>metrics.metric_baselines</code> — per-merchant baselines (mean + stddev) used by the Risk Dictionary's z-score queries</li>
+  <li><code>metrics.entity_risk_scores</code> — current risk score per employee / card / subject</li>
+</ul>
+
+<h2>The MCP surface</h2>
+<p>Every bounded service domain exposes an MCP server at its own URL prefix — <code>/owl</code>, <code>/chirp</code>, <code>/fox</code>, <code>/alert</code>, <code>/analytics</code>, <code>/identity</code>, <code>/tsp</code>, <code>/raas</code>, <code>/bff</code>, <code>/condor</code>, <code>/atlas</code>, plus ALX for institutional memory. Each server follows the same contract:</p>
+<ul class="wc-list">
+  <li><code>GET /&lt;domain&gt;/manifest</code> — describes the server, tools, and schemas</li>
+  <li><code>GET /&lt;domain&gt;/tools</code> — lists tool names + argument signatures</li>
+  <li><code>POST /&lt;domain&gt;/tools/&lt;name&gt;</code> — invokes a tool with JSON arguments</li>
+  <li><code>GET /&lt;domain&gt;/health</code> — liveness probe</li>
+</ul>
+<p>Auth is JWT on tool invocation; manifest/tools/health are public. The shared base kit in <code>canary/mcp/</code> stamps these endpoints via <code>create_mcp_blueprint()</code>, so adding a new domain is a model + a handler file, not a blueprint scaffold.</p>
+<p>This is the same contract the Agent SDK uses. Owl, ALX, and the Ops Console's QA Agent all talk to these servers as tool consumers — no internal-only API, no backdoors.</p>
+
+<h2>Deployment shape</h2>
+
+<figure>
+  <img src="/atlas/svg/fig-i01-docker-stack-topology.svg" alt="Docker stack topology — Flask, four TSP subscribers, Postgres, Valkey, Ollama, PgAdmin, MailHog">
+  <figcaption>Fig. I-01 · <a href="/atlas/#cat-I">Docker Stack Topology</a></figcaption>
+</figure>
+
+<p>All environments run the same Docker Compose stack:</p>
+<ul class="wc-list">
+  <li><code>canary_flask</code> — Gunicorn, 5001 inside the container, served via <code>--reload</code> in dev</li>
+  <li><code>canary_localhost_tsp_sub1..sub4</code> — four TSP consumer containers, one per subscriber</li>
+  <li><code>growdirect_postgres</code> — PostgreSQL 17 with <code>pgvector</code> (on port 5432, shared across Canary + Cove + memory)</li>
+  <li><code>growdirect_valkey</code> — Valkey 8 (on 6379); DB 0 = sessions/cache, DB 4 = TSP streams</li>
+  <li><code>growdirect_ollama</code> — Ollama serving <code>qwen3-embedding:8b</code> for 1024-dim semantic vectors</li>
+  <li><code>growdirect_pgadmin</code> — DB admin UI on port 5050</li>
+  <li><code>canary_localhost_qa_agent</code> — Claude-powered QA assistant sidecar</li>
+</ul>
+<p>In dev, <code>dev.growdirect.app</code> routes to the Flask container through a Cloudflare tunnel. Production target is <code>canary.growdirect.app</code> on a Mac Mini behind a second tunnel (same compose, no nginx — Cloudflare handles TLS). No AWS. No Kubernetes. The architecture is deliberately one founder's operational surface area.</p>
+
+<h2>Where to go next</h2>
+<p>You now have the shape. For depth:</p>
+<ul class="wc-list">
+  <li><a href="/atlas/">The Mermaid Atlas</a> — 52 diagrams across pipeline, lifecycle, orchestration, infrastructure, decision, journey, protocol, and legacy research.</li>
+  <li><a href="The%20CRDM.html">The CRDM</a> — provenance of the data model (Tesco TDS → Walmart SMART → Canary), seven canonical sources, Square coverage analysis.</li>
+  <li><a href="The%20Field%20Registry.html">The Field Registry</a> — every table, every column, every searchable field, every i18n key. The metadata source of truth.</li>
+  <li><a href="The%20Detection%20Catalog.html">The Detection Catalog</a> — all 37 rules, generated from source.</li>
+  <li><a href="The%20Risk%20Dictionary.html">The Risk Dictionary</a> — 21 z-score queries mapped to drill paths.</li>
+  <li><a href="API.html">API Reference</a> — OpenAPI 3.0 spec, Redoc-rendered.</li>
+</ul>
+
+  </article>
+</main>
+<footer class="site-footer">
+  <div class="footer-inner">
+    <div>&copy; 2026 GrowDirect DAO LLC · Canary LP</div>
+    <div class="footer-links">
+      <a href="/">canary.growdirect.io</a>
+      <a href="/docs/">Tech Library</a>
+    </div>
+  </div>
+</footer>
+</body>
+</html>
