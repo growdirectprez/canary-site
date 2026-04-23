@@ -3,17 +3,47 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>API Reference — Canary Technical Library</title>
-<meta name="description" content="Canary LP REST API — OpenAPI 3.0 spec rendered with Redoc. 29 blueprints, 12 MCP servers, 37 detection rules across 221 live routes.">
+<title>API — Canary Technical Library</title>
+<meta name="description" content="The elJeffe notarization API — universal event notarization on Bitcoin L1. Architecture specification rendered with Redoc.">
 <meta name="robots" content="noindex, nofollow">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@300;400;500;600&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="../css/canary-docs.css">
 <style>
-body { background: #060608; }
-.redoc-wrapper { background: #fff; min-height: calc(100vh - 200px); }
-.redoc-wrapper redoc { display: block; }
+  /* Page canvas goes dark for Redoc */
+  body { padding: 0; margin: 0; background: #0D1117; color: #E5E7EB; }
+
+  /* Dark-theme overrides scoped to Redoc ONLY.
+     `redoc` is the custom element; all Redoc DOM lives under it. */
+  redoc,
+  redoc * { /* base color fallback */ }
+  redoc .redoc-wrap { background: #0D1117 !important; }
+  redoc .menu-content { background: #0D1117 !important; }
+  redoc .menu-content label,
+  redoc .menu-content li { color: #E5E7EB !important; }
+  redoc .menu-content label:hover,
+  redoc .menu-content li:hover { background: #131920 !important; }
+  redoc .menu-content label.active { background: #131920 !important; }
+  redoc [role="navigation"] { background: #0D1117 !important; border-right: 1px solid #1C2330 !important; }
+  redoc h1, redoc h2, redoc h3, redoc h4, redoc h5 { color: #E5E7EB !important; }
+  redoc p, redoc li, redoc td, redoc th, redoc span, redoc div { color: #C9D1D9 !important; }
+  redoc a { color: #FBBF24 !important; }
+  redoc table { border-color: #1C2330 !important; }
+  redoc tr { background: #0D1117 !important; }
+  redoc tr:nth-child(2n) { background: #131920 !important; }
+  redoc td, redoc th { border-color: #1C2330 !important; }
+  redoc code { background: #131920 !important; color: #FBBF24 !important; }
+  redoc pre { background: #131920 !important; }
+  redoc [class*="right-panel"] { background: #131920 !important; }
+  redoc [class*="http-verb"] { font-weight: 700 !important; }
+  redoc input[type="search"],
+  redoc input[type="text"] { background: #131920 !important; color: #E5E7EB !important; border-color: #1C2330 !important; }
+  redoc button { color: #FBBF24 !important; }
+  ::-webkit-scrollbar { background: #0D1117; width: 8px; }
+  ::-webkit-scrollbar-thumb { background: #1C2330; border-radius: 4px; }
+
+  /* Our site header/nav already defined in canary-docs.css; leave untouched */
 </style>
 </head>
 <body>
@@ -24,24 +54,22 @@ body { background: #060608; }
   </a>
   <a class="demo-cta" href="/prototype/">Launch Demo →</a>
 </header>
-<nav class="doc-nav"><a href="/atlas/">Mermaid Atlas</a><a href="Getting%20Started.html">Getting Started</a><a href="Architecture.html">Architecture</a><a href="The CRDM.html">The CRDM</a><a href="The Field Registry.html">Field Registry</a><a href="The Detection Catalog.html">Detection Catalog</a><a href="The Risk Dictionary.html">Risk Dictionary</a><a href="API.html" class="active">API</a></nav>
-<div class="redoc-wrapper">
-  <redoc spec-url="assets/canary-api-v1.yaml"
-         theme='{"colors": {"primary": {"main": "#E0A500"}}, "typography": {"fontFamily": "Inter, system-ui, sans-serif", "headings": {"fontFamily": "Space Grotesk, sans-serif"}}}'
-         hide-loading
-         expand-responses="200,201"
-         required-props-first
-         sort-props-alphabetically></redoc>
-  <script src="https://cdn.redoc.ly/redoc/latest/bundles/redoc.standalone.js"></script>
-</div>
-<footer class="site-footer">
-  <div class="footer-inner">
-    <div>&copy; 2026 GrowDirect DAO LLC · Canary LP · API v1.2.0</div>
-    <div class="footer-links">
-      <a href="assets/canary-api-v1.yaml">canary-api-v1.yaml</a>
-      <a href="/docs/">Tech Library</a>
-    </div>
-  </div>
-</footer>
+<nav class="doc-nav">
+  <a href="/atlas/">Mermaid Atlas</a>
+  <a href="Getting%20Started.html">Getting Started</a>
+  <a href="Architecture.html">Architecture</a>
+  <a href="The CRDM.html">The CRDM</a>
+  <a href="The Field Registry.html">Field Registry</a>
+  <a href="The Detection Catalog.html">Detection Catalog</a>
+  <a href="The Risk Dictionary.html">Risk Dictionary</a>
+  <a href="API.html" class="active">API</a>
+</nav>
+<redoc spec-url="assets/eljeffe-swagger.yaml"
+       theme='{"colors":{"primary":{"main":"#FBBF24"},"text":{"primary":"#E5E7EB","secondary":"#C9D1D9"},"http":{"get":"#3B82F6","post":"#22C55E","put":"#F59E0B","delete":"#EF4444"}},"typography":{"fontFamily":"Inter, system-ui, sans-serif","headings":{"fontFamily":"Space Grotesk, sans-serif"},"code":{"fontFamily":"Space Mono, monospace"}},"sidebar":{"backgroundColor":"#0D1117","textColor":"#E5E7EB","activeTextColor":"#FBBF24"},"rightPanel":{"backgroundColor":"#131920","textColor":"#E5E7EB"}}'
+       hide-loading
+       expand-responses="200,201"
+       required-props-first
+       sort-props-alphabetically></redoc>
+<script src="https://cdn.redocly.com/redoc/v2.5.1/bundles/redoc.standalone.js"></script>
 </body>
 </html>
