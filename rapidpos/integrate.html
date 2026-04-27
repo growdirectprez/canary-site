@@ -225,7 +225,6 @@ section.alt { background: var(--bg-alt); }
   border-bottom-color: var(--gold);
 }
 
-/* ===== WIKI SHELL + SIDEBAR (injected) ===== */
 .wiki-shell { display: grid; grid-template-columns: 240px 1fr; min-height: calc(100vh - 56px); }
 @media (max-width: 980px) { .wiki-shell { grid-template-columns: 1fr; } }
 .wiki-sidebar {
@@ -252,6 +251,34 @@ section.alt { background: var(--bg-alt); }
 .sb-divider { border: none; border-top: 1px solid rgba(245,240,232,0.1); margin: 12px 0; }
 .wiki-content { min-width: 0; }
 
+
+
+/* ===== WIKI SHELL + SIDEBAR ===== */
+.wiki-shell { display: grid; grid-template-columns: 240px 1fr; min-height: calc(100vh - 56px); }
+@media (max-width: 980px) { .wiki-shell { grid-template-columns: 1fr; } }
+.wiki-sidebar {
+  background: var(--green-dark, #1C3A2B); color: #F5F0E8;
+  padding: 28px 18px; position: sticky; top: 56px; align-self: start;
+  height: calc(100vh - 56px); overflow-y: auto;
+  border-right: 1px solid rgba(0,0,0,0.25); font-size: 13px;
+}
+.wiki-sidebar::-webkit-scrollbar { width: 4px; }
+.wiki-sidebar::-webkit-scrollbar-thumb { background: rgba(245,240,232,0.15); border-radius: 3px; }
+@media (max-width: 980px) { .wiki-sidebar { position: static; height: auto; border-right: none; border-bottom: 1px solid rgba(0,0,0,0.2); } }
+.vault-hdr { padding-bottom: 18px; border-bottom: 1px solid rgba(245,240,232,0.12); margin-bottom: 18px; }
+.vault-lbl { font-size: 10px; font-weight: 700; letter-spacing: 0.16em; text-transform: uppercase; color: #E8A800; display: block; margin-bottom: 5px; font-family: 'Inter', sans-serif; }
+.vault-ttl { font-family: 'Source Serif 4', Georgia, serif; font-style: italic; font-size: 18px; font-weight: 600; color: #F5F0E8; display: block; }
+.vault-sub2 { font-size: 11px; color: rgba(245,240,232,0.45); margin-top: 3px; display: block; }
+.sb-sec { margin-bottom: 18px; }
+.sb-lbl { font-size: 10px; font-weight: 700; letter-spacing: 0.13em; text-transform: uppercase; color: rgba(245,240,232,0.38); margin-bottom: 6px; display: block; font-family: 'Inter', sans-serif; }
+.sb-a { display: block; padding: 5px 8px; border-radius: 4px; color: rgba(245,240,232,0.72); font-size: 13px; border: none !important; transition: background .12s, color .12s; text-decoration: none; }
+.sb-a:hover { background: rgba(245,240,232,0.08); color: #F5F0E8; }
+.sb-a.on { background: rgba(191,135,0,0.18); color: #E8A800; }
+.sb-a .mc { font-size: 10px; font-family: 'IBM Plex Mono', monospace; color: #BF8700; margin-right: 4px; }
+.sb-a.dim { color: rgba(245,240,232,0.32); font-size: 11.5px; }
+.sb-hr { border: none; border-top: 1px solid rgba(245,240,232,0.1); margin: 12px 0; }
+.wiki-cnt { min-width: 0; }
+
 </style>
 </head>
 <body>
@@ -273,6 +300,42 @@ section.alt { background: var(--bg-alt); }
     </div>
   </div>
 </nav>
+<div class="wiki-shell">
+<aside class="wiki-sidebar">
+  <div class="vault-hdr">
+    <span class="vault-lbl">Canary RapidPOS</span>
+    <span class="vault-ttl">NCR Counterpoint</span>
+    <span class="vault-sub2">MCP Layer · GrowDirect</span>
+  </div>
+  <div class="sb-sec">
+    <span class="sb-lbl">Docs</span>
+    <a href="/rapidpos/" class="sb-a">Overview</a>
+    <a href="/rapidpos/architecture.html" class="sb-a">Architecture</a>
+    <a href="/rapidpos/endpoints.html" class="sb-a">Endpoints</a>
+    <a href="/rapidpos/integrate.html" class="sb-a on">Quickstart</a>
+  </div>
+  <hr class="sb-hr">
+  <div class="sb-sec">
+    <span class="sb-lbl">NCR Modules</span>
+    <a href="/rapidpos/wiki-template.html" class="sb-a"><span class="mc">T</span>Transaction Pipeline</a>
+    <a href="#" class="sb-a"><span class="mc">Q</span>Loss Prevention</a>
+    <a href="#" class="sb-a"><span class="mc">R</span>Customer</a>
+    <a href="#" class="sb-a"><span class="mc">C</span>Commercial</a>
+    <a href="#" class="sb-a"><span class="mc">P</span>Pricing &amp; Promo</a>
+    <a href="#" class="sb-a"><span class="mc">D</span>Distribution</a>
+    <a href="#" class="sb-a"><span class="mc">L</span>Labor</a>
+    <a href="#" class="sb-a dim">+ 8 more modules</a>
+  </div>
+  <hr class="sb-hr">
+  <div class="sb-sec">
+    <span class="sb-lbl">Delivery</span>
+    <a href="/rapidpos/wiki/" class="sb-a">Wiki</a>
+    <a href="/rapidpos/method/" class="sb-a">Method</a>
+    <a href="/rapidpos/armstrong.html" class="sb-a">Armstrong Pilot</a>
+    <a href="/rapidpos/armstrong-proposal.html" class="sb-a">Armstrong Proposal</a>
+  </div>
+</aside>
+<div class="wiki-cnt">
 
 <header class="hero">
   <div class="container">
@@ -409,5 +472,8 @@ export REDIS_URL=<span class="s">redis://localhost:6379</span></code></pre>
   </div>
 </footer>
 
+
+</div><!-- /wiki-cnt -->
+</div><!-- /wiki-shell -->
 </body>
 </html>

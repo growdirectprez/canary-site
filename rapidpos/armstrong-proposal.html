@@ -1,0 +1,1715 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Armstrong Garden Centers — A GrowDirect Proposal</title>
+<style>
+  :root {
+    --green-dark: #1C3A2B;
+    --green-mid: #2A5240;
+    --green-light: #4CAF7D;
+    --gold: #BF8700;
+    --gold-light: #E8A800;
+    --parchment: #F5F0E8;
+    --parchment-dark: #EAE4D6;
+    --purple: #6639BA;
+    --purple-light: #8A5FD4;
+    --text-dark: #1A1A1A;
+    --text-mid: #3A3A3A;
+    --text-muted: #6B6B6B;
+    --text-light: #F5F0E8;
+    --border: #D0C9BB;
+    --red: #C0392B;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif;
+    background: #F0EBE2;
+    color: var(--text-dark);
+    line-height: 1.65;
+  }
+
+  a { color: var(--gold); text-decoration: none; }
+  a:hover { text-decoration: underline; }
+
+  .container { max-width: 860px; margin: 0 auto; padding: 0 28px; }
+
+  /* ── COVER ── */
+  .cover {
+    background: var(--green-dark);
+    color: var(--text-light);
+    padding: 90px 0 80px;
+    position: relative;
+    overflow: hidden;
+  }
+  .cover::before {
+    content: '';
+    position: absolute;
+    top: 0; right: 0; bottom: 0; left: 0;
+    background: repeating-linear-gradient(135deg, transparent, transparent 40px, rgba(255,255,255,0.015) 40px, rgba(255,255,255,0.015) 41px);
+    pointer-events: none;
+  }
+  .cover-eyebrow {
+    font-size: 10px;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    color: var(--gold);
+    margin-bottom: 20px;
+    font-weight: 700;
+  }
+  .cover h1 {
+    font-family: Georgia, 'Times New Roman', serif;
+    font-size: 46px;
+    font-weight: 700;
+    line-height: 1.1;
+    margin-bottom: 14px;
+    color: #fff;
+  }
+  .cover h1 span { color: var(--gold); }
+  .cover-sub {
+    font-size: 19px;
+    color: rgba(245,240,232,0.72);
+    margin-bottom: 52px;
+    font-style: italic;
+    font-family: Georgia, serif;
+    max-width: 600px;
+    line-height: 1.4;
+  }
+  .cover-divider {
+    width: 60px;
+    height: 2px;
+    background: var(--gold);
+    margin-bottom: 36px;
+  }
+  .cover-meta {
+    display: flex;
+    gap: 48px;
+    flex-wrap: wrap;
+  }
+  .cover-meta-item {
+    font-size: 11px;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    color: rgba(245,240,232,0.5);
+  }
+  .cover-meta-item strong {
+    display: block;
+    color: rgba(245,240,232,0.85);
+    font-size: 13px;
+    margin-top: 4px;
+    letter-spacing: 0;
+    text-transform: none;
+  }
+  .pilot-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    background: rgba(102,57,186,0.25);
+    border: 1px solid var(--purple-light);
+    border-radius: 6px;
+    padding: 12px 20px;
+    margin-top: 40px;
+    font-size: 13px;
+    color: rgba(245,240,232,0.9);
+    max-width: 480px;
+  }
+  .pilot-badge .dot {
+    width: 8px; height: 8px;
+    background: var(--green-light);
+    border-radius: 50%;
+    flex-shrink: 0;
+    animation: pulse 2s infinite;
+  }
+  @keyframes pulse {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.4; }
+  }
+
+  /* ── TOC NAV ── */
+  .toc {
+    background: var(--green-mid);
+    padding: 28px 0;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    box-shadow: 0 2px 12px rgba(0,0,0,0.15);
+  }
+  .toc-inner {
+    display: flex;
+    gap: 0;
+    overflow-x: auto;
+  }
+  .toc-item {
+    font-size: 11px;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    color: rgba(245,240,232,0.55);
+    padding: 0 22px;
+    white-space: nowrap;
+    cursor: pointer;
+    border-right: 1px solid rgba(255,255,255,0.1);
+    transition: color 0.2s;
+    font-weight: 600;
+  }
+  .toc-item:last-child { border-right: none; }
+  .toc-item:hover { color: var(--gold); }
+  .toc-number {
+    display: block;
+    font-size: 9px;
+    color: rgba(245,240,232,0.3);
+    margin-bottom: 3px;
+    letter-spacing: 1px;
+  }
+
+  /* ── SECTIONS ── */
+  .section {
+    padding: 72px 0;
+    border-bottom: 1px solid var(--border);
+  }
+  .section:last-child { border-bottom: none; }
+  .section-header {
+    margin-bottom: 48px;
+  }
+  .section-number {
+    font-size: 10px;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    color: var(--gold);
+    font-weight: 700;
+    margin-bottom: 10px;
+  }
+  .section h2 {
+    font-family: Georgia, serif;
+    font-size: 34px;
+    font-weight: 700;
+    color: var(--green-dark);
+    line-height: 1.15;
+    margin-bottom: 12px;
+  }
+  .section-lead {
+    font-size: 17px;
+    color: var(--text-mid);
+    max-width: 680px;
+    line-height: 1.6;
+    border-left: 3px solid var(--gold);
+    padding-left: 18px;
+  }
+
+  /* ── STAT GRID ── */
+  .stat-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+    gap: 2px;
+    margin: 40px 0;
+    background: var(--border);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    overflow: hidden;
+  }
+  .stat-cell {
+    background: #fff;
+    padding: 28px 22px;
+    text-align: center;
+  }
+  .stat-cell:first-child { border-radius: 8px 0 0 8px; }
+  .stat-cell:last-child { border-radius: 0 8px 8px 0; }
+  .stat-value {
+    font-family: Georgia, serif;
+    font-size: 32px;
+    font-weight: 700;
+    color: var(--green-dark);
+    line-height: 1;
+    margin-bottom: 6px;
+  }
+  .stat-value.gold { color: var(--gold); }
+  .stat-value.purple { color: var(--purple); }
+  .stat-label {
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    color: var(--text-muted);
+    line-height: 1.3;
+  }
+
+  /* ── CALLOUT BOXES ── */
+  .callout {
+    background: var(--parchment);
+    border: 1px solid var(--border);
+    border-left: 4px solid var(--green-dark);
+    border-radius: 6px;
+    padding: 24px 28px;
+    margin: 32px 0;
+  }
+  .callout.gold-callout { border-left-color: var(--gold); }
+  .callout.purple-callout { border-left-color: var(--purple); }
+  .callout.red-callout { border-left-color: var(--red); }
+  .callout-label {
+    font-size: 10px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    font-weight: 700;
+    color: var(--text-muted);
+    margin-bottom: 8px;
+  }
+  .callout p {
+    font-size: 15px;
+    color: var(--text-mid);
+    line-height: 1.6;
+  }
+  .callout strong { color: var(--text-dark); }
+
+  /* ── DARK HERO CALLOUT ── */
+  .hero-callout {
+    background: var(--green-dark);
+    color: var(--text-light);
+    border-radius: 10px;
+    padding: 40px 40px;
+    margin: 40px 0;
+    position: relative;
+    overflow: hidden;
+  }
+  .hero-callout::after {
+    content: '';
+    position: absolute;
+    top: -30px; right: -30px;
+    width: 160px; height: 160px;
+    background: rgba(191,135,0,0.07);
+    border-radius: 50%;
+    pointer-events: none;
+  }
+  .hero-callout h3 {
+    font-family: Georgia, serif;
+    font-size: 26px;
+    color: #fff;
+    margin-bottom: 12px;
+    line-height: 1.2;
+  }
+  .hero-callout h3 em { color: var(--gold); font-style: normal; }
+  .hero-callout p {
+    font-size: 16px;
+    color: rgba(245,240,232,0.78);
+    line-height: 1.6;
+    max-width: 640px;
+  }
+
+  /* ── PLAYBOOK CARDS ── */
+  .playbook-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+    gap: 20px;
+    margin: 40px 0;
+  }
+  .playbook-card {
+    background: #fff;
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 28px 24px;
+    position: relative;
+    overflow: hidden;
+  }
+  .playbook-card::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 4px;
+  }
+  .playbook-card.p1::before { background: var(--gold); }
+  .playbook-card.p2::before { background: var(--green-light); }
+  .playbook-card.p3::before { background: var(--purple); }
+  .playbook-num {
+    font-size: 10px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: var(--text-muted);
+    margin-bottom: 8px;
+    font-weight: 700;
+  }
+  .playbook-card h3 {
+    font-size: 17px;
+    font-weight: 700;
+    color: var(--green-dark);
+    margin-bottom: 12px;
+    line-height: 1.2;
+  }
+  .playbook-card p {
+    font-size: 14px;
+    color: var(--text-mid);
+    line-height: 1.55;
+  }
+  .playbook-origin {
+    font-size: 11px;
+    color: var(--text-muted);
+    margin-top: 14px;
+    padding-top: 14px;
+    border-top: 1px solid var(--border);
+    font-style: italic;
+  }
+
+  /* ── PHASE STEPS ── */
+  .phase-steps {
+    display: flex;
+    gap: 0;
+    margin: 36px 0;
+    position: relative;
+  }
+  .phase-steps::before {
+    content: '';
+    position: absolute;
+    top: 28px; left: 28px; right: 28px;
+    height: 2px;
+    background: var(--border);
+    z-index: 0;
+  }
+  .phase-step {
+    flex: 1;
+    text-align: center;
+    position: relative;
+    z-index: 1;
+  }
+  .phase-dot {
+    width: 56px; height: 56px;
+    border-radius: 50%;
+    background: var(--green-dark);
+    color: #fff;
+    font-family: Georgia, serif;
+    font-size: 20px;
+    font-weight: 700;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto 14px;
+    border: 3px solid var(--parchment);
+  }
+  .phase-dot.gold { background: var(--gold); }
+  .phase-dot.purple { background: var(--purple); }
+  .phase-title {
+    font-size: 12px;
+    font-weight: 700;
+    color: var(--green-dark);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    margin-bottom: 4px;
+  }
+  .phase-desc {
+    font-size: 12px;
+    color: var(--text-muted);
+    line-height: 1.4;
+    padding: 0 8px;
+  }
+
+  /* ── VSM FEATURE CARDS ── */
+  .vsm-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 16px;
+    margin: 36px 0;
+  }
+  .vsm-card {
+    background: #fff;
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 24px 22px;
+    transition: box-shadow 0.2s;
+  }
+  .vsm-card:hover { box-shadow: 0 4px 16px rgba(0,0,0,0.08); }
+  .vsm-id {
+    font-size: 10px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: var(--gold);
+    font-weight: 700;
+    margin-bottom: 6px;
+  }
+  .vsm-card h3 {
+    font-size: 15px;
+    font-weight: 700;
+    color: var(--green-dark);
+    margin-bottom: 10px;
+    line-height: 1.3;
+  }
+  .vsm-card p {
+    font-size: 13px;
+    color: var(--text-mid);
+    line-height: 1.55;
+    margin-bottom: 12px;
+  }
+  .vsm-tools {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+  }
+  .vsm-tool {
+    font-size: 10px;
+    font-family: 'SF Mono', 'Fira Code', monospace;
+    background: var(--parchment-dark);
+    color: var(--green-dark);
+    padding: 3px 8px;
+    border-radius: 4px;
+    border: 1px solid var(--border);
+  }
+
+  /* ── ARCHITECTURE STACK ── */
+  .stack {
+    margin: 36px 0;
+    display: flex;
+    flex-direction: column;
+    gap: 3px;
+  }
+  .stack-layer {
+    background: #fff;
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    padding: 18px 24px;
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    position: relative;
+  }
+  .stack-layer.layer-4 {
+    background: var(--purple);
+    border-color: var(--purple);
+    color: #fff;
+  }
+  .layer-num {
+    font-size: 10px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    font-weight: 700;
+    color: var(--text-muted);
+    min-width: 52px;
+    flex-shrink: 0;
+  }
+  .stack-layer.layer-4 .layer-num { color: rgba(255,255,255,0.6); }
+  .layer-body { flex: 1; }
+  .layer-name {
+    font-size: 14px;
+    font-weight: 700;
+    color: var(--green-dark);
+    margin-bottom: 2px;
+  }
+  .stack-layer.layer-4 .layer-name { color: #fff; }
+  .layer-desc {
+    font-size: 12px;
+    color: var(--text-muted);
+    line-height: 1.4;
+  }
+  .stack-layer.layer-4 .layer-desc { color: rgba(255,255,255,0.78); }
+  .layer-badge {
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    padding: 4px 10px;
+    border-radius: 4px;
+    flex-shrink: 0;
+  }
+  .badge-prize {
+    background: var(--gold);
+    color: var(--green-dark);
+  }
+  .badge-ncr {
+    background: var(--parchment-dark);
+    color: var(--text-muted);
+    border: 1px solid var(--border);
+  }
+  .badge-customer {
+    background: rgba(76,175,125,0.15);
+    color: var(--green-mid);
+    border: 1px solid rgba(76,175,125,0.3);
+  }
+  .stack-arrow {
+    text-align: center;
+    font-size: 11px;
+    color: var(--text-muted);
+    letter-spacing: 1px;
+    padding: 2px 0;
+  }
+
+  /* ── ROADMAP ── */
+  .roadmap {
+    margin: 36px 0;
+  }
+  .roadmap-phase {
+    display: flex;
+    gap: 20px;
+    margin-bottom: 16px;
+    align-items: flex-start;
+  }
+  .roadmap-phase-num {
+    width: 44px;
+    height: 44px;
+    border-radius: 50%;
+    background: var(--green-dark);
+    color: #fff;
+    font-family: Georgia, serif;
+    font-size: 17px;
+    font-weight: 700;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    margin-top: 2px;
+  }
+  .roadmap-phase-num.current { background: var(--purple); }
+  .roadmap-phase-body { flex: 1; }
+  .roadmap-phase-header {
+    display: flex;
+    align-items: baseline;
+    gap: 14px;
+    margin-bottom: 6px;
+  }
+  .roadmap-phase-title {
+    font-size: 16px;
+    font-weight: 700;
+    color: var(--green-dark);
+  }
+  .roadmap-phase-when {
+    font-size: 11px;
+    color: var(--text-muted);
+    letter-spacing: 0.5px;
+  }
+  .roadmap-phase-desc {
+    font-size: 14px;
+    color: var(--text-mid);
+    line-height: 1.55;
+  }
+  .roadmap-bar {
+    height: 5px;
+    border-radius: 3px;
+    margin-top: 10px;
+    margin-bottom: 4px;
+  }
+
+  /* ── TABLE ── */
+  .data-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 13px;
+    margin: 28px 0;
+    background: #fff;
+    border-radius: 8px;
+    overflow: hidden;
+    border: 1px solid var(--border);
+  }
+  .data-table th {
+    background: var(--green-dark);
+    color: rgba(245,240,232,0.85);
+    font-size: 10px;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    padding: 12px 16px;
+    text-align: left;
+    font-weight: 600;
+  }
+  .data-table td {
+    padding: 12px 16px;
+    border-bottom: 1px solid var(--border);
+    color: var(--text-mid);
+    vertical-align: top;
+  }
+  .data-table tr:last-child td { border-bottom: none; }
+  .data-table tr:nth-child(even) td { background: var(--parchment); }
+
+  /* ── TEAM BIOS ── */
+  .team-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(380px, 1fr));
+    gap: 20px;
+    margin: 36px 0;
+  }
+  .bio-card {
+    background: #fff;
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 30px 28px;
+  }
+  .bio-name {
+    font-family: Georgia, serif;
+    font-size: 20px;
+    font-weight: 700;
+    color: var(--green-dark);
+    margin-bottom: 4px;
+  }
+  .bio-title {
+    font-size: 12px;
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+    color: var(--gold);
+    font-weight: 700;
+    margin-bottom: 16px;
+  }
+  .bio-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+    margin-bottom: 16px;
+  }
+  .bio-tag {
+    font-size: 11px;
+    background: var(--parchment-dark);
+    color: var(--text-muted);
+    padding: 3px 10px;
+    border-radius: 20px;
+    border: 1px solid var(--border);
+  }
+  .bio-text {
+    font-size: 14px;
+    color: var(--text-mid);
+    line-height: 1.65;
+  }
+
+  /* ── PLAYS ── */
+  .play-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+    gap: 20px;
+    margin: 36px 0;
+  }
+  .play-card {
+    border-radius: 10px;
+    padding: 30px 26px;
+    position: relative;
+    overflow: hidden;
+  }
+  .play-card.anchor { background: var(--green-dark); color: var(--text-light); }
+  .play-card.smb { background: var(--parchment); border: 1px solid var(--border); }
+  .play-card.asset { background: linear-gradient(135deg, #1a1f3a 0%, #0f1228 100%); color: var(--text-light); border: 1px solid rgba(134,108,210,0.35); }
+  .play-label {
+    font-size: 10px;
+    letter-spacing: 2.5px;
+    text-transform: uppercase;
+    font-weight: 700;
+    margin-bottom: 10px;
+    opacity: 0.7;
+  }
+  .play-card h3 {
+    font-family: Georgia, serif;
+    font-size: 20px;
+    font-weight: 700;
+    line-height: 1.2;
+    margin-bottom: 12px;
+  }
+  .play-card.anchor h3 { color: #fff; }
+  .play-card.smb h3 { color: var(--green-dark); }
+  .play-card.asset h3 { color: #fff; }
+  .play-card p {
+    font-size: 13.5px;
+    line-height: 1.6;
+    opacity: 0.85;
+  }
+  .play-card.smb p { color: var(--text-mid); opacity: 1; }
+  .play-number {
+    font-family: Georgia, serif;
+    font-size: 52px;
+    font-weight: 700;
+    opacity: 0.12;
+    position: absolute;
+    bottom: 12px;
+    right: 18px;
+    line-height: 1;
+  }
+
+  /* ── PILOT MOMENT ── */
+  .pilot-section {
+    background: var(--green-dark);
+    color: var(--text-light);
+    border-radius: 12px;
+    padding: 52px 48px;
+    margin: 48px 0;
+    position: relative;
+    overflow: hidden;
+  }
+  .pilot-section::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0; bottom: 0;
+    background: repeating-linear-gradient(135deg, transparent, transparent 40px, rgba(255,255,255,0.012) 40px, rgba(255,255,255,0.012) 41px);
+    pointer-events: none;
+  }
+  .pilot-section h2 {
+    font-family: Georgia, serif;
+    font-size: 32px;
+    color: #fff;
+    margin-bottom: 16px;
+    line-height: 1.2;
+  }
+  .pilot-section h2 em { color: var(--gold); font-style: normal; }
+  .pilot-section p {
+    font-size: 16px;
+    color: rgba(245,240,232,0.78);
+    line-height: 1.65;
+    max-width: 700px;
+    margin-bottom: 14px;
+  }
+  .pilot-bullets {
+    margin: 24px 0;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+  }
+  .pilot-bullet {
+    display: flex;
+    align-items: flex-start;
+    gap: 14px;
+    font-size: 15px;
+    color: rgba(245,240,232,0.88);
+    line-height: 1.5;
+  }
+  .pilot-bullet-dot {
+    width: 6px; height: 6px;
+    background: var(--gold);
+    border-radius: 50%;
+    margin-top: 8px;
+    flex-shrink: 0;
+  }
+
+  /* ── SMROI TABLE ── */
+  .smroi {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 2px;
+    margin: 36px 0;
+    background: var(--border);
+    border-radius: 8px;
+    overflow: hidden;
+  }
+  .smroi-cell {
+    background: #fff;
+    padding: 28px 24px;
+  }
+  .smroi-cell.header {
+    background: var(--parchment-dark);
+  }
+  .smroi-label {
+    font-size: 10px;
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+    color: var(--text-muted);
+    margin-bottom: 6px;
+    font-weight: 700;
+  }
+  .smroi-value {
+    font-family: Georgia, serif;
+    font-size: 24px;
+    font-weight: 700;
+    color: var(--green-dark);
+    margin-bottom: 4px;
+  }
+  .smroi-desc {
+    font-size: 12px;
+    color: var(--text-muted);
+    line-height: 1.5;
+  }
+
+  /* ── 90-DAY PLAN ── */
+  .plan-row {
+    display: flex;
+    gap: 16px;
+    padding: 16px 0;
+    border-bottom: 1px solid var(--border);
+    align-items: flex-start;
+  }
+  .plan-row:last-child { border-bottom: none; }
+  .plan-week {
+    font-size: 11px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    color: var(--gold);
+    min-width: 60px;
+    padding-top: 2px;
+  }
+  .plan-action { font-size: 14px; color: var(--text-mid); flex: 1; line-height: 1.5; }
+  .plan-output { font-size: 13px; color: var(--text-muted); font-style: italic; flex: 1; line-height: 1.5; }
+
+  /* ── FOOTER ── */
+  .footer {
+    background: var(--green-dark);
+    color: rgba(245,240,232,0.45);
+    padding: 44px 0;
+    font-size: 12px;
+    margin-top: 0;
+  }
+  .footer-inner {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 40px;
+    flex-wrap: wrap;
+  }
+  .footer-brand {
+    font-family: Georgia, serif;
+    font-size: 18px;
+    color: rgba(245,240,232,0.85);
+    margin-bottom: 6px;
+  }
+  .footer-links {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    text-align: right;
+  }
+  .footer-links a {
+    color: var(--gold);
+    font-size: 12px;
+  }
+
+  /* ── UTILITY ── */
+  h3.subsection {
+    font-size: 20px;
+    font-weight: 700;
+    color: var(--green-dark);
+    margin: 40px 0 16px;
+    padding-bottom: 10px;
+    border-bottom: 1px solid var(--border);
+  }
+  p { margin-bottom: 14px; color: var(--text-mid); font-size: 15px; }
+  p:last-child { margin-bottom: 0; }
+
+  @media (max-width: 600px) {
+    .cover h1 { font-size: 32px; }
+    .section h2 { font-size: 26px; }
+    .toc-item { font-size: 10px; padding: 0 14px; }
+    .team-grid { grid-template-columns: 1fr; }
+    .pilot-section { padding: 36px 24px; }
+    .phase-steps { flex-direction: column; }
+    .phase-steps::before { display: none; }
+  }
+</style>
+</head>
+<body>
+
+<!-- ══ VAULT NAV ══ -->
+<nav style="background:#0f1c10;border-bottom:1px solid rgba(76,175,125,0.25);padding:0;position:sticky;top:0;z-index:999;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',system-ui,sans-serif;">
+  <div style="max-width:860px;margin:0 auto;padding:0 28px;display:flex;align-items:center;justify-content:space-between;height:42px;">
+    <span style="color:rgba(245,240,232,0.45);font-size:11px;letter-spacing:0.08em;text-transform:uppercase;">GrowDirect Vaults</span>
+    <div style="display:flex;gap:24px;align-items:center;">
+      <a href="https://proposal.growdirect.io" style="color:#4CAF7D;font-size:12px;font-weight:600;letter-spacing:0.04em;text-decoration:none;opacity:1;">Proposal</a>
+      <a href="https://ncr.growdirect.io" style="color:rgba(245,240,232,0.65);font-size:12px;font-weight:500;letter-spacing:0.04em;text-decoration:none;" onmouseover="this.style.color='#4CAF7D'" onmouseout="this.style.color='rgba(245,240,232,0.65)'">NCR Vault</a>
+      <a href="https://growdirect-llc.github.io/canary-retail-brain/" style="color:rgba(245,240,232,0.65);font-size:12px;font-weight:500;letter-spacing:0.04em;text-decoration:none;" onmouseover="this.style.color='#4CAF7D'" onmouseout="this.style.color='rgba(245,240,232,0.65)'">Retail Brain</a>
+      <a href="https://growdirect-llc.github.io/catz/" style="color:rgba(245,240,232,0.65);font-size:12px;font-weight:500;letter-spacing:0.04em;text-decoration:none;" onmouseover="this.style.color='#4CAF7D'" onmouseout="this.style.color='rgba(245,240,232,0.65)'">CATz Method</a>
+    </div>
+  </div>
+</nav>
+
+<!-- ══ COVER ══ -->
+<div class="cover" id="top">
+  <div class="container">
+    <div class="cover-eyebrow">GrowDirect LLC — Confidential Proposal</div>
+    <h1>Armstrong Garden Centers<br>
+    <span>The Garden Partner of the Future</span></h1>
+    <div class="cover-sub">How 136 years of horticultural expertise becomes the first MCP-native specialty retail experience in America — live, in this room, today.</div>
+    <div class="cover-divider"></div>
+    <div class="cover-meta">
+      <div class="cover-meta-item">Prepared for<strong>Armstrong Garden Centers</strong></div>
+      <div class="cover-meta-item">Presented by<strong>GrowDirect LLC</strong></div>
+      <div class="cover-meta-item">Date<strong>April 2026</strong></div>
+      <div class="cover-meta-item">Status<strong>Working Prototype</strong></div>
+    </div>
+    <div class="pilot-badge">
+      <div class="dot"></div>
+      ALX Virtual Horticulturist is live — full stack on a laptop, demonstrable today
+    </div>
+  </div>
+</div>
+
+<!-- ══ NAV ══ -->
+<div class="toc">
+  <div class="container">
+    <div class="toc-inner">
+      <a href="#s1" class="toc-item"><span class="toc-number">01</span>The Strategy</a>
+      <a href="#s2" class="toc-item"><span class="toc-number">02</span>The Method</a>
+      <a href="#s3" class="toc-item"><span class="toc-number">03</span>The Solution</a>
+      <a href="#s4" class="toc-item"><span class="toc-number">04</span>The Plan</a>
+      <a href="#s5" class="toc-item"><span class="toc-number">05</span>The Team</a>
+      <a href="#s6" class="toc-item"><span class="toc-number">06</span>The Play</a>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════
+     SECTION 1 — THE STRATEGY
+══════════════════════════════════════════ -->
+<div class="section" id="s1">
+  <div class="container">
+    <div class="section-header">
+      <div class="section-number">Section 01</div>
+      <h2>The Strategy</h2>
+      <div class="section-lead">A $20.9 billion market is being created right now — the first wave of AI agents that shop, advise, and transact on behalf of customers. No specialty garden retailer has an MCP endpoint. Armstrong has everything but one layer.</div>
+    </div>
+
+    <div class="stat-grid">
+      <div class="stat-cell">
+        <div class="stat-value gold">$20.9B</div>
+        <div class="stat-label">AI agent retail market 2026 (eMarketer)</div>
+      </div>
+      <div class="stat-cell">
+        <div class="stat-value">4×</div>
+        <div class="stat-label">Growth vs. 2025 — fastest expanding channel</div>
+      </div>
+      <div class="stat-cell">
+        <div class="stat-value purple">0</div>
+        <div class="stat-label">Specialty garden retailers with an MCP endpoint</div>
+      </div>
+      <div class="stat-cell">
+        <div class="stat-value">136</div>
+        <div class="stat-label">Years of Armstrong horticultural expertise — unmatchable</div>
+      </div>
+    </div>
+
+    <div class="callout gold-callout">
+      <div class="callout-label">The Moment</div>
+      <p>Walmart's Sparky MCP agent is live. Gartner projects <strong>75% of gateway vendors will have MCP features by end of 2026</strong>. The agent commerce layer is being built right now, retailer by retailer. The question is not whether Armstrong needs this — it is whether Armstrong leads or follows.</p>
+    </div>
+
+    <h3 class="subsection">The Armstrong Opportunity</h3>
+    <p>Armstrong Garden Centers is a $300M specialty retailer with 31 California locations, 136 years of horticultural expertise, and a 100% ESOP ownership structure that makes every associate a stakeholder in the outcome. The business has three structural advantages that no competitor can replicate: local SoCal knowledge encoded in its horticulturists, a supply chain that grows native plants at scale (42% of US nurseries don't stock them at all), and the trust of a customer base that drives 40 minutes for the right plant and the right advice.</p>
+    <p>The gap is that none of it travels beyond the store floor. The horticulturist's expertise ends when the customer leaves. The plant guarantee doesn't come with ongoing care. The seasonal knowledge — that September, not spring, is the best planting month in SoCal — lives in staff heads, not in customer hands.</p>
+    <p>ALX closes the gap. Not as a chatbot. As a persistent, zone-aware, inventory-connected, garden-remembering horticulturist that is available 24 hours a day across every digital channel Armstrong has — and the ones it doesn't have yet.</p>
+
+    <div class="hero-callout">
+      <h3>"Your garden <em>remembered</em>"</h3>
+      <p>Armstrong's positioning strategy in three words. The Expertise Seeker — the 45–65 SoCal homeowner who drives 40 minutes for the right plant — is not choosing between Armstrong and Home Depot. She's choosing between Armstrong and the gap between knowing what to plant and having it survive in her specific Sunset zone. ALX closes that gap, 24 hours a day, for every customer Armstrong has ever served.</p>
+    </div>
+
+    <h3 class="subsection">The Competitive Position</h3>
+    <div class="smroi">
+      <div class="smroi-cell header">
+        <div class="smroi-label">High Expertise / High Accessibility</div>
+        <div class="smroi-value" style="color:var(--green-light)">Armstrong + ALX</div>
+        <div class="smroi-desc">The target. Full horticultural depth, always available. This position doesn't exist yet in specialty garden retail.</div>
+      </div>
+      <div class="smroi-cell">
+        <div class="smroi-label">High Expertise / Low Accessibility</div>
+        <div class="smroi-value">Armstrong Today</div>
+        <div class="smroi-desc">136 years of expertise locked behind store hours, staff availability, and the customer's willingness to drive.</div>
+      </div>
+      <div class="smroi-cell">
+        <div class="smroi-label">Low Expertise / High Accessibility</div>
+        <div class="smroi-value">Home Depot</div>
+        <div class="smroi-desc">Commodity at scale. Price-competitive, ubiquitous, and undifferentiated. Not Armstrong's real competition.</div>
+      </div>
+      <div class="smroi-cell header">
+        <div class="smroi-label">Low Expertise / Low Accessibility</div>
+        <div class="smroi-value" style="color:var(--text-muted)">No Man's Land</div>
+        <div class="smroi-desc">The graveyard of undifferentiated local nurseries losing to both big box and online.</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════
+     SECTION 2 — THE METHOD
+══════════════════════════════════════════ -->
+<div class="section" id="s2">
+  <div class="container">
+    <div class="section-header">
+      <div class="section-number">Section 02</div>
+      <h2>The Method</h2>
+      <div class="section-lead">Three playbooks, twenty-eight years refined. Not hypothetical — Armstrong has already been through all three. The deliverables in this proposal are the outputs.</div>
+    </div>
+
+    <div class="playbook-grid">
+      <div class="playbook-card p1">
+        <div class="playbook-num">Playbook 01</div>
+        <h3>Consumer Positioning</h3>
+        <p>A structured three-phase engagement: Current State audit → Market and consumer research → Positioning strategy and execution roadmap. Applied to Armstrong across $50.2B market analysis, three customer segment profiles, SEO content strategy, and a positioning framework.</p>
+        <div class="playbook-origin">Derived from PwC Strategic Information Systems Planning (SISP) methodology. Applied at Ann Taylor, Saks Fifth Avenue, PETsMART, Kenneth Cole, Talbots, Muji, Sports Authority — and now Armstrong.</div>
+      </div>
+      <div class="playbook-card p2">
+        <div class="playbook-num">Playbook 02</div>
+        <h3>VSM Feature Design</h3>
+        <p>Six purpose-built virtual store manager features designed from the ground up for the specialty garden retail context. Each feature is an MCP tool, a customer experience, and a data source that makes the system smarter over time.</p>
+        <div class="playbook-origin">Derived from the ERIS (Enterprise Retail Information System) domain model — Coopers & Lybrand, 1995. The retail business logic encoded in ERIS is the same logic running in ALX today, reimplemented for the MCP era.</div>
+      </div>
+      <div class="playbook-card p3">
+        <div class="playbook-num">Playbook 03</div>
+        <h3>The Delivery Method</h3>
+        <p>The RapidPOS MCP Server (Layer 4) plus the Canary Lawn &amp; Garden OS (CRDM + TSP) that powers it. CATz Phase 2 is the delivery framework — Select, contract, and implement the platform. Phase 2 ends with a signed vendor agreement, funded implementation plan, and the CRDM build underway across all Armstrong locations.</p>
+        <div class="playbook-origin">Architecture derived from SAP IS Retail POS Interface specification (PwC COE, 1999). CRDM lineage: IBM TDS → Tesco SMART → Canary. The data model has been enterprise-validated. What is new is the MCP protocol layer and the garden retail domain adaptation.</div>
+      </div>
+    </div>
+
+    <h3 class="subsection">Playbook 01 in Detail — What We Already Did for Armstrong</h3>
+    <div class="phase-steps">
+      <div class="phase-step">
+        <div class="phase-dot">1</div>
+        <div class="phase-title">Phase 1</div>
+        <div class="phase-desc">Project initiation, data inventory, scoped hypotheses</div>
+      </div>
+      <div class="phase-step">
+        <div class="phase-dot gold">2A</div>
+        <div class="phase-title">Phase 2A</div>
+        <div class="phase-desc">$50.2B market analysis, SMROI competitive mapping</div>
+      </div>
+      <div class="phase-step">
+        <div class="phase-dot gold">2B</div>
+        <div class="phase-title">Phase 2B</div>
+        <div class="phase-desc">Three customer segments, review mining, SEO strategy</div>
+      </div>
+      <div class="phase-step">
+        <div class="phase-dot purple">3</div>
+        <div class="phase-title">Phase 3</div>
+        <div class="phase-desc">Positioning strategy, execution recommendations, 3-year targets</div>
+      </div>
+    </div>
+
+    <div class="callout">
+      <div class="callout-label">What This Normally Costs</div>
+      <p>A PwC or Bain SISP engagement at the depth delivered here — four phases, primary and secondary research, competitive mapping, positioning strategy, and execution roadmap — was billed at <strong>$150,000–$250,000</strong> in 1997 dollars. That's what the methodology is worth. GrowDirect delivers it as the front door to an implementation partnership, not a standalone invoice.</p>
+    </div>
+
+    <h3 class="subsection">Playbook 02 in Detail — The VSM Feature Architecture</h3>
+    <p>Six features designed as a system. Each one is independently valuable; together they create the persistent garden relationship that no competitor can replicate.</p>
+
+    <h3 class="subsection">Playbook 03 in Detail — MCP Architecture + CATz Phase 2 Platform Deployment</h3>
+    <p>The SAP IS Retail POS Interface specification (PwC COE, 1999) defines the IDoc message architecture that is the direct ancestor of the MCP tool schemas in Layer 4. The technical pattern — outbound pricing/promotions/customer data, inbound sales receipts/payment reconciliation — has been proven at scale across hundreds of retail deployments. GrowDirect translates it for the MCP era. That is the RapidPOS MCP Server: the IDoc architecture reimplemented as JSON-RPC 2.0 over HTTPS, with SSE for streaming, and Anthropic's MCP protocol as the agent communication layer.</p>
+    <p>But the MCP Server alone is not the prize. The prize is the CRDM underneath it. This is CATz Phase 2: after the Phase 1 diagnostic confirms the opportunity, the Phase 2 engagement selects and contracts the Canary Lawn &amp; Garden OS — the three-database PostgreSQL platform (<strong>canary_app / canary_sales / canary_metrics</strong>) that runs the 13-module spine across all 31 Armstrong stores. The CRDM lineage runs: IBM TDS (the enterprise data model used at Tesco and Asda) → Tesco SMART (the canonical transaction data warehouse used across 3,000 Tesco stores) → Canary CRDM (the SMB distillation, purpose-built for the NCR Counterpoint channel). The same retail data architecture that enterprise retailers spent hundreds of millions of dollars building — shrunk to fit a 31-store specialty garden chain and deployed in weeks rather than years.</p>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════
+     SECTION 3 — THE SOLUTION
+══════════════════════════════════════════ -->
+<div class="section" id="s3">
+  <div class="container">
+    <div class="section-header">
+      <div class="section-number">Section 03</div>
+      <h2>The Solution</h2>
+      <div class="section-lead">ALX — the Armstrong Virtual Store Horticulturist — is not a chatbot. It is a persistent, zone-aware, inventory-connected retail agent running on the MCP protocol, built on NCR Counterpoint, and powered by the Armstrong Horticulture Vault.</div>
+    </div>
+
+    <h3 class="subsection">Meet ALX</h3>
+    <div class="callout purple-callout">
+      <div class="callout-label">ALX — The Armstrong Virtual Store Horticulturist</div>
+      <p><strong>ALX</strong> (also known as Alex) is a conversational AI agent built on the MCP protocol and trained on the Armstrong Horticulture Vault. ALX is not a search bar, a chatbot, or a FAQ system. ALX is the horticulturist who is always there — who knows your Sunset zone, remembers what you planted last September, checks whether that agave is actually in stock at the Pasadena store before you make the drive, and follows up in August to tell you it's time to plant. ALX is the reason a customer who came in once for annuals becomes a customer who calls before every garden project. ALX™ is a trademark of GrowDirect LLC.</p>
+    </div>
+
+    <h3 class="subsection">The Armstrong Horticulture Vault</h3>
+    <p>Every other AI solution for retail starts with generic training data and tries to specialize later. ALX starts with the Vault. The Vault is a structured knowledge base built from Armstrong's 136 years of SoCal horticultural expertise: the Sunset zone matrix for Zones 21–24, the plant diagnostics library (86+ conditions mapped to symptom → diagnosis → treatment → product), the SoCal seasonal calendar (month-by-month, zone-specific), and the full species library with provenance and care notes.</p>
+    <p>The Vault is what makes ALX "Armstrong" rather than generic. It is also, simultaneously, the SEO content engine that drives organic discovery across all 31 markets.</p>
+
+    <div style="background:var(--parchment-dark); border:1px solid var(--border); border-left:4px solid var(--purple); border-radius:6px; padding:22px 26px; margin:28px 0; display:flex; justify-content:space-between; align-items:center; gap:24px; flex-wrap:wrap;">
+      <div>
+        <div style="font-size:10px; letter-spacing:2px; text-transform:uppercase; font-weight:700; color:var(--purple); margin-bottom:6px;">NCR Counterpoint Vault — Live</div>
+        <div style="font-size:14px; color:var(--text-mid); line-height:1.55;">The GrowDirect NCR Vault: reference architecture, API documentation, MCP tool schemas, and VAR channel resources for the RapidPOS MCP Server build.</div>
+      </div>
+      <a href="https://ncr.growdirect.io" target="_blank" style="background:#1a1f3a; color:#fff; padding:10px 20px; border-radius:6px; font-size:13px; font-weight:700; white-space:nowrap; text-decoration:none; border:1px solid rgba(134,108,210,0.4);">ncr.growdirect.io →</a>
+    </div>
+
+    <h3 class="subsection">Six VSM Features</h3>
+    <div class="vsm-grid">
+      <div class="vsm-card">
+        <div class="vsm-id">VSM-GC-01</div>
+        <h3>Zone-Aware Plant Advisor</h3>
+        <p>Resolves any SoCal location to its Sunset zone and delivers zone-specific planting guidance from the Horticulture Vault. 47-zone taxonomy with city-level and neighborhood-level resolution.</p>
+        <div class="vsm-tools">
+          <span class="vsm-tool">resolve_sunset_zone()</span>
+          <span class="vsm-tool">get_plant_recommendations()</span>
+        </div>
+      </div>
+      <div class="vsm-card">
+        <div class="vsm-id">VSM-GC-02</div>
+        <h3>Plant Diagnostics Engine</h3>
+        <p>86+ conditions mapped from symptom to diagnosis to treatment to in-stock product. The horticulturist who is always available when a customer's citrus leaves start yellowing at 11pm.</p>
+        <div class="vsm-tools">
+          <span class="vsm-tool">run_diagnostic()</span>
+          <span class="vsm-tool">check_inventory()</span>
+        </div>
+      </div>
+      <div class="vsm-card">
+        <div class="vsm-id">VSM-GC-03</div>
+        <h3>Seasonal Garden Calendar</h3>
+        <p>Month-by-month, zone-specific gardening guide for SoCal. Proactive outreach triggers when customers should be planting. September campaign execution engine.</p>
+        <div class="vsm-tools">
+          <span class="vsm-tool">get_monthly_tasks()</span>
+          <span class="vsm-tool">send_seasonal_alert()</span>
+        </div>
+      </div>
+      <div class="vsm-card">
+        <div class="vsm-id">VSM-GC-04</div>
+        <h3>Live Inventory Plant Finder</h3>
+        <p>Real-time inventory lookup across all 31 stores via NCR Counterpoint. "Is this specific agave in stock in Pasadena?" answered in seconds. Rare plant hold capability.</p>
+        <div class="vsm-tools">
+          <span class="vsm-tool">search_inventory()</span>
+          <span class="vsm-tool">hold_plant()</span>
+          <span class="vsm-tool">get_pricing()</span>
+        </div>
+      </div>
+      <div class="vsm-card">
+        <div class="vsm-id">VSM-GC-05</div>
+        <h3>Consultation &amp; Service Workflow</h3>
+        <p>Service intake, consultation booking, and persistent customer garden record. The "corner shop" relationship at scale — ALX knows your garden history, your zone, your past purchases, and your upcoming projects.</p>
+        <div class="vsm-tools">
+          <span class="vsm-tool">get_customer_account()</span>
+          <span class="vsm-tool">book_consultation()</span>
+          <span class="vsm-tool">log_visit()</span>
+        </div>
+      </div>
+      <div class="vsm-card">
+        <div class="vsm-id">VSM-GC-06</div>
+        <h3>Store Operations Manual</h3>
+        <p>Staff-facing SOP library. Every store procedure, seasonal task, zone-specific protocol, and horticulture reference available to associates on the floor — via the same ALX interface as customers.</p>
+        <div class="vsm-tools">
+          <span class="vsm-tool">get_sop()</span>
+          <span class="vsm-tool">get_zone_protocol()</span>
+        </div>
+      </div>
+    </div>
+
+    <h3 class="subsection">The MCP Architecture — Layer 4 is the Prize</h3>
+    <div class="stack">
+      <div class="stack-layer">
+        <div class="layer-num">Layer 5</div>
+        <div class="layer-body">
+          <div class="layer-name">Customer — Claude Agent</div>
+          <div class="layer-desc">The customer's AI on their phone. Knows their preferences, garden history, Sunset zone, and purchase history. Speaks MCP. Owned by the customer.</div>
+        </div>
+        <div class="layer-badge badge-customer">Customer</div>
+      </div>
+      <div class="stack-arrow">↕ MCP / JSON-RPC 2.0 / HTTPS + SSE</div>
+      <div class="stack-layer layer-4">
+        <div class="layer-num">Layer 4</div>
+        <div class="layer-body">
+          <div class="layer-name">ALX / VSM — RapidPOS MCP Server</div>
+          <div class="layer-desc">The Armstrong Horticulture Vault. Six VSM tools. Inventory, pricing, loyalty, diagnostics, wayfinding, consultation. Translates agent queries into NCR API calls. The layer nobody owns yet.</div>
+        </div>
+        <div class="layer-badge badge-prize">THE PRIZE</div>
+      </div>
+      <div class="stack-arrow">↕ NCR REST API / ODBC</div>
+      <div class="stack-layer">
+        <div class="layer-num">Layer 3</div>
+        <div class="layer-body">
+          <div class="layer-name">NCR Counterpoint POS</div>
+          <div class="layer-desc">Inventory, customer records, pricing engine, loyalty, transaction processing, back office. Batch-reconciled. Rock solid — and going nowhere.</div>
+        </div>
+        <div class="layer-badge badge-ncr">NCR</div>
+      </div>
+      <div class="stack-arrow">↕ Store LAN</div>
+      <div class="stack-layer">
+        <div class="layer-num">Layer 2</div>
+        <div class="layer-body">
+          <div class="layer-name">NCR Hardware</div>
+          <div class="layer-desc">POS terminals, self-checkout, mobile tablets, barcode/RFID sensors, edge compute. The physical infrastructure.</div>
+        </div>
+        <div class="layer-badge badge-ncr">NCR</div>
+      </div>
+      <div class="stack-arrow">↕ Physical</div>
+      <div class="stack-layer">
+        <div class="layer-num">Layer 1</div>
+        <div class="layer-body">
+          <div class="layer-name">The Store</div>
+          <div class="layer-desc">31 Armstrong locations. 1,400 associates. 136 years of accumulated plant knowledge. The thing we are amplifying, not replacing.</div>
+        </div>
+        <div class="layer-badge badge-ncr">Store</div>
+      </div>
+    </div>
+
+    <div class="callout purple-callout">
+      <div class="callout-label">Why Layer 4</div>
+      <p>NCR owns Layers 1–3. They cannot and will not build Layer 4 — it requires horticultural domain expertise, MCP protocol implementation, and a customer-facing AI product. The customer's Claude agent owns the conversation at Layer 5. <strong>Layer 4 is the only layer nobody owns yet.</strong> Whoever builds and operates it at scale across the NCR Counterpoint VAR channel (22,000+ retailers) controls the agent interface for every retailer on the platform. That is the business.</p>
+    </div>
+
+    <h3 class="subsection">The Platform — Canary Lawn &amp; Garden OS™</h3>
+    <div style="background: linear-gradient(135deg, #0f1c2e 0%, #1C3A2B 100%); border-radius:10px; padding:36px 40px; margin:32px 0; color: var(--text-light);">
+      <div style="font-size:10px; letter-spacing:3px; text-transform:uppercase; color:var(--gold); font-weight:700; margin-bottom:12px;">The Lawn &amp; Garden Retail Spine — 13 Modules</div>
+      <div style="font-family:Georgia,serif; font-size:26px; font-weight:700; color:#fff; margin-bottom:14px; line-height:1.2;">Canary Lawn &amp; Garden OS™ — the layer that makes the VSM real.</div>
+      <p style="font-size:15px; color:rgba(245,240,232,0.82); line-height:1.65; margin-bottom:6px;">ALX is not a standalone agent. It is the VSM persona running on Canary Lawn &amp; Garden OS: a 13-module ARTS-native operating system adapted for multi-location specialty garden retail, deployed between RapidPOS and the VSM as the data intelligence layer. The <strong style="color:#fff;">CRDM (Centralized Retail Data Model)</strong> is the foundation — a three-database PostgreSQL architecture (<strong style="color:#fff;">canary_app / canary_sales / canary_metrics</strong>) that normalizes every NCR Counterpoint transaction from every Armstrong store into a unified canonical data model. The Transaction Streaming Pipeline (Module T) keeps it live. The CRDM is what neither NCR Counterpoint nor RapidPOS provides — and what every 13 modules in the spine depend on.</p>
+      <div style="margin:6px 0 18px; padding:12px 16px; background:rgba(191,135,0,0.15); border:1px solid rgba(191,135,0,0.5); border-radius:6px; font-size:13px; color:var(--gold-light); font-weight:600;">CRDM — NCR doesn't have it. RapidPOS doesn't have it. Canary does. It is the moat.</div>
+
+      <div style="font-size:10px; letter-spacing:2px; text-transform:uppercase; color:rgba(245,240,232,0.4); font-weight:700; margin-bottom:10px;">13 Modules — The Full Retail Spine</div>
+      <div style="display:grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap:8px; margin-bottom:20px;">
+        <div style="background:rgba(76,175,125,0.18); border:1px solid rgba(76,175,125,0.3); border-radius:6px; padding:11px 14px;">
+          <div style="font-size:9px; letter-spacing:2px; text-transform:uppercase; color:rgba(76,175,125,0.8); font-weight:700; margin-bottom:3px;">v1 — Shipping</div>
+          <div style="font-size:12px; color:rgba(245,240,232,0.9); line-height:1.6;"><strong style="color:#fff;">T</strong> Transaction Pipeline &nbsp;·&nbsp; <strong style="color:#fff;">R</strong> Customer &nbsp;·&nbsp; <strong style="color:#fff;">N</strong> Device &nbsp;·&nbsp; <strong style="color:#fff;">A</strong> Asset Management &nbsp;·&nbsp; <strong style="color:#fff;">Q</strong> Loss Prevention (Chirp + Fox)</div>
+        </div>
+        <div style="background:rgba(102,57,186,0.2); border:1px solid rgba(102,57,186,0.3); border-radius:6px; padding:11px 14px;">
+          <div style="font-size:9px; letter-spacing:2px; text-transform:uppercase; color:rgba(138,95,212,0.9); font-weight:700; margin-bottom:3px;">v2 — Design Complete</div>
+          <div style="font-size:12px; color:rgba(245,240,232,0.9); line-height:1.6;"><strong style="color:#fff;">C</strong> Commercial &nbsp;·&nbsp; <strong style="color:#fff;">D</strong> Distribution &nbsp;·&nbsp; <strong style="color:#fff;">F</strong> Finance &nbsp;·&nbsp; <strong style="color:#fff;">J</strong> Forecast &amp; Order</div>
+        </div>
+        <div style="background:rgba(255,255,255,0.06); border:1px solid rgba(255,255,255,0.1); border-radius:6px; padding:11px 14px;">
+          <div style="font-size:9px; letter-spacing:2px; text-transform:uppercase; color:rgba(245,240,232,0.4); font-weight:700; margin-bottom:3px;">v3 — Design Complete</div>
+          <div style="font-size:12px; color:rgba(245,240,232,0.9); line-height:1.6;"><strong style="color:#fff;">S</strong> Space, Range, Display &nbsp;·&nbsp; <strong style="color:#fff;">P</strong> Pricing &amp; Promotion &nbsp;·&nbsp; <strong style="color:#fff;">L</strong> Labor &amp; Workforce &nbsp;·&nbsp; <strong style="color:#fff;">W</strong> Work Execution</div>
+        </div>
+      </div>
+
+      <div style="display:flex; gap:12px; flex-wrap:wrap; margin-bottom:16px;">
+        <div style="background:rgba(191,135,0,0.2); border:1px solid var(--gold); border-radius:6px; padding:10px 14px; font-size:12px; color:var(--gold-light); font-weight:700;">🌿 Armstrong Horticulture Vault — the domain knowledge layer for module R + T + Q + A</div>
+        <div style="background:rgba(102,57,186,0.2); border:1px solid rgba(102,57,186,0.4); border-radius:6px; padding:10px 14px; font-size:12px; color:rgba(138,95,212,0.9); font-weight:700;">🤖 VSM / ALX — the persona layer on top of all 13 modules via Owl runtime</div>
+      </div>
+      <div style="font-size:13px; color:rgba(245,240,232,0.45); font-style:italic;">Spine lineage: ERIS (Coopers &amp; Lybrand, 1995) → RBIS (IBM, 2005) → SAP IS Retail (PwC COE, 1999) → Canary Retail OS (2024). The same retail capability decomposition, rebuilt for the MCP era on a perpetual stock ledger with satoshi-precision cost accounting.</div>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════
+     SECTION 4 — THE PLAN
+══════════════════════════════════════════ -->
+<div class="section" id="s4">
+  <div class="container">
+    <div class="section-header">
+      <div class="section-number">Section 04</div>
+      <h2>The Plan</h2>
+      <div class="section-lead">Four phases from working prototype today to autonomous ALX by 2030. Phase 1 is already running. The first 90 days are sequenced and ready to execute.</div>
+    </div>
+
+    <h3 class="subsection">Implementation Roadmap — Phase 1 → 4</h3>
+    <div class="roadmap">
+      <div class="roadmap-phase">
+        <div class="roadmap-phase-num current">1</div>
+        <div class="roadmap-phase-body">
+          <div class="roadmap-phase-header">
+            <div class="roadmap-phase-title">Wrap &amp; Ship</div>
+            <div class="roadmap-phase-when">Now → End 2026 — Running Today</div>
+          </div>
+          <div class="roadmap-phase-desc">RapidPOS MCP Server wraps the existing NCR Counterpoint REST API. ALX tools call live Counterpoint endpoints for inventory, pricing, customer, and loyalty. Redis cache delivers near-real-time response (1–5 sec). Worldpay payment integration for "put it on my account." The full Horticulture Vault is the knowledge layer. Six VSM features live. <strong>This is the conf room pilot — running right now on a laptop.</strong></div>
+          <div class="roadmap-bar" style="width:100%; background: var(--purple);"></div>
+        </div>
+      </div>
+      <div class="roadmap-phase">
+        <div class="roadmap-phase-num">2</div>
+        <div class="roadmap-phase-body">
+          <div class="roadmap-phase-header">
+            <div class="roadmap-phase-title">Event Triggers</div>
+            <div class="roadmap-phase-when">2027</div>
+          </div>
+          <div class="roadmap-phase-desc">Webhook layer on Counterpoint — inventory events push on transaction. Cache invalidated by events, not timers. Inventory accuracy improves from 60–300 second polling to near-instant on sale events. Associate availability connected via scheduling system.</div>
+          <div class="roadmap-bar" style="width:60%; background: var(--green-mid);"></div>
+        </div>
+      </div>
+      <div class="roadmap-phase">
+        <div class="roadmap-phase-num">3</div>
+        <div class="roadmap-phase-body">
+          <div class="roadmap-phase-header">
+            <div class="roadmap-phase-title">Streaming Pipeline</div>
+            <div class="roadmap-phase-when">2027–2028</div>
+          </div>
+          <div class="roadmap-phase-desc">Kafka / Kinesis streaming layer as parallel data pipe. Store sensor data (RFID, computer vision) fed into stream. ALX has live store state — what just sold, where the queue is, what is low stock. NCR batch cycle becomes irrelevant to the customer experience.</div>
+          <div class="roadmap-bar" style="width:40%; background: var(--green-light);"></div>
+        </div>
+      </div>
+      <div class="roadmap-phase">
+        <div class="roadmap-phase-num">4</div>
+        <div class="roadmap-phase-body">
+          <div class="roadmap-phase-header">
+            <div class="roadmap-phase-title">Autonomous ALX</div>
+            <div class="roadmap-phase-when">2028–2030</div>
+          </div>
+          <div class="roadmap-phase-desc">ALX develops store-level demand models from streaming history. Predictive inventory signals push to customer agents before they ask. Agent-to-agent: ALX offers deals to high-value customer agents proactively. Cross-store network: customer agent queries any enrolled Armstrong store via single MCP endpoint. This is the Store of the Future.</div>
+          <div class="roadmap-bar" style="width:20%; background: var(--gold);"></div>
+        </div>
+      </div>
+    </div>
+
+    <h3 class="subsection">90-Day SEO + Content Launch</h3>
+    <p>The Armstrong Horticulture Vault is simultaneously the ALX knowledge substrate and the SEO content engine. Every plant in the Vault is a URL. Every diagnostic condition is a symptom page. Every Sunset zone is a zone guide. The content strategy surfaces the Vault as public-facing web pages — with consultation and inventory CTAs on every page.</p>
+    <div style="background:#fff; border:1px solid var(--border); border-radius:8px; padding:8px 20px; margin:24px 0;">
+      <div class="plan-row">
+        <div class="plan-week">Wk 1–2</div>
+        <div class="plan-action">Google Business Profile audit + optimisation for all 31 stores. Zone landing pages for Sunset Zones 21–24.</div>
+        <div class="plan-output">Local pack ranking improvement, 4 high-value zone pages live</div>
+      </div>
+      <div class="plan-row">
+        <div class="plan-week">Wk 3–4</div>
+        <div class="plan-action">Top 20 diagnostic pages from highest-volume symptom queries (citrus yellowing 8,200/mo; "why is my plant dying" 40,000+/mo aggregate)</div>
+        <div class="plan-output">Immediate long-tail organic traffic, high-intent visitors</div>
+      </div>
+      <div class="plan-row">
+        <div class="plan-week">Wk 4–5</div>
+        <div class="plan-action">September campaign hub page + SoCal seasonal calendar. "September is the best planting month" — content no national retailer has.</div>
+        <div class="plan-output">Q3 content anchor, recurring annual differentiator</div>
+      </div>
+      <div class="plan-row">
+        <div class="plan-week">Wk 5–6</div>
+        <div class="plan-action">Native plant authority hub + LADWP rebate integration page. "Armstrong Rebate-Eligible Plants" — the only page like it in SoCal.</div>
+        <div class="plan-output">Rebate-intent capture, water district partnership pathway</div>
+      </div>
+      <div class="plan-row">
+        <div class="plan-week">Wk 6–8</div>
+        <div class="plan-action">Inventory schema + Google Merchant Center feed from Layer 4 API. Live stock in Google Shopping for all 31 stores.</div>
+        <div class="plan-output">Google Shopping visibility, "in stock near me" for every SKU</div>
+      </div>
+      <div class="plan-row">
+        <div class="plan-week">Wk 8–12</div>
+        <div class="plan-action">ALX goes live. Feedback loop begins — top 50 ALX questions become next 20 content pages. Data drives roadmap.</div>
+        <div class="plan-output">Ongoing content intelligence, ALX-to-content attribution baseline</div>
+      </div>
+    </div>
+
+    <h3 class="subsection">3-Year Performance Targets</h3>
+    <table class="data-table">
+      <thead>
+        <tr>
+          <th>Metric</th>
+          <th>Current (Est.)</th>
+          <th>Year 1</th>
+          <th>Year 2</th>
+          <th>Year 3</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><strong>Revenue</strong></td>
+          <td>$229.8M</td>
+          <td>$245M</td>
+          <td>$265M</td>
+          <td>$290M</td>
+        </tr>
+        <tr>
+          <td><strong>Design + Consultation % of revenue</strong></td>
+          <td>&lt;10%</td>
+          <td>15%</td>
+          <td>18%</td>
+          <td>22%</td>
+        </tr>
+        <tr>
+          <td><strong>Average customer annual spend</strong></td>
+          <td>~$600</td>
+          <td>$720</td>
+          <td>$850</td>
+          <td>$980</td>
+        </tr>
+        <tr>
+          <td><strong>Digital-sourced store visits</strong></td>
+          <td>&lt;5%</td>
+          <td>15%</td>
+          <td>25%</td>
+          <td>35%</td>
+        </tr>
+        <tr>
+          <td><strong>ALX interactions per month</strong></td>
+          <td>0</td>
+          <td>10,000</td>
+          <td>50,000</td>
+          <td>150,000</td>
+        </tr>
+        <tr>
+          <td><strong>Organic search sessions per month</strong></td>
+          <td>&lt;10K</td>
+          <td>40,000</td>
+          <td>120,000</td>
+          <td>300,000+</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════
+     SECTION 5 — THE TEAM
+══════════════════════════════════════════ -->
+<div class="section" id="s5">
+  <div class="container">
+    <div class="section-header">
+      <div class="section-number">Section 05</div>
+      <h2>The Team</h2>
+      <div class="section-lead">The people in this room have built this before. Not this product — but every component of it, at scale, for the world's largest retailers and most demanding enterprise deployments. What is new is that it now runs on a laptop.</div>
+    </div>
+
+    <div class="callout gold-callout">
+      <div class="callout-label">The Complete Package</div>
+      <p>Retail systems methodology built at PwC and proven across 25+ engagements. Enterprise infrastructure deployed at Starbucks across 35,000+ stores. Strategic context from Nordstrom, IBM Global Business Services, Accenture, and Gartner. <strong>We have seen this play from every seat at the table.</strong> The only thing missing was the technology moment — and that moment is now.</p>
+    </div>
+
+    <div class="team-grid">
+      <div class="bio-card">
+        <div class="bio-name">Geoff</div>
+        <div class="bio-title">Founder — GrowDirect LLC</div>
+        <div class="bio-tags">
+          <span class="bio-tag">PricewaterhouseCoopers</span>
+          <span class="bio-tag">IBM Global Services</span>
+          <span class="bio-tag">Retail IS Strategy</span>
+          <span class="bio-tag">SAP IS Retail</span>
+          <span class="bio-tag">MCP Architecture</span>
+        </div>
+        <div class="bio-text">Former PricewaterhouseCoopers retail consultant who helped architect the SAP IS Retail implementation templates and SISP methodology deployed across Ann Taylor, Saks Fifth Avenue, PETsMART, Sports Authority, and others during the formative years of enterprise retail systems (1997–2002). Author of the retail SDD lineage that runs from Coopers &amp; Lybrand's ERIS framework through PwC's SISP playbooks, IBM's RBIS platform, and into Canary Retail OS — the MCP-native reimplementation of the same retail spine, built for 2026. Founder of GrowDirect LLC, the company building Layer 4.</div>
+      </div>
+
+      <div class="bio-card">
+        <div class="bio-name">Jeff</div>
+        <div class="bio-title">Infrastructure Lead</div>
+        <div class="bio-tags">
+          <span class="bio-tag">Starbucks</span>
+          <span class="bio-tag">Enterprise Infrastructure</span>
+          <span class="bio-tag">Store Systems</span>
+          <span class="bio-tag">Terraform</span>
+          <span class="bio-tag">Network Architecture</span>
+        </div>
+        <div class="bio-text">Enterprise infrastructure architect from the Starbucks technology organization, where infrastructure means 35,000+ locations running in harmony across every timezone and connectivity profile on earth. Terraform, network architecture, store systems, edge compute — the engineering discipline that keeps mission-critical retail infrastructure running when it has to run. If the RapidPOS MCP Server needs to be reliable at scale across 22,000 NCR Counterpoint retailers, Jeff is why it will be.</div>
+      </div>
+
+      <div class="bio-card">
+        <div class="bio-name">Matt</div>
+        <div class="bio-title">Engineering Lead</div>
+        <div class="bio-tags">
+          <span class="bio-tag">Starbucks</span>
+          <span class="bio-tag">Enterprise Engineering</span>
+          <span class="bio-tag">Store Technology</span>
+          <span class="bio-tag">Systems Integration</span>
+        </div>
+        <div class="bio-text">Enterprise engineering lead from Starbucks technology, with deep experience in store-level systems integration and the particular discipline of building software that must work in the physical retail environment — intermittent connectivity, legacy hardware, real-time transaction requirements, and the expectation that it never goes down during peak hours. The engineering counterpart to the architecture vision, with the scar tissue from having shipped it at enterprise scale.</div>
+      </div>
+
+      <div class="bio-card">
+        <div class="bio-name">Tim</div>
+        <div class="bio-title">Strategic Advisor</div>
+        <div class="bio-tags">
+          <span class="bio-tag">Nordstrom</span>
+          <span class="bio-tag">Starbucks</span>
+          <span class="bio-tag">IBM Global Services</span>
+          <span class="bio-tag">Accenture</span>
+          <span class="bio-tag">Gartner</span>
+          <span class="bio-tag">Store of the Future</span>
+        </div>
+        <div class="bio-text">The strategic vantage point that most teams can only read about. Tim's career spans the full arc of enterprise retail technology: operations at Nordstrom, food &amp; entertainment strategy at Starbucks, global systems advisory at IBM and Accenture, and the analyst perspective from Gartner where the Store of the Future was not a product pitch — it was a research category. Tim has seen more retail transformation programs succeed and fail than most CIOs have read about. That pattern recognition is the strategic context for why this play works, and why it works now.</div>
+      </div>
+    </div>
+
+    <div class="hero-callout">
+      <h3>This is not a <em>proposal to study the problem</em></h3>
+      <p>The methodology was proven at PricewaterhouseCoopers across $150M in retail IS engagements. The infrastructure expertise was proven at Starbucks across 35,000 locations. The strategic context comes from having sat inside Nordstrom, IBM, and Gartner when the question of what comes after POS was first being asked. The only thing new is that we can now bring the working prototype into the room — not a demo environment, not a staging server. A laptop. Today.</p>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════
+     SECTION 6 — THE PLAY
+══════════════════════════════════════════ -->
+<div class="section" id="s6">
+  <div class="container">
+    <div class="section-header">
+      <div class="section-number">Section 06</div>
+      <h2>The Play</h2>
+      <div class="section-lead">Five plays. One platform. Armstrong is the anchor that proves the model — and the CRDM is the moat that makes it defensible at every layer.</div>
+    </div>
+
+    <div class="play-grid">
+      <div class="play-card anchor">
+        <div class="play-label">Play One</div>
+        <h3>Armstrong Enterprise Anchor</h3>
+        <p>Full ALX deployment across 31 stores. Six VSM features. Complete Armstrong Horticulture Vault. The definitive proof that MCP-native specialty retail works. Armstrong becomes the reference implementation — the case study every specialty retailer wants to be.</p>
+        <div class="play-number">01</div>
+      </div>
+      <div class="play-card smb">
+        <div class="play-label">Play Two</div>
+        <h3>SMB Store Ops at Scale</h3>
+        <p>The NCR Counterpoint VAR channel has 22,000+ active retailers. Each one needs Layer 4. The Armstrong playbook is the template. RapidPOS is the distribution partner. Same MCP server, domain-adapted knowledge vault, deployed via the existing VAR channel at a fraction of the enterprise cost.</p>
+        <div class="play-number">02</div>
+      </div>
+      <div class="play-card asset">
+        <div class="play-label">Play Three</div>
+        <h3>Canary for Lawn &amp; Garden™</h3>
+        <p>The CRDM and TSP that sit between RapidPOS and the VSM. 13 ARTS-native modules adapted for multi-location garden retail — unified transaction history across all 31 stores on one canonical PostgreSQL data model. CATz Phase 2 is the delivery framework. This is what makes the VSM actually smart.</p>
+        <div class="play-number">03</div>
+      </div>
+      <div class="play-card" style="background: linear-gradient(135deg, #1C3A2B 0%, #0f2218 100%); color: var(--text-light); border: 1px solid rgba(76,175,125,0.4);">
+        <div class="play-label" style="color: var(--green-light); opacity:1;">Play Four</div>
+        <h3 style="color:#fff;">VSM Goes Live</h3>
+        <p style="opacity:0.85;">Once the CRDM is populated and the TSP is streaming — ALX stops being a chatbot. It becomes a store manager. Transaction history, seasonal demand signals, customer purchase patterns, fresh plant delivery cycles — all live. ALX surfaces them in natural language to every customer, associate, and buyer. The payoff of Plays 1, 2, and 3.</p>
+        <div class="play-number" style="opacity:0.08; color:var(--green-light);">04</div>
+      </div>
+      <div class="play-card" style="background: linear-gradient(135deg, #0f1c2e 0%, #1a2d42 100%); color: var(--text-light); border: 1px solid rgba(191,135,0,0.3); grid-column: 1 / -1;">
+        <div class="play-label" style="color: var(--gold-light); opacity:1;">Play Five</div>
+        <h3 style="color:#fff;">LG — First Joint Target</h3>
+        <p style="opacity:0.85; max-width:680px;">LG has physical experience stores globally and the LG ThinQ AI platform. The customer's Claude already knows their LG devices. ALX knows the 2026 model is in stock. The customer walks in, picks it up, on their account. RapidPOS is the infrastructure. One proof of concept scales to every LG store in the world. The first MCP-native retail experience on the planet — and the proof that the Canary platform is not garden-vertical-specific. It is retail-horizontal.</p>
+        <div class="play-number" style="opacity:0.08; color:var(--gold);">05</div>
+      </div>
+    </div>
+
+    <h3 class="subsection">Play One — The Armstrong Deployment in Detail</h3>
+    <p>Armstrong is not a test case. Armstrong is the archetype. The specialty retailer with deep product expertise, a fiercely loyal customer base, and competitive pressure from big box — this is exactly the profile that makes ALX most valuable. The PwC engagement closest to Armstrong was PETsMART: specialty retail with expert staff (Banfield vets = Armstrong horticulturists), services layered on top of commodity products, and volume pressure from every direction. The PETsMART engagement defined how specialty retail defends its position. The Armstrong engagement executes it.</p>
+    <table class="data-table">
+      <thead>
+        <tr><th>Armstrong Asset</th><th>ALX Application</th><th>Canary Module</th></tr>
+      </thead>
+      <tbody>
+        <tr><td>136 years of SoCal horticulture expertise</td><td>Armstrong Horticulture Vault — the knowledge substrate</td><td>Canary Knowledge Layer</td></tr>
+        <tr><td>31 stores, NCR Counterpoint POS</td><td>Layer 4 RapidPOS MCP Server — inventory, pricing, loyalty</td><td>Canary Store Module</td></tr>
+        <tr><td>Sunset Zone coverage Zones 21–24</td><td>VSM-GC-01 Zone-Aware Plant Advisor</td><td>Canary Zone Engine</td></tr>
+        <tr><td>1,400 associates, Certified Nursery Professionals</td><td>VSM-GC-06 Store Ops Manual — knowledge portable to every associate</td><td>Canary Staff Module</td></tr>
+        <tr><td>165,000 sq ft growing operation (the "DC")</td><td>Replenishment engine, native plant inventory signal</td><td>Canary Replenishment</td></tr>
+        <tr><td>100% ESOP — 1,184 employee-owners</td><td>Customer garden record — staff buy-in from ownership culture</td><td>Canary CRDM / Module R</td></tr>
+        <tr><td>LADWP turf rebate programme ($5/sqft, up to $25K)</td><td>Rebate-eligible plant inventory, water district partnership</td><td>Canary Promo Engine</td></tr>
+      </tbody>
+    </table>
+
+    <h3 class="subsection">Play Two — The SMB Volume Play</h3>
+    <p>Armstrong is one of 22,000+ active retailers on the NCR Counterpoint platform. Every one of them faces the same structural challenge: the customer's AI agent can now transact, advise, and browse — but there is no API endpoint to connect it to the store. RapidPOS is the VAR partner that already has relationships with the full Counterpoint channel. GrowDirect builds Layer 4. RapidPOS distributes it.</p>
+
+    <div class="callout">
+      <div class="callout-label">The Distribution Model</div>
+      <p>RapidPOS sells to retailers via the NCR Counterpoint VAR channel. Every VAR sale is a potential Layer 4 deployment. The Armstrong Horticulture Vault is the template — domain-adapted for each vertical (pet retail, nursery, hardware, wine, outdoor goods). <strong>22,000 retailers × $X/month = the platform business.</strong> Armstrong is the proof point that makes the conversation possible.</p>
+    </div>
+
+    <h3 class="subsection">Play Three — Canary for Lawn &amp; Garden™</h3>
+
+    <div class="callout purple-callout">
+      <div class="callout-label">CATz Phase 2 — Select &amp; Implement</div>
+      <p>Canary is GrowDirect's CATz Phase 2 deliverable for Armstrong. After Phase 1 confirms the prize, Phase 2 selects and contracts the platform — and Canary is it. The target architecture is signed, the vendor contract is executed, the implementation is funded, and the CRDM build begins. This is the moment Armstrong stops being a single-store-at-a-time operator and starts running as a unified 31-store data company.</p>
+    </div>
+
+    <p>Canary Lawn &amp; Garden OS™ is the data layer between RapidPOS and the VSM. It is not middleware. It is the Centralized Retail Data Model — a three-database PostgreSQL architecture (<strong>canary_app</strong> / <strong>canary_sales</strong> / <strong>canary_metrics</strong>) that normalizes every NCR Counterpoint transaction from every Armstrong store into a canonical garden retail data warehouse. The Transaction Streaming Pipeline (Module T) is the live feed — every sale, return, hold, and markdown from every terminal in every store flows in real time into the CRDM. Not batch. Not polled. Streamed.</p>
+
+    <p>The 13 modules of the Canary spine are adapted for the lawn and garden context. Module R (Customer) holds every garden profile, purchase history, and Sunset zone mapping across Armstrong's full customer base — the first time this has ever existed in one place. Module D (Distribution) connects the growing operation (165,000 sq ft) to the stores — the demand signal that decides what gets loaded on each truck, to which store, on which day, based on actual sell-through from the CRDM. Module J (Forecast &amp; Order) drives seasonal ordering — because Armstrong's demand curve is not linear, it is weather-driven, event-driven, and zone-specific in ways no generic ERP can model. Module Q (Loss Prevention) runs 37 Chirp detection rules across the full transaction stream. The CRDM is what makes each rule meaningful — not a single-store alert, but a 31-store pattern.</p>
+
+    <div style="background:#fff; border:1px solid var(--border); border-radius:8px; overflow:hidden; margin:28px 0;">
+      <div style="background:var(--green-dark); color:var(--text-light); padding:14px 20px; font-size:10px; letter-spacing:2px; text-transform:uppercase; font-weight:700;">Canary Lawn &amp; Garden OS — 13-Module Deployment for Armstrong</div>
+      <table class="data-table" style="margin:0;">
+        <thead><tr><th>Module</th><th>Garden Retail Function</th><th>Armstrong Application</th></tr></thead>
+        <tbody>
+          <tr><td><strong>T — TSP</strong></td><td>Transaction Streaming Pipeline</td><td>Every POS event from 31 stores → CRDM in real time</td></tr>
+          <tr><td><strong>R — Customer</strong></td><td>Garden profile + purchase history</td><td>First unified customer view across all Armstrong locations</td></tr>
+          <tr><td><strong>N — Device</strong></td><td>POS terminal + device registry</td><td>31-store device inventory, connectivity monitoring</td></tr>
+          <tr><td><strong>A — Asset</strong></td><td>Anomaly engine over device/inventory layer</td><td>Rare specimen tracking, high-value inventory alerts</td></tr>
+          <tr><td><strong>Q — Loss Prevention</strong></td><td>Chirp rules + Fox case management</td><td>37 detection rules running on streaming CRDM data</td></tr>
+          <tr><td><strong>C — Commercial</strong></td><td>Vendor/grower relationship management</td><td>Armstrong supplier base, PO compliance, delivery windows</td></tr>
+          <tr><td><strong>D — Distribution</strong></td><td>Growing operation → store delivery</td><td>JIT signals from 165,000 sq ft growing DC to each store</td></tr>
+          <tr><td><strong>F — Finance</strong></td><td>Multi-store P&amp;L, 3-way match</td><td>Unified financial view across all 31 Armstrong locations</td></tr>
+          <tr><td><strong>J — Forecast &amp; Order</strong></td><td>Seasonal demand forecasting</td><td>Zone-specific, weather-adjusted, event-driven ordering</td></tr>
+          <tr><td><strong>S — Space, Range, Display</strong></td><td>Planogram + seasonal resets</td><td>Merchandising calendar tied to SoCal seasonal calendar</td></tr>
+          <tr><td><strong>P — Pricing &amp; Promotion</strong></td><td>Seasonal pricing + markdown</td><td>LADWP rebate-eligible pricing, annual markdown cadence</td></tr>
+          <tr><td><strong>L — Labor</strong></td><td>Seasonal workforce management</td><td>Spring/fall peak scheduling, Certified Nursery Pro coverage</td></tr>
+          <tr><td><strong>W — Work Execution</strong></td><td>Store tasks, receiving, care routines</td><td>Plant care SOP delivery + receiving workflow management</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <p>The moat is the CRDM. NCR Counterpoint does not have one. RapidPOS does not have one. Canary does. Once the CRDM is populated with six months of Armstrong transaction data, the schema becomes the intelligence layer that none of Armstrong's competitors can replicate — because they do not have the data model, and they do not have the 31-store breadth to train it.</p>
+
+    <h3 class="subsection">Play Four — VSM Goes Live</h3>
+
+    <div class="callout gold-callout">
+      <div class="callout-label">The Payoff of Plays 1 + 2 + 3</div>
+      <p>Play 1 built the architecture. Play 2 built the knowledge substrate. Play 3 built the data foundation. Play 4 is when ALX stops answering questions and starts running the store.</p>
+    </div>
+
+    <p>Before the CRDM and TSP: ALX knows horticulture. It can answer plant questions, diagnose problems, look up inventory via batch API calls to NCR Counterpoint. It is useful. It is a very good chatbot with deep garden knowledge.</p>
+    <p>After the CRDM and TSP: ALX knows the store. It knows what sold at the Camarillo location last Saturday. It knows the lavender at Pasadena is three days from sellout. It knows that a specific customer buys six-packs of petunias every March and has not come in yet. It knows the September rush starts building in the last week of August — at the Torrance store specifically, because the CRDM has three years of Torrance transaction history to prove it. The VSM tools become genuinely predictive — not because of AI guessing, but because the CRDM has the data to be certain.</p>
+
+    <div style="display:grid; grid-template-columns:1fr 1fr; gap:16px; margin:28px 0;">
+      <div style="background:var(--parchment-dark); border:1px solid var(--border); border-radius:8px; padding:22px 24px;">
+        <div style="font-size:10px; letter-spacing:2px; text-transform:uppercase; font-weight:700; color:var(--text-muted); margin-bottom:10px;">Before CRDM + TSP</div>
+        <div style="font-size:14px; color:var(--text-mid); line-height:1.7;">
+          ALX answers plant questions<br>
+          Looks up inventory on demand<br>
+          Knows horticulture knowledge<br>
+          One store at a time<br>
+          Reactive — customer asks first
+        </div>
+      </div>
+      <div style="background:var(--green-dark); border-radius:8px; padding:22px 24px;">
+        <div style="font-size:10px; letter-spacing:2px; text-transform:uppercase; font-weight:700; color:var(--gold); margin-bottom:10px;">After CRDM + TSP</div>
+        <div style="font-size:14px; color:rgba(245,240,232,0.88); line-height:1.7;">
+          ALX knows what just sold across all 31 stores<br>
+          Predicts sellout before it happens<br>
+          Knows each customer's actual purchase patterns<br>
+          Drives fresh plant delivery signals to the DC<br>
+          Proactively reaches out at the right moment
+        </div>
+      </div>
+    </div>
+
+    <p>The fresh delivery cycle becomes the clearest example. Armstrong's 165,000 sq ft growing operation is the distribution center. Module D (Distribution) reads the CRDM sell-through by store, by SKU, by zone. Module J (Forecast &amp; Order) runs the seasonal demand model against current sell rates. The result is a daily delivery signal — what goes on each truck, to which store, in what quantity — not based on a buyer's intuition or a weekly cycle count, but on actual real-time demand from the CRDM. Plants are perishable. Getting this right is operational alpha that no competitor can touch without the same data infrastructure.</p>
+
+    <p>Agent-to-agent capability is the final unlock. ALX does not wait for a customer to ask. When the CRDM signals that a high-value customer's lavender purchase was six months ago, and Module J shows a warm October forecast that is perfect planting weather in Zone 22, ALX initiates — not a marketing email, but a conversational reach-out to the customer's agent: "Your lavender should be full by now. If you want to extend the bed, the Sunset Zone 22 companion plants are in stock at the Redlands store." This is not automation. This is the garden relationship that Armstrong's staff has always wanted to maintain at scale, and never had the infrastructure to deliver.</p>
+
+    <!-- THE PILOT MOMENT -->
+    <div class="pilot-section">
+      <h2>The <em>Conf Room Pilot</em> Moment</h2>
+      <p>Other consultants would charge $150,000 to tell you this is possible. They would spend three months on the discovery phase. They would deliver a 200-page report recommending a $2M technology investment. Then the sharks would start circling to figure out what happens next.</p>
+      <p>We walked in the door with it running.</p>
+      <div class="pilot-bullets">
+        <div class="pilot-bullet">
+          <div class="pilot-bullet-dot"></div>
+          <div>Full ALX stack — six VSM features, Armstrong Horticulture Vault, NCR Counterpoint integration — running on a laptop. Demonstrable in this room, right now. No staging environment. No IT setup required. No three-month pilot timeline before you see anything.</div>
+        </div>
+        <div class="pilot-bullet">
+          <div class="pilot-bullet-dot"></div>
+          <div>The consumer positioning work — Phase 1 through Phase 3, $50.2B market analysis, three customer segments, positioning strategy, SEO roadmap — is already done. This is not a proposal to begin a study. It is the output of the study, delivered on the first meeting.</div>
+        </div>
+        <div class="pilot-bullet">
+          <div class="pilot-bullet-dot"></div>
+          <div>The methodology has 28 years of provenance. The technology has 18 months of momentum. The window — before every specialty retailer has an MCP endpoint, before the VAR channel locks in on a Layer 4 provider — is open right now, and closing.</div>
+        </div>
+        <div class="pilot-bullet">
+          <div class="pilot-bullet-dot"></div>
+          <div>Fully mobile. Full stack. The entire Canary Retail OS, ALX Virtual Horticulturist, and Armstrong Horticulture Vault — on a laptop, in a parking lot, in a store, in a boardroom. The conf room pilot we used to imagine. It exists.</div>
+        </div>
+      </div>
+      <p style="margin-top:24px; font-size:17px; color:rgba(245,240,232,0.9);"><strong style="color:#fff;">The question is not whether to do this.</strong><br>The question is whether Armstrong leads the category or watches someone else do it first.</p>
+    </div>
+
+    <h3 class="subsection">Strategic Opportunities Summary</h3>
+    <table class="data-table">
+      <thead>
+        <tr><th>Opportunity</th><th>Description</th><th>Priority</th></tr>
+      </thead>
+      <tbody>
+        <tr><td><strong>ALX / MCP Deployment</strong></td><td>Virtual Store Horticulturist — scales expertise 24/7, closes the accessibility gap</td><td>IMMEDIATE</td></tr>
+        <tr><td><strong>September Campaign</strong></td><td>Annual SoCal planting surge — uncontested nationally, ALX as outreach engine</td><td>IMMEDIATE</td></tr>
+        <tr><td><strong>Native Plant Authority</strong></td><td>Category leadership — water district partnerships, LADWP rebate channel</td><td>HIGH</td></tr>
+        <tr><td><strong>Fire-Resistant Landscaping</strong></td><td>First-mover in LA/SD markets — insurance angle, post-fire demand cycle</td><td>HIGH</td></tr>
+        <tr><td><strong>Design + Consultation Bundling</strong></td><td>"Armstrong Garden Partnership" — package the service, ALX scales delivery</td><td>HIGH</td></tr>
+        <tr><td><strong>ESOP Brand Storytelling</strong></td><td>"We own what we plant" — a differentiation no competitor can copy</td><td>MEDIUM</td></tr>
+        <tr><td><strong>Rare Plant Enthusiast Channel</strong></td><td>Digital notifications, online inventory, hold capability — enthusiast loyalty</td><td>MEDIUM</td></tr>
+        <tr><td><strong>Asset Management / IoT</strong></td><td>RFID specimen tracking, cold chain monitoring, equipment lifecycle</td><td>PHASE 3</td></tr>
+      </tbody>
+    </table>
+
+    <h3 class="subsection">Next Steps</h3>
+    <div class="callout gold-callout">
+      <div class="callout-label">To Begin</div>
+      <p><strong>Step 1:</strong> Armstrong + GrowDirect partnership agreement — scope, terms, timeline for Phase 1 deployment.<br><br>
+      <strong>Step 2:</strong> RapidPOS engagement — confirm NCR Counterpoint API access parameters for the Layer 4 server build. See <a href="https://ncr.growdirect.io" target="_blank">ncr.growdirect.io</a> for architecture reference.<br><br>
+      <strong>Step 3:</strong> Armstrong Horticulture Vault build — four-week content sprint to populate the knowledge substrate from Armstrong's existing IP.<br><br>
+      <strong>Step 4:</strong> Pilot store deployment — ALX live in one Armstrong location. 90-day measurement period. The numbers speak for themselves.<br><br>
+      <strong>The conf room pilot is already running.</strong> The next step is moving it from a laptop to a store.</p>
+    </div>
+  </div>
+</div>
+
+<!-- ══ FOOTER ══ -->
+<div class="footer">
+  <div class="container">
+    <div class="footer-inner">
+      <div>
+        <div class="footer-brand">GrowDirect LLC</div>
+        <div>Confidential — prepared for Armstrong Garden Centers</div>
+        <div style="margin-top:8px;">April 2026 — Working Prototype Available for Demonstration</div>
+      </div>
+      <div class="footer-links">
+        <a href="https://ncr.growdirect.io" target="_blank">ncr.growdirect.io — NCR Vault</a>
+        <a href="https://growdirect-llc.github.io/canary-retail-brain/" target="_blank">Canary Retail Brain</a>
+        <a href="https://growdirect-llc.github.io/catz/" target="_blank">CATz Method</a>
+        <div style="margin-top:8px; color:rgba(245,240,232,0.55);">gclyle@growdirect.io</div>
+      </div>
+    </div>
+    <div style="margin-top:32px; padding-top:24px; border-top:1px solid rgba(255,255,255,0.08); display:flex; justify-content:space-between; align-items:flex-end; flex-wrap:wrap; gap:16px;">
+      <div style="font-size:11px; color:rgba(245,240,232,0.25); line-height:1.7; max-width:560px;">
+        © 2026 GrowDirect LLC. All rights reserved. ALX™, Canary Retail OS™, VSM™, and the Armstrong Horticulture Vault™ are trademarks of GrowDirect LLC. The methodology contained herein is proprietary and confidential. Unauthorised reproduction or distribution is prohibited. GrowDirect LLC is the sole author and owner of all intellectual property presented in this document, including the SDD lineage framework, the MCP Sandwich Architecture, and the Consumer Positioning playbook as adapted for the specialty retail context.
+      </div>
+      <div style="font-size:13px; color:rgba(245,240,232,0.3); font-style:italic; text-align:right; line-height:1.8;">
+        25 years in the making.<br>
+        <span style="color:rgba(245,240,232,0.18);">— Alejandro.</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+  // Smooth scroll for nav links
+  document.querySelectorAll('a[href^="#"]').forEach(a => {
+    a.addEventListener('click', e => {
+      const target = document.querySelector(a.getAttribute('href'));
+      if (target) {
+        e.preventDefault();
+        target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      }
+    });
+  });
+</script>
+</body>
+</html>
