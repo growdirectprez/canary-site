@@ -1,0 +1,345 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>CDF — Canary Delivery Framework · RapidPOS</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,wght@0,300;0,400;0,600;0,700;1,400&family=Inter:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;600&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg: #F5F0E8; --bg-alt: #EAE4D6; --surface: #FFFFFF;
+  --green-dark: #1C3A2B; --green-mid: #2A5240; --green-light: #4CAF7D; --green-faint: rgba(76,175,125,0.10);
+  --gold: #BF8700; --gold-light: #E8A800; --gold-faint: rgba(191,135,0,0.12);
+  --text-primary: #1C3A2B; --text-secondary:#3A3A3A; --text-muted: #6B6B6B; --text-on-dark: #F5F0E8;
+  --border: #D0C9BB; --border-subtle: rgba(28,58,43,0.10);
+  --code-bg: #1C3A2B; --code-text: #4CAF7D;
+  --max: 860px;
+}
+*, *::before, *::after { box-sizing: border-box; }
+html, body { margin: 0; padding: 0; }
+body { font-family: 'Inter', system-ui, sans-serif; font-size: 16px; line-height: 1.7; color: var(--text-primary); background: var(--bg); -webkit-font-smoothing: antialiased; }
+a { color: var(--green-mid); text-decoration: none; border-bottom: 1px solid var(--border-subtle); transition: color .15s; }
+a:hover { color: var(--gold); border-bottom-color: var(--gold); }
+h1, h2, h3 { font-family: 'Source Serif 4', Georgia, serif; color: var(--text-primary); margin: 0; }
+p { margin: 0 0 1em; }
+code { font-family: 'IBM Plex Mono', monospace; font-size: 0.9em; padding: 1px 5px; background: var(--green-faint); border-radius: 3px; color: var(--green-dark); }
+
+/* NAV */
+.nav { background: var(--green-dark); height: 56px; position: sticky; top: 0; z-index: 50; border-bottom: 1px solid rgba(0,0,0,0.2); }
+.nav-inner { max-width: 1280px; margin: 0 auto; padding: 0 24px; height: 100%; display: flex; align-items: center; gap: 32px; }
+.nav-brand { color: var(--text-on-dark); border: none; display: flex; align-items: baseline; gap: 8px; }
+.nav-brand .wordmark { font-family: 'Source Serif 4', serif; font-style: italic; font-weight: 600; font-size: 19px; color: var(--text-on-dark); }
+.nav-brand .slash { color: rgba(245,240,232,0.4); font-size: 13px; }
+.nav-brand .product { font-family: 'Inter', sans-serif; font-size: 13px; font-weight: 400; color: rgba(245,240,232,0.65); letter-spacing: 0.04em; }
+.nav-links { display: flex; align-items: center; gap: 28px; margin-left: 24px; }
+.nav-links a { color: rgba(245,240,232,0.78); border: none; font-size: 13px; font-weight: 500; padding: 4px 0; position: relative; }
+.nav-links a:hover { color: var(--text-on-dark); }
+.nav-links a.active { color: var(--text-on-dark); }
+.nav-links a.active::after { content: ""; position: absolute; left: 0; right: 0; bottom: -19px; height: 2px; background: var(--gold); }
+.nav-right { margin-left: auto; }
+.btn-nav { border: 1px solid var(--gold); color: var(--gold-light); padding: 7px 14px; border-radius: 4px; font-size: 12px; font-weight: 600; background: transparent; display: inline-flex; align-items: center; gap: 6px; }
+.btn-nav:hover { background: var(--gold); color: var(--green-dark); border-color: var(--gold); }
+@media (max-width: 980px) { .nav-links { display: none; } }
+
+/* PAGE */
+.page { max-width: var(--max); margin: 0 auto; padding: 56px 32px 96px; }
+@media (max-width: 680px) { .page { padding: 36px 18px 64px; } }
+
+.eyebrow { font-size: 11px; font-weight: 700; letter-spacing: 0.14em; text-transform: uppercase; color: var(--gold); display: block; margin-bottom: 14px; }
+.page-title { font-size: clamp(32px, 5vw, 52px); font-weight: 700; line-height: 1.08; letter-spacing: -0.025em; margin-bottom: 18px; }
+.page-lead { font-size: 18px; color: var(--text-secondary); max-width: 580px; line-height: 1.6; margin-bottom: 40px; padding-bottom: 36px; border-bottom: 1px solid var(--border); }
+
+/* LINEAGE */
+.lineage-table { width: 100%; border-collapse: collapse; margin-bottom: 48px; font-size: 14px; }
+.lineage-table th { font-size: 10px; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; color: var(--text-muted); text-align: left; padding: 0 14px 10px 0; border-bottom: 2px solid var(--border); }
+.lineage-table td { padding: 13px 14px 13px 0; border-bottom: 1px solid var(--bg-alt); vertical-align: top; line-height: 1.45; }
+.lineage-table td:first-child { font-family: 'IBM Plex Mono', monospace; font-size: 12px; color: var(--gold); white-space: nowrap; width: 60px; }
+.lineage-table td:nth-child(2) { font-weight: 600; color: var(--text-primary); width: 260px; }
+.lineage-table td:last-child { color: var(--text-secondary); }
+.lineage-table tr:last-child td { border-bottom: none; font-weight: 600; }
+.lineage-table tr:last-child td:first-child { color: var(--green-light); }
+
+/* SECTION */
+.section { margin-bottom: 52px; }
+.section h2 { font-size: 26px; font-weight: 600; margin-bottom: 6px; }
+.section-desc { font-size: 15px; color: var(--text-muted); margin-bottom: 24px; }
+
+/* PHASE CARDS */
+.phase-grid { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 14px; margin-bottom: 12px; }
+@media (max-width: 680px) { .phase-grid { grid-template-columns: 1fr; } }
+
+.phase-card { background: var(--surface); border: 1px solid var(--border); border-radius: 6px; overflow: hidden; }
+.phase-head { background: var(--green-dark); padding: 16px 20px; }
+.phase-num { font-size: 10px; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase; color: var(--gold); display: block; margin-bottom: 3px; }
+.phase-name { font-family: 'Source Serif 4', serif; font-size: 22px; font-weight: 700; color: var(--text-on-dark); display: block; }
+.phase-days { font-size: 12px; color: rgba(245,240,232,0.5); margin-top: 3px; display: block; }
+.phase-body { padding: 18px 20px; }
+.phase-body ul { list-style: none; margin: 0 0 14px; padding: 0; display: flex; flex-direction: column; gap: 6px; }
+.phase-body ul li { font-size: 13px; color: var(--text-secondary); padding-left: 14px; position: relative; line-height: 1.4; }
+.phase-body ul li::before { content: "·"; position: absolute; left: 0; color: var(--gold); font-weight: 700; }
+.phase-gate { font-size: 12px; color: var(--text-muted); border-top: 1px solid var(--bg-alt); padding-top: 12px; line-height: 1.4; }
+.phase-gate strong { color: var(--green-dark); font-weight: 600; }
+
+/* WORKSTREAM TABLE */
+.ws-table { width: 100%; border-collapse: collapse; font-size: 14px; }
+.ws-table th { font-size: 10px; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; color: var(--text-muted); text-align: left; padding: 0 0 10px; border-bottom: 2px solid var(--border); }
+.ws-table td { padding: 14px 0; border-bottom: 1px solid var(--bg-alt); vertical-align: top; line-height: 1.5; }
+.ws-table tr:last-child td { border-bottom: none; }
+.ws-dot { display: inline-flex; align-items: center; gap: 8px; font-weight: 600; font-size: 13px; }
+.ws-dot::before { content: ""; display: inline-block; width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0; }
+.ws1::before { background: #2E6B9A; }
+.ws2::before { background: #3D7A45; }
+.ws3::before { background: #A67C3D; }
+.ws4::before { background: #7A4E8C; }
+.ws5::before { background: #2E7D7D; }
+.ws-owner { font-size: 11px; font-weight: 600; letter-spacing: 0.05em; text-transform: uppercase; color: var(--text-muted); }
+.ws-desc { font-size: 13px; color: var(--text-secondary); padding-right: 20px; }
+
+/* BENCHMARK */
+.bench-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+@media (max-width: 600px) { .bench-grid { grid-template-columns: 1fr; } }
+.bench-card { border: 1px solid var(--border); border-radius: 6px; overflow: hidden; }
+.bench-head { padding: 16px 20px; }
+.bench-head.traditional { background: var(--bg-alt); }
+.bench-head.cdf { background: var(--green-dark); }
+.bench-head-label { font-size: 10px; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; margin-bottom: 3px; display: block; }
+.bench-head.traditional .bench-head-label { color: var(--text-muted); }
+.bench-head.cdf .bench-head-label { color: var(--gold); }
+.bench-head-title { font-family: 'Source Serif 4', serif; font-size: 18px; font-weight: 700; }
+.bench-head.traditional .bench-head-title { color: var(--text-primary); }
+.bench-head.cdf .bench-head-title { color: var(--text-on-dark); }
+.bench-body { background: var(--surface); padding: 18px 20px; }
+.bench-row { display: flex; justify-content: space-between; align-items: baseline; padding: 7px 0; border-bottom: 1px solid var(--bg-alt); font-size: 13px; }
+.bench-row:last-child { border-bottom: none; }
+.bench-label { color: var(--text-muted); }
+.bench-val { font-weight: 600; color: var(--text-primary); text-align: right; max-width: 55%; }
+.bench-val.highlight { color: var(--green-mid); }
+
+/* CALLOUT */
+.callout { border-left: 3px solid var(--gold); background: var(--gold-faint); padding: 16px 20px; border-radius: 0 4px 4px 0; margin: 28px 0; }
+.callout-label { font-size: 10px; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase; color: var(--gold); margin-bottom: 6px; display: block; }
+.callout p { margin: 0; font-size: 14px; color: var(--text-secondary); line-height: 1.6; }
+
+/* FOOTER */
+.page-footer { border-top: 1px solid var(--border); padding-top: 24px; margin-top: 48px; display: flex; justify-content: space-between; font-size: 12px; color: var(--text-muted); flex-wrap: wrap; gap: 8px; }
+</style>
+</head>
+<body>
+
+<nav class="nav">
+  <div class="nav-inner">
+    <a href="/rapidpos/" class="nav-brand">
+      <span class="wordmark">Canary</span>
+      <span class="slash">/</span>
+      <span class="product">RapidPOS</span>
+    </a>
+    <div class="nav-links">
+      <a href="/rapidpos/">Overview</a>
+      <a href="/rapidpos/architecture.html">Architecture</a>
+      <a href="/rapidpos/endpoints.html">Endpoints</a>
+      <a href="/rapidpos/wiki/">Wiki</a>
+      <a href="/rapidpos/method/" class="active">Method</a>
+    </div>
+    <div class="nav-right">
+      <a href="mailto:canary@growdirect.io" class="btn-nav">Contact ↗</a>
+    </div>
+  </div>
+</nav>
+
+<div class="page">
+
+  <span class="eyebrow">Canary Delivery Framework · CDF</span>
+  <h1 class="page-title">Scaffold. Seed. Show.</h1>
+  <p class="page-lead">From data access to a working system in 20 days. CDF is the implementation counterpart to CATz — it picks up where the assessment ends and delivers a running system, not a roadmap.</p>
+
+  <!-- LINEAGE -->
+  <div class="section">
+    <h2>Where this comes from.</h2>
+    <p class="section-desc">Thirty years of retail implementation methodology, compressed by agent delivery into a 20-day sprint.</p>
+    <table class="lineage-table">
+      <thead>
+        <tr>
+          <th>Year</th>
+          <th>Source</th>
+          <th>Contribution</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>1995</td>
+          <td>Management Horizons RIM · PriceWaterhouse</td>
+          <td>Retail implementation methodology. The founder's direct training — Herb &amp; Walter.</td>
+        </tr>
+        <tr>
+          <td>1998</td>
+          <td>PwC merger · PW + C&amp;L</td>
+          <td>RIM lineage converges with ERIS into the PwC retail practice.</td>
+        </tr>
+        <tr>
+          <td>1999</td>
+          <td>SAP IS Retail · PwC COE</td>
+          <td>IDoc integration architecture, POS interface patterns.</td>
+        </tr>
+        <tr>
+          <td>2005</td>
+          <td>IBM RBIS</td>
+          <td>Enterprise retail data model.</td>
+        </tr>
+        <tr>
+          <td>2015</td>
+          <td>Sysrepublic EBR</td>
+          <td>SaaS LP delivery — studied as the counter-example. "100 hours of consultancy."</td>
+        </tr>
+        <tr>
+          <td>2026</td>
+          <td>CDF · Canary Delivery Framework</td>
+          <td>Agent-native, SaaS-fast. No services block. Data in, diagnostics out.</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- PHASES -->
+  <div class="section">
+    <h2>Three phases. Hard gates between each.</h2>
+    <p class="section-desc">No phase starts until the prior gate clears. No overruns by design — if the gate doesn't open, the problem surfaces on Day 5, not Day 45.</p>
+    <div class="phase-grid">
+      <div class="phase-card">
+        <div class="phase-head">
+          <span class="phase-num">Phase 1</span>
+          <span class="phase-name">Scaffold</span>
+          <span class="phase-days">Days 1–5</span>
+        </div>
+        <div class="phase-body">
+          <ul>
+            <li>MCP endpoint deployed and reachable</li>
+            <li>RapidPOS API credentials provisioned</li>
+            <li>Pilot store named and confirmed</li>
+            <li>CRDM schemas initialized</li>
+            <li>LOI or work order signed</li>
+          </ul>
+          <p class="phase-gate"><strong>Gate:</strong> ALX queries live Counterpoint data from the pilot store. If it can't read, nothing else starts.</p>
+        </div>
+      </div>
+      <div class="phase-card">
+        <div class="phase-head">
+          <span class="phase-num">Phase 2</span>
+          <span class="phase-name">Seed</span>
+          <span class="phase-days">Days 6–15</span>
+        </div>
+        <div class="phase-body">
+          <ul>
+            <li>Vault seeded — 200+ SKUs with taxonomy, seasonality, care data</li>
+            <li>First 10 Canary diagnostics running on pilot store</li>
+            <li>CRDM receiving daily sales and inventory feeds</li>
+            <li>ALX trained on retailer item taxonomy</li>
+          </ul>
+          <p class="phase-gate"><strong>Gate:</strong> Two VSM tools return live data. Vault has ≥ 200 entries with diagnostic annotations.</p>
+        </div>
+      </div>
+      <div class="phase-card">
+        <div class="phase-head">
+          <span class="phase-num">Phase 3</span>
+          <span class="phase-name">Show</span>
+          <span class="phase-days">Days 16–25</span>
+        </div>
+        <div class="phase-body">
+          <ul>
+            <li>ALX demonstrable on-site at pilot store</li>
+            <li>LP diagnostics running across all stores</li>
+            <li>Sponsor + store manager sign-off</li>
+            <li>Multi-store rollout plan delivered</li>
+          </ul>
+          <p class="phase-gate"><strong>Gate:</strong> Sponsor and store manager sign off on Phase 3 review. Rollout plan accepted.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- WORKSTREAMS -->
+  <div class="section">
+    <h2>Five workstreams. One accountable lead each.</h2>
+    <p class="section-desc">All five run concurrently. No shared ownership on anything that blocks a gate.</p>
+    <table class="ws-table">
+      <thead><tr><th style="width:180px">Workstream</th><th>What it does</th><th style="width:160px">Accountable</th></tr></thead>
+      <tbody>
+        <tr>
+          <td><span class="ws-dot ws1">WS1 · Commercial</span></td>
+          <td class="ws-desc">Scope, contract, pilot store selection, rollout plan. Commercial structure determined by VAR relationship.</td>
+          <td class="ws-owner">Client Business</td>
+        </tr>
+        <tr>
+          <td><span class="ws-dot ws2">WS2 · API &amp; Integration</span></td>
+          <td class="ws-desc">NCR Vault provisioning, Counterpoint REST API config, MCP endpoint deploy, credential handoff, endpoint testing.</td>
+          <td class="ws-owner">Client IT + RapidPOS</td>
+        </tr>
+        <tr>
+          <td><span class="ws-dot ws3">WS3 · Vault &amp; Content</span></td>
+          <td class="ws-desc">Item master ingestion, domain taxonomy, care data, cross-sell signals. This is the moat — the Vault nobody else has built.</td>
+          <td class="ws-owner">GrowDirect + Client Biz</td>
+        </tr>
+        <tr>
+          <td><span class="ws-dot ws4">WS4 · CRDM &amp; Data</span></td>
+          <td class="ws-desc">Three-database CRDM init, ETL from Counterpoint into <code>canary_sales</code> / <code>canary_app</code> / <code>canary_metrics</code>, daily feed schedule.</td>
+          <td class="ws-owner">GrowDirect + Client IT</td>
+        </tr>
+        <tr>
+          <td><span class="ws-dot ws5">WS5 · Platform &amp; Infra</span></td>
+          <td class="ws-desc">EC2 provision, Docker stack, Cloudflare DNS, SSL. Single box. Nothing managed, nothing to maintain at launch.</td>
+          <td class="ws-owner">GrowDirect</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- BENCHMARK -->
+  <div class="section">
+    <h2>What this used to cost.</h2>
+    <p class="section-desc">Documented from a 100-day LP analytics deployment at a comparable specialty retailer, 2015. Agent delivery absorbs what used to be billed at daily rates.</p>
+    <div class="bench-grid">
+      <div class="bench-card">
+        <div class="bench-head traditional">
+          <span class="bench-head-label">Traditional SaaS deployment</span>
+          <span class="bench-head-title">The 100-Day Model</span>
+        </div>
+        <div class="bench-body">
+          <div class="bench-row"><span class="bench-label">Timeline</span><span class="bench-val">100 days</span></div>
+          <div class="bench-row"><span class="bench-label">Total effort</span><span class="bench-val">~2,700 combined hours</span></div>
+          <div class="bench-row"><span class="bench-label">Vendor roles</span><span class="bench-val">7</span></div>
+          <div class="bench-row"><span class="bench-label">Client roles</span><span class="bench-val">7</span></div>
+          <div class="bench-row"><span class="bench-label">Cost</span><span class="bench-val">$400K+</span></div>
+          <div class="bench-row"><span class="bench-label">Bottleneck</span><span class="bench-val">Dev pair 1,050h · Validation 22d · POS Analysis 17d</span></div>
+        </div>
+      </div>
+      <div class="bench-card">
+        <div class="bench-head cdf">
+          <span class="bench-head-label">CDF · Agent-native delivery</span>
+          <span class="bench-head-title">The 20-Day Model</span>
+        </div>
+        <div class="bench-body">
+          <div class="bench-row"><span class="bench-label">Timeline</span><span class="bench-val highlight">20–25 days</span></div>
+          <div class="bench-row"><span class="bench-label">Total effort</span><span class="bench-val highlight">~450 hours</span></div>
+          <div class="bench-row"><span class="bench-label">Vendor roles</span><span class="bench-val highlight">3</span></div>
+          <div class="bench-row"><span class="bench-label">Client roles</span><span class="bench-val highlight">3</span></div>
+          <div class="bench-row"><span class="bench-label">Cost</span><span class="bench-val highlight">$50–70K</span></div>
+          <div class="bench-row"><span class="bench-label">Agent absorbs</span><span class="bench-val highlight">Data transforms · POS analysis 17d→2d · Validation 22d→2d · Infra 20d→2d</span></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="callout">
+      <span class="callout-label">The structural reason</span>
+      <p>CRDM is pre-built. The three-database PostgreSQL architecture that took a dev pair 12 weeks to model in 2015 exists before the engagement starts. NCR doesn't have it. RapidPOS doesn't have it. That's where the 80 days went.</p>
+    </div>
+  </div>
+
+  <div class="page-footer">
+    <span>Canary Delivery Framework · GrowDirect LLC · <a href="mailto:canary@growdirect.io" style="border:none">canary@growdirect.io</a></span>
+    <span><a href="/rapidpos/wiki/" style="border:none">← Wiki</a> &nbsp;·&nbsp; <a href="/rapidpos/armstrong.html" style="border:none">Armstrong Pilot →</a></span>
+  </div>
+
+</div>
+</body>
+</html>
