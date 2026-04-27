@@ -1,0 +1,888 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>T — Transaction Pipeline · NCR Vault — Canary RapidPOS</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,wght@0,300;0,400;0,600;0,700;1,400&family=Inter:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;600&display=swap" rel="stylesheet">
+<!--
+  Canary RapidPOS — Wiki vault template.
+  Shell is reusable: top nav, two-column (sidebar + article),
+  vault switcher, breadcrumb, callouts, table, code blocks,
+  back-links. Sample content: NCR / Modules / T — Transaction Pipeline.
+-->
+<style>
+/* ============================================================
+   Canary RapidPOS — shared design system (verbatim from index.html)
+   ============================================================ */
+:root {
+  --bg: #F5F0E8; --bg-alt: #EAE4D6; --surface: #FFFFFF;
+  --green-dark: #1C3A2B; --green-mid: #2A5240; --green-light: #4CAF7D; --green-faint: rgba(76,175,125,0.10);
+  --gold: #BF8700; --gold-light: #E8A800; --gold-faint: rgba(191,135,0,0.12);
+  --text-primary: #1C3A2B; --text-secondary:#3A3A3A; --text-muted: #6B6B6B; --text-on-dark: #F5F0E8;
+  --border: #D0C9BB; --border-subtle: rgba(28,58,43,0.10);
+  --code-bg: #1C3A2B; --code-text: #4CAF7D; --code-comment: rgba(76,175,125,0.55);
+  --max: 960px; --pad: 32px;
+  --warn: #B5371F;
+  --sidebar: 260px;
+}
+*, *::before, *::after { box-sizing: border-box; }
+html, body { margin: 0; padding: 0; }
+body { font-family: 'Inter', system-ui, -apple-system, Segoe UI, sans-serif; font-size: 16px; line-height: 1.7; color: var(--text-primary); background: var(--bg); -webkit-font-smoothing: antialiased; }
+a { color: var(--green-mid); text-decoration: none; border-bottom: 1px solid var(--border-subtle); transition: color .15s, border-color .15s; }
+a:hover { color: var(--gold); border-bottom-color: var(--gold); }
+
+h1, h2, h3, h4 { font-family: 'Source Serif 4', Georgia, serif; color: var(--text-primary); margin: 0; }
+h1 { font-size: 42px; font-weight: 700; line-height: 1.1; letter-spacing: -0.02em; }
+h2 { font-size: 28px; font-weight: 600; line-height: 1.2; letter-spacing: -0.01em; }
+h3 { font-size: 19px; font-weight: 600; line-height: 1.3; }
+p  { margin: 0 0 1em; }
+
+.eyebrow, .section-label, .stat-label, .callout-label {
+  font-family: 'Inter', sans-serif; font-size: 11px; font-weight: 700;
+  letter-spacing: 0.1em; text-transform: uppercase; color: var(--gold);
+}
+
+code, pre, .mono { font-family: 'IBM Plex Mono', ui-monospace, SFMono-Regular, Menlo, monospace; }
+code { font-size: 0.92em; padding: 1px 5px; background: var(--green-faint); border-radius: 3px; color: var(--green-dark); }
+pre code { background: none; padding: 0; color: inherit; font-size: inherit; }
+
+/* ==========================================================================
+   NAV (same as technical pages)
+   ========================================================================== */
+.nav { background: var(--green-dark); height: 56px; position: sticky; top: 0; z-index: 50; border-bottom: 1px solid rgba(0,0,0,0.2); }
+.nav-inner { max-width: 1280px; margin: 0 auto; padding: 0 24px; height: 100%; display: flex; align-items: center; gap: 32px; }
+.nav-brand { color: var(--text-on-dark); border: none; display: flex; align-items: baseline; gap: 8px; letter-spacing: 0.02em; }
+.nav-brand .wordmark { font-family: 'Source Serif 4', serif; font-style: italic; font-weight: 600; font-size: 19px; color: var(--text-on-dark); }
+.nav-brand .slash { color: rgba(245,240,232,0.4); font-size: 13px; font-weight: 400; }
+.nav-brand .product { font-family: 'Inter', sans-serif; font-size: 13px; font-weight: 400; color: rgba(245,240,232,0.65); letter-spacing: 0.04em; }
+.nav-links { display: flex; align-items: center; gap: 28px; margin-left: 24px; }
+.nav-links a { color: rgba(245,240,232,0.78); border: none; font-size: 13px; font-weight: 500; padding: 4px 0; position: relative; }
+.nav-links a:hover { color: var(--text-on-dark); }
+.nav-links a.active { color: var(--text-on-dark); }
+.nav-links a.active::after { content: ""; position: absolute; left: 0; right: 0; bottom: -19px; height: 2px; background: var(--gold); }
+.nav-right { margin-left: auto; display: flex; align-items: center; gap: 18px; }
+.nav-right .gold-link { color: var(--gold-light); border: none; font-size: 13px; font-weight: 600; }
+.nav-right .gold-link:hover { color: #ffce4d; }
+.btn-nav { border: 1px solid var(--gold); color: var(--gold-light); padding: 7px 14px; border-radius: 4px; font-size: 12px; font-weight: 600; letter-spacing: 0.04em; background: transparent; display: inline-flex; align-items: center; gap: 6px; }
+.btn-nav:hover { background: var(--gold); color: var(--green-dark); border-color: var(--gold); }
+@media (max-width: 980px) { .nav-links, .nav-right .gold-link { display: none; } }
+
+/* ==========================================================================
+   WIKI LAYOUT
+   ========================================================================== */
+.wiki-shell {
+  display: grid;
+  grid-template-columns: var(--sidebar) 1fr;
+  min-height: calc(100vh - 56px);
+}
+@media (max-width: 980px) {
+  .wiki-shell { grid-template-columns: 1fr; }
+}
+
+/* Sidebar */
+.wiki-sidebar {
+  background: var(--green-dark);
+  color: var(--text-on-dark);
+  padding: 32px 22px 28px;
+  position: sticky;
+  top: 56px;
+  align-self: start;
+  height: calc(100vh - 56px);
+  overflow-y: auto;
+  border-right: 1px solid rgba(0,0,0,0.25);
+  font-size: 13.5px;
+}
+.wiki-sidebar::-webkit-scrollbar { width: 6px; }
+.wiki-sidebar::-webkit-scrollbar-thumb { background: rgba(245,240,232,0.15); border-radius: 3px; }
+
+@media (max-width: 980px) {
+  .wiki-sidebar { position: static; height: auto; border-right: none; border-bottom: 1px solid rgba(0,0,0,0.2); }
+}
+
+.wiki-vault-header { padding-bottom: 22px; border-bottom: 1px solid rgba(245,240,232,0.12); margin-bottom: 22px; }
+.wiki-vault-header .label {
+  font-family: 'Inter', sans-serif;
+  font-size: 10.5px;
+  font-weight: 700;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--gold-light);
+  display: block;
+  margin-bottom: 8px;
+}
+.wiki-vault-header .vault-title {
+  font-family: 'Source Serif 4', serif;
+  font-style: italic;
+  font-weight: 600;
+  font-size: 22px;
+  color: var(--text-on-dark);
+  letter-spacing: -0.01em;
+  display: block;
+  margin-bottom: 6px;
+}
+.wiki-vault-header p {
+  font-size: 12px;
+  color: rgba(245,240,232,0.55);
+  line-height: 1.5;
+  margin: 0;
+}
+
+.wiki-section { margin-bottom: 22px; }
+.wiki-section-label {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 10.5px;
+  font-weight: 600;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: rgba(245,240,232,0.45);
+  margin-bottom: 8px;
+  padding: 0 10px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.wiki-section-label::before {
+  content: ""; width: 4px; height: 4px; background: var(--gold); border-radius: 50%;
+}
+.wiki-nav-link {
+  display: block;
+  padding: 6px 12px;
+  color: rgba(245,240,232,0.72);
+  border: none;
+  border-left: 2px solid transparent;
+  font-size: 13px;
+  font-weight: 400;
+  line-height: 1.4;
+  border-radius: 0 3px 3px 0;
+  transition: all .12s ease;
+}
+.wiki-nav-link:hover {
+  color: var(--text-on-dark);
+  background: rgba(245,240,232,0.04);
+  border-left-color: rgba(245,240,232,0.3);
+}
+.wiki-nav-link.active {
+  color: var(--green-dark);
+  background: var(--green-light);
+  border-left-color: var(--gold);
+  font-weight: 600;
+}
+.wiki-nav-link .mod-letter {
+  display: inline-block;
+  width: 18px;
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 11px;
+  font-weight: 700;
+  color: var(--gold-light);
+  margin-right: 6px;
+}
+.wiki-nav-link.active .mod-letter { color: var(--green-dark); }
+
+/* Vault switcher */
+.vault-switcher {
+  margin-top: 28px;
+  padding-top: 20px;
+  border-top: 1px solid rgba(245,240,232,0.12);
+}
+.vault-switcher .label {
+  font-family: 'Inter', sans-serif;
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: rgba(245,240,232,0.45);
+  display: block;
+  margin-bottom: 10px;
+  padding: 0 10px;
+}
+.vault-switcher .switcher-row {
+  display: flex; gap: 6px; padding: 0 8px;
+}
+.vault-link {
+  flex: 1;
+  text-align: center;
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  padding: 8px 0;
+  border: 1px solid rgba(245,240,232,0.14);
+  border-radius: 3px;
+  color: rgba(245,240,232,0.72);
+  background: transparent;
+}
+.vault-link:hover { background: rgba(245,240,232,0.06); color: var(--text-on-dark); border-color: rgba(245,240,232,0.3); }
+.vault-link.active { background: var(--gold); color: var(--green-dark); border-color: var(--gold); }
+
+/* ==========================================================================
+   ARTICLE
+   ========================================================================== */
+.wiki-main {
+  padding: 40px 56px 80px;
+  background: var(--bg);
+  min-width: 0;
+}
+@media (max-width: 980px) { .wiki-main { padding: 32px 24px 64px; } }
+
+.article { max-width: 760px; margin: 0; }
+
+/* Breadcrumb */
+.breadcrumb {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 11.5px;
+  letter-spacing: 0.04em;
+  color: var(--text-muted);
+  margin-bottom: 28px;
+  display: flex; flex-wrap: wrap; gap: 6px;
+  align-items: center;
+}
+.breadcrumb a { color: var(--text-muted); border: none; }
+.breadcrumb a:hover { color: var(--gold); }
+.breadcrumb .sep { color: var(--border); }
+.breadcrumb .current { color: var(--green-dark); font-weight: 600; }
+
+/* Article header */
+.article-header {
+  border-bottom: 1px solid var(--border);
+  padding-bottom: 28px;
+  margin-bottom: 36px;
+}
+.article-header .module-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 18px;
+}
+.article-header .module-badge .letter {
+  width: 36px; height: 36px;
+  display: inline-flex; align-items: center; justify-content: center;
+  background: var(--green-dark); color: var(--gold-light);
+  font-family: 'Source Serif 4', serif; font-style: italic; font-weight: 700;
+  font-size: 22px;
+  border-radius: 4px;
+  letter-spacing: -0.02em;
+}
+.article-header .module-badge .badge-meta {
+  font-family: 'Inter', sans-serif;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--gold);
+}
+.article-header h1 { margin-bottom: 14px; max-width: 700px; }
+.article-header .subtitle {
+  font-size: 17px;
+  line-height: 1.6;
+  color: var(--text-secondary);
+  margin: 0;
+  max-width: 680px;
+}
+.article-meta {
+  display: flex; flex-wrap: wrap; gap: 22px;
+  margin-top: 22px;
+  font-size: 12px;
+  color: var(--text-muted);
+  font-family: 'IBM Plex Mono', monospace;
+  letter-spacing: 0.04em;
+}
+.article-meta .meta-item span { color: var(--gold); margin-right: 6px; font-weight: 600; }
+
+/* Article body */
+.article-body { font-size: 16.5px; line-height: 1.75; color: var(--text-primary); }
+.article-body > * + * { margin-top: 1em; }
+.article-body p { color: var(--text-secondary); }
+.article-body h2 {
+  margin-top: 56px;
+  padding-left: 18px;
+  border-left: 3px solid var(--gold);
+  font-size: 26px;
+  font-weight: 600;
+  color: var(--green-dark);
+  position: relative;
+  scroll-margin-top: 80px;
+}
+.article-body h2 .h-num {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 0.14em;
+  color: var(--gold);
+  display: block;
+  margin-bottom: 4px;
+  text-transform: uppercase;
+}
+.article-body h3 { margin-top: 36px; color: var(--green-dark); font-size: 18px; }
+.article-body strong { color: var(--green-dark); font-weight: 700; }
+.article-body em { color: var(--green-mid); }
+
+.article-body ul, .article-body ol { padding-left: 22px; color: var(--text-secondary); }
+.article-body li + li { margin-top: 6px; }
+
+/* Code block */
+pre.code-block {
+  background: var(--code-bg);
+  color: var(--code-text);
+  padding: 22px 26px;
+  border-radius: 8px;
+  border-left: 3px solid var(--green-light);
+  overflow-x: auto;
+  font-size: 13.5px;
+  line-height: 1.6;
+  margin: 1.4em 0;
+}
+pre.code-block .c-comment { color: var(--code-comment); font-style: italic; }
+pre.code-block .c-key { color: #ffce4d; }
+pre.code-block .c-str { color: #c8e6c0; }
+pre.code-block .c-num { color: #ffce4d; }
+pre.code-block .c-punc { color: rgba(245,240,232,0.6); }
+.code-caption {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  color: var(--text-muted);
+  margin: 0 0 -6px;
+}
+
+/* Callout */
+.callout {
+  background: var(--gold-faint);
+  border-left: 3px solid var(--gold);
+  padding: 18px 22px;
+  border-radius: 0 6px 6px 0;
+  margin: 1.6em 0;
+}
+.callout .callout-label { display: block; margin-bottom: 6px; }
+.callout p { margin: 0; color: var(--text-primary); font-size: 15.5px; }
+.callout p + p { margin-top: 0.6em; }
+.callout.callout-warning { background: rgba(181,55,31,0.08); border-left-color: var(--warn); }
+.callout.callout-warning .callout-label { color: var(--warn); }
+
+/* Tables */
+table.wiki-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 1.4em 0;
+  font-size: 14px;
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  overflow: hidden;
+}
+table.wiki-table thead th {
+  background: var(--green-dark);
+  color: var(--text-on-dark);
+  text-align: left;
+  font-family: 'Inter', sans-serif;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  padding: 12px 16px;
+}
+table.wiki-table tbody td {
+  padding: 11px 16px;
+  border-top: 1px solid var(--border);
+  color: var(--text-secondary);
+  vertical-align: top;
+}
+table.wiki-table tbody tr:nth-child(even) td { background: var(--bg-alt); }
+table.wiki-table td code { font-size: 12.5px; }
+table.wiki-table td .req { font-family: 'IBM Plex Mono', monospace; font-size: 10px; font-weight: 700; color: var(--warn); letter-spacing: 0.1em; text-transform: uppercase; }
+table.wiki-table td .opt { font-family: 'IBM Plex Mono', monospace; font-size: 10px; font-weight: 700; color: var(--text-muted); letter-spacing: 0.1em; text-transform: uppercase; }
+
+/* Wikilink */
+a.wikilink {
+  border-bottom: 1px dashed var(--green-light);
+  color: var(--green-mid);
+}
+a.wikilink::before { content: "↗ "; font-size: 0.85em; color: var(--gold); }
+a.wikilink:hover { color: var(--gold); border-bottom-color: var(--gold); }
+
+/* Tag pills */
+.tag-row { display: flex; flex-wrap: wrap; gap: 8px; margin: 1.2em 0; }
+.tag {
+  display: inline-block;
+  background: var(--green-faint);
+  color: var(--green-dark);
+  border: 1px solid var(--green-light);
+  padding: 3px 10px;
+  border-radius: 12px;
+  font-size: 11px;
+  font-weight: 600;
+}
+
+/* Schema callout block (styled diff) */
+.schema-block {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-left: 3px solid var(--green-light);
+  border-radius: 6px;
+  padding: 0;
+  margin: 1.6em 0;
+  overflow: hidden;
+}
+.schema-block .schema-head {
+  background: var(--bg-alt);
+  padding: 10px 16px;
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--green-dark);
+  border-bottom: 1px solid var(--border);
+  display: flex; align-items: baseline; gap: 12px;
+}
+.schema-block .schema-head .pill {
+  font-size: 10px; letter-spacing: 0.12em; text-transform: uppercase;
+  background: var(--green-light); color: var(--green-dark);
+  padding: 2px 8px; border-radius: 10px; font-weight: 700;
+}
+
+/* Phase pipeline visual */
+.phase-pipeline {
+  display: grid;
+  grid-template-columns: 1fr auto 1fr;
+  gap: 16px;
+  align-items: stretch;
+  margin: 1.6em 0;
+}
+.phase-pipeline .phase-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  padding: 18px 20px;
+}
+.phase-pipeline .phase-card .label {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 10.5px;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  color: var(--gold);
+  text-transform: uppercase;
+  margin-bottom: 6px;
+  display: block;
+}
+.phase-pipeline .phase-card h4 {
+  font-family: 'Source Serif 4', serif;
+  font-weight: 600;
+  font-size: 15px;
+  margin: 0 0 8px;
+  color: var(--green-dark);
+}
+.phase-pipeline .phase-card p { font-size: 13.5px; line-height: 1.55; color: var(--text-secondary); margin: 0; }
+.phase-pipeline .phase-card .latency {
+  margin-top: 10px;
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 11px;
+  color: var(--green-mid);
+  background: var(--green-faint);
+  padding: 3px 8px;
+  border-radius: 10px;
+  display: inline-block;
+}
+.phase-pipeline .arrow {
+  display: flex; align-items: center; justify-content: center;
+  font-family: 'IBM Plex Mono', monospace;
+  color: var(--gold);
+  font-size: 14px;
+  font-weight: 600;
+}
+@media (max-width: 720px) {
+  .phase-pipeline { grid-template-columns: 1fr; }
+  .phase-pipeline .arrow { padding: 4px; transform: rotate(90deg); }
+}
+
+/* Backlinks */
+.backlinks {
+  margin-top: 72px;
+  padding-top: 28px;
+  border-top: 1px solid var(--border);
+}
+.backlinks .label {
+  font-family: 'Inter', sans-serif;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--gold);
+  margin-bottom: 14px;
+}
+.backlinks ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+  gap: 10px;
+}
+.backlinks li a {
+  display: block;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-left: 3px solid var(--green-light);
+  padding: 12px 16px;
+  border-radius: 4px;
+  font-size: 13px;
+  color: var(--green-dark);
+  font-weight: 500;
+  border-bottom: 1px solid var(--border);
+}
+.backlinks li a:hover { background: var(--bg-alt); border-color: var(--gold); border-left-color: var(--gold); color: var(--gold); }
+.backlinks li .b-path {
+  display: block;
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 10.5px;
+  color: var(--text-muted);
+  margin-top: 4px;
+  letter-spacing: 0.04em;
+}
+
+/* Page footer (next/prev) */
+.page-nav {
+  display: flex;
+  justify-content: space-between;
+  gap: 16px;
+  margin-top: 44px;
+  padding-top: 28px;
+  border-top: 1px solid var(--border);
+}
+.page-nav a {
+  flex: 1;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  padding: 14px 20px;
+  font-size: 13px;
+  color: var(--text-secondary);
+}
+.page-nav a:hover { border-color: var(--gold); color: var(--gold); }
+.page-nav a .dir { font-family: 'IBM Plex Mono', monospace; font-size: 10px; letter-spacing: 0.16em; text-transform: uppercase; color: var(--gold); display: block; margin-bottom: 4px; }
+.page-nav a .ttl { font-family: 'Source Serif 4', serif; font-weight: 600; font-size: 16px; color: var(--green-dark); }
+.page-nav a.next { text-align: right; }
+
+/* TOC (right rail, optional, hidden on small) */
+.article-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 760px) 200px;
+  gap: 56px;
+  align-items: start;
+}
+@media (max-width: 1180px) { .article-grid { grid-template-columns: 1fr; } .toc-rail { display: none; } }
+.toc-rail {
+  position: sticky; top: 80px;
+  font-size: 12.5px;
+  border-left: 1px solid var(--border);
+  padding-left: 18px;
+}
+.toc-rail .label { font-family: 'Inter', sans-serif; font-size: 10px; font-weight: 700; letter-spacing: 0.16em; text-transform: uppercase; color: var(--gold); margin-bottom: 10px; }
+.toc-rail ul { list-style: none; padding: 0; margin: 0; }
+.toc-rail li { margin-bottom: 6px; }
+.toc-rail a { color: var(--text-muted); border: none; font-size: 12.5px; line-height: 1.4; display: block; padding: 2px 0; }
+.toc-rail a:hover { color: var(--gold); }
+</style>
+</head>
+<body>
+
+<!-- ============ TOP NAV ============ -->
+<nav class="nav" aria-label="Primary">
+  <div class="nav-inner">
+    <a href="index.html" class="nav-brand" aria-label="Canary RapidPOS">
+      <span class="wordmark">Canary</span>
+      <span class="slash">/</span>
+      <span class="product">RapidPOS</span>
+    </a>
+    <div class="nav-links">
+      <a href="index.html">Overview</a>
+      <a href="architecture.html">Architecture</a>
+      <a href="endpoints.html">Endpoints</a>
+      <a href="integrate.html">Quickstart</a>
+      <a href="wiki-template.html" class="active">Vaults</a>
+    </div>
+    <div class="nav-right">
+      <a href="store-2030.html" class="gold-link">Store of the Future →</a>
+      <a href="mailto:canary@growdirect.io" class="btn-nav">Book a Call</a>
+    </div>
+  </div>
+</nav>
+
+<!-- ============ WIKI SHELL ============ -->
+<div class="wiki-shell">
+
+  <!-- ===== SIDEBAR ===== -->
+  <aside class="wiki-sidebar" aria-label="Vault navigation">
+    <div class="wiki-vault-header">
+      <span class="label">NCR Vault</span>
+      <span class="vault-title">Counterpoint</span>
+      <p>RapidPOS MCP Server — reference and integration for the NCR Counterpoint VAR channel.</p>
+    </div>
+
+    <div class="wiki-section">
+      <div class="wiki-section-label">Getting started</div>
+      <a href="#" class="wiki-nav-link">Vault home</a>
+      <a href="#" class="wiki-nav-link">How to read this vault</a>
+    </div>
+
+    <div class="wiki-section">
+      <div class="wiki-section-label">Integration</div>
+      <a href="#" class="wiki-nav-link">Overview</a>
+      <a href="#" class="wiki-nav-link">Counterpoint REST API</a>
+      <a href="#" class="wiki-nav-link">Authentication &amp; tenancy</a>
+      <a href="#" class="wiki-nav-link">Rate limits</a>
+    </div>
+
+    <div class="wiki-section">
+      <div class="wiki-section-label">Modules (13)</div>
+      <a href="#" class="wiki-nav-link active"><span class="mod-letter">T</span>Transaction Pipeline</a>
+      <a href="#" class="wiki-nav-link"><span class="mod-letter">R</span>Customer Record</a>
+      <a href="#" class="wiki-nav-link"><span class="mod-letter">I</span>Inventory</a>
+      <a href="#" class="wiki-nav-link"><span class="mod-letter">P</span>Pricing</a>
+      <a href="#" class="wiki-nav-link"><span class="mod-letter">L</span>Loyalty</a>
+      <a href="#" class="wiki-nav-link"><span class="mod-letter">D</span>Diagnostics</a>
+      <a href="#" class="wiki-nav-link"><span class="mod-letter">Q</span>Replenishment</a>
+      <a href="#" class="wiki-nav-link"><span class="mod-letter">W</span>Wayfinding</a>
+      <a href="#" class="wiki-nav-link"><span class="mod-letter">A</span>Associate</a>
+      <a href="#" class="wiki-nav-link"><span class="mod-letter">S</span>Seasonal</a>
+      <a href="#" class="wiki-nav-link"><span class="mod-letter">K</span>Knowledge</a>
+      <a href="#" class="wiki-nav-link"><span class="mod-letter">M</span>Merchandising</a>
+      <a href="#" class="wiki-nav-link"><span class="mod-letter">G</span>Google</a>
+    </div>
+
+    <div class="wiki-section">
+      <div class="wiki-section-label">Agents</div>
+      <a href="#" class="wiki-nav-link">MCP client patterns</a>
+      <a href="#" class="wiki-nav-link">Consent scopes</a>
+    </div>
+
+    <div class="wiki-section">
+      <div class="wiki-section-label">Pitch · Sandbox · Verticals</div>
+      <a href="#" class="wiki-nav-link">VAR pitch deck</a>
+      <a href="#" class="wiki-nav-link">Sandbox environment</a>
+      <a href="#" class="wiki-nav-link">Vertical adaptations</a>
+    </div>
+
+    <!-- Vault switcher -->
+    <div class="vault-switcher">
+      <span class="label">Vaults</span>
+      <div class="switcher-row">
+        <a href="#" class="vault-link active">NCR</a>
+        <a href="#" class="vault-link">CRB</a>
+        <a href="#" class="vault-link">CATz</a>
+      </div>
+    </div>
+  </aside>
+
+  <!-- ===== MAIN ===== -->
+  <main class="wiki-main">
+    <div class="article-grid">
+      <article class="article">
+
+        <!-- Breadcrumb -->
+        <nav class="breadcrumb" aria-label="Breadcrumb">
+          <a href="index.html">RapidPOS</a>
+          <span class="sep">/</span>
+          <a href="#">NCR Vault</a>
+          <span class="sep">/</span>
+          <a href="#">Modules</a>
+          <span class="sep">/</span>
+          <span class="current">T — Transaction Pipeline</span>
+        </nav>
+
+        <!-- Article header -->
+        <header class="article-header">
+          <div class="module-badge">
+            <span class="letter">T</span>
+            <span class="badge-meta">Module · Foundation tier · Phase 1+</span>
+          </div>
+          <h1>T — Transaction Pipeline</h1>
+          <p class="subtitle">The data foundation module. It connects the NCR Counterpoint REST API to the CRDM in real time, normalizing every transaction — sales, returns, holds, markdowns — from every terminal into <code>canary_sales</code>.</p>
+
+          <div class="article-meta">
+            <span class="meta-item"><span>STATUS</span>Live · Phase 1 polling</span>
+            <span class="meta-item"><span>OWNER</span>GrowDirect Platform</span>
+            <span class="meta-item"><span>DEPENDS ON</span>Counterpoint REST · canary_sales</span>
+            <span class="meta-item"><span>UPDATED</span>2026-04-22</span>
+          </div>
+        </header>
+
+        <!-- Body -->
+        <div class="article-body">
+
+          <p><strong>T — Transaction Pipeline</strong> is the data foundation module. Every other Canary module depends on T being live and current. If T is down, <code>canary_sales</code> goes stale; if <code>canary_sales</code> is stale, every downstream tool — inventory, loyalty, pricing — returns yesterday's truth. This page is the operator's contract for keeping it honest.</p>
+
+          <div class="callout">
+            <span class="callout-label">Key insight</span>
+            <p>T is the only module that runs <em>without</em> the MCP Server. It is upstream of the protocol layer entirely — its job is to make the CRDM continuously match Counterpoint, so that every tool call answered by the MCP Server is answered against fresh data.</p>
+          </div>
+
+          <h2 id="phases"><span class="h-num">§ 01</span>Two phases — polling, then push</h2>
+
+          <p>T ships in two delivery phases. Phase 1 is live for every retailer on the platform; Phase 2 rolls out per-tenant once the Counterpoint webhook surface is whitelisted with the retailer's IT team.</p>
+
+          <div class="phase-pipeline">
+            <div class="phase-card">
+              <span class="label">Phase 01 · Polling</span>
+              <h4>60-second cycle</h4>
+              <p>Every Counterpoint terminal's transaction log is pulled on the cycle, diffed against the last snapshot, and written to <code>canary_sales</code>. Idempotent — safe to replay.</p>
+              <span class="latency">Latency ≤ 60s</span>
+            </div>
+            <div class="arrow">───►</div>
+            <div class="phase-card">
+              <span class="label">Phase 02 · Webhook push</span>
+              <h4>Sub-second propagation</h4>
+              <p>Counterpoint fires an event on every transaction. T receives it, validates it, writes to <code>canary_sales</code>, and invalidates Redis cache for affected SKUs.</p>
+              <span class="latency">Latency &lt; 500ms</span>
+            </div>
+          </div>
+
+          <p>The transition from Phase 1 to Phase 2 is per-retailer and reversible. If the webhook channel falters, T falls back to the 60-second poll without operator intervention. <a href="#" class="wikilink">Failure modes</a> are documented in the integration guide.</p>
+
+          <h2 id="schema"><span class="h-num">§ 02</span>Schema — every row in <code>canary_sales</code></h2>
+
+          <p>Every transaction row in <code>canary_sales</code> is canonical. The shape is the same whether the row arrived via polling or webhook — Phase 2 is a latency upgrade, not a schema change. <a href="#" class="wikilink">canary_sales schema reference</a> is the source of truth; the columns below are the operator-relevant subset.</p>
+
+          <table class="wiki-table">
+            <thead>
+              <tr>
+                <th>Column</th>
+                <th>Type</th>
+                <th>Notes</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr><td><code>store_id</code></td><td>varchar(8)</td><td>Counterpoint store code. <span class="req">indexed</span></td></tr>
+              <tr><td><code>terminal_id</code></td><td>varchar(16)</td><td>Originating register / lane.</td></tr>
+              <tr><td><code>transaction_type</code></td><td>enum</td><td><code>SALE</code> · <code>RETURN</code> · <code>HOLD</code> · <code>MARKDOWN</code></td></tr>
+              <tr><td><code>sku</code></td><td>varchar(64)</td><td>Counterpoint item number. <span class="req">indexed</span></td></tr>
+              <tr><td><code>quantity</code></td><td>numeric(10,3)</td><td>Negative for returns.</td></tr>
+              <tr><td><code>unit_price</code></td><td>numeric(10,2)</td><td>Pre-tax, pre-discount line price.</td></tr>
+              <tr><td><code>customer_id</code></td><td>uuid</td><td>Nullable — guest transactions allowed. <span class="opt">nullable</span></td></tr>
+              <tr><td><code>counterpoint_transaction_id</code></td><td>varchar(32)</td><td>Source-system traceability key. <span class="req">unique</span></td></tr>
+              <tr><td><code>occurred_at</code></td><td>timestamptz</td><td>Counterpoint terminal clock, UTC normalized.</td></tr>
+              <tr><td><code>ingested_at</code></td><td>timestamptz</td><td>CRDM write time. <code>ingested_at − occurred_at</code> = pipeline latency.</td></tr>
+            </tbody>
+          </table>
+
+          <h2 id="example"><span class="h-num">§ 03</span>Example — a single sale lands in the CRDM</h2>
+
+          <p>The polling cycle pulls a batch every 60 seconds; the example below is one row of that batch, after normalization, ready for write.</p>
+
+          <p class="code-caption">canary_sales · INSERT payload</p>
+<pre class="code-block"><code><span class="c-comment">// Normalized from Counterpoint REST `/transactions/recent?since=...`</span>
+<span class="c-punc">{</span>
+  <span class="c-key">"store_id"</span><span class="c-punc">:</span> <span class="c-str">"PAS"</span><span class="c-punc">,</span>
+  <span class="c-key">"terminal_id"</span><span class="c-punc">:</span> <span class="c-str">"REG-04"</span><span class="c-punc">,</span>
+  <span class="c-key">"transaction_type"</span><span class="c-punc">:</span> <span class="c-str">"SALE"</span><span class="c-punc">,</span>
+  <span class="c-key">"sku"</span><span class="c-punc">:</span> <span class="c-str">"AGAVE-BLU-5G"</span><span class="c-punc">,</span>
+  <span class="c-key">"quantity"</span><span class="c-punc">:</span> <span class="c-num">1</span><span class="c-punc">,</span>
+  <span class="c-key">"unit_price"</span><span class="c-punc">:</span> <span class="c-num">39.99</span><span class="c-punc">,</span>
+  <span class="c-key">"customer_id"</span><span class="c-punc">:</span> <span class="c-str">"a3f1c2e0-8d27-4ebb-b1f5-09a7b4d9c1a3"</span><span class="c-punc">,</span>
+  <span class="c-key">"counterpoint_transaction_id"</span><span class="c-punc">:</span> <span class="c-str">"CP-2026-1147-88419"</span><span class="c-punc">,</span>
+  <span class="c-key">"occurred_at"</span><span class="c-punc">:</span> <span class="c-str">"2026-04-26T18:14:22Z"</span><span class="c-punc">,</span>
+  <span class="c-key">"ingested_at"</span><span class="c-punc">:</span> <span class="c-str">"2026-04-26T18:14:48Z"</span>
+<span class="c-punc">}</span></code></pre>
+
+          <p>Pipeline latency for this row: <code>26s</code>. Phase 2 push would have logged <code>&lt; 500ms</code> for the same write.</p>
+
+          <h2 id="operations"><span class="h-num">§ 04</span>Operating notes</h2>
+
+          <h3>Idempotency</h3>
+          <p>The <code>counterpoint_transaction_id</code> column is unique. Re-runs of the polling job — manual or automatic — are safe. Inserts collide on the unique key and are dropped silently.</p>
+
+          <h3>Backfill</h3>
+          <p>To replay history: invoke the <code>tsp:backfill</code> CLI with a date range. The job paginates the Counterpoint <code>/transactions</code> endpoint at 1,000 rows per page, writes via the same idempotent insert path, and emits progress to the operator log. Backfill does <em>not</em> invalidate Redis — cache is rebuilt by the next live event.</p>
+
+          <h3>Tags</h3>
+          <div class="tag-row">
+            <span class="tag">foundation</span>
+            <span class="tag">phase-1</span>
+            <span class="tag">phase-2</span>
+            <span class="tag">canary_sales</span>
+            <span class="tag">redis</span>
+            <span class="tag">counterpoint-rest</span>
+          </div>
+
+          <div class="callout callout-warning">
+            <span class="callout-label">Watch · cache drift</span>
+            <p>If T is paused for &gt; 5 minutes, downstream <code>inventory_lookup</code> calls will surface the <code>cache_age_seconds</code> field accurately, but loyalty point accruals can drift. Re-enable T before issuing high-trust transactional tool calls.</p>
+          </div>
+
+          <h2 id="see-also"><span class="h-num">§ 05</span>See also</h2>
+          <ul>
+            <li><a href="#" class="wikilink">canary_sales schema reference</a> — full column list, indexes, and partition strategy.</li>
+            <li><a href="#" class="wikilink">Redis cache invalidation</a> — Phase 2 event-to-eviction flow.</li>
+            <li><a href="endpoints.html" class="wikilink">inventory_lookup endpoint</a> — primary downstream consumer of T's data.</li>
+            <li><a href="architecture.html" class="wikilink">CRDM architecture</a> — three-database PostgreSQL layout.</li>
+          </ul>
+
+          <!-- Backlinks -->
+          <section class="backlinks" aria-label="Referenced by">
+            <div class="label">Referenced by</div>
+            <ul>
+              <li>
+                <a href="#"><strong>I — Inventory</strong>
+                  <span class="b-path">ncr / modules / I-inventory</span>
+                </a>
+              </li>
+              <li>
+                <a href="#"><strong>L — Loyalty</strong>
+                  <span class="b-path">ncr / modules / L-loyalty</span>
+                </a>
+              </li>
+              <li>
+                <a href="#"><strong>Q — Replenishment</strong>
+                  <span class="b-path">ncr / modules / Q-replenishment</span>
+                </a>
+              </li>
+              <li>
+                <a href="#"><strong>Integration overview</strong>
+                  <span class="b-path">ncr / integration</span>
+                </a>
+              </li>
+              <li>
+                <a href="#"><strong>VAR pitch · technical proof</strong>
+                  <span class="b-path">ncr / pitch / technical-proof</span>
+                </a>
+              </li>
+              <li>
+                <a href="#"><strong>Sandbox: replay job</strong>
+                  <span class="b-path">ncr / sandbox / replay</span>
+                </a>
+              </li>
+            </ul>
+          </section>
+
+          <!-- Page nav -->
+          <nav class="page-nav" aria-label="Module navigation">
+            <a href="#" class="prev">
+              <span class="dir">← Previous</span>
+              <span class="ttl">Integration · Authentication</span>
+            </a>
+            <a href="#" class="next">
+              <span class="dir">Next →</span>
+              <span class="ttl">R — Customer Record</span>
+            </a>
+          </nav>
+
+        </div>
+      </article>
+
+      <!-- Right rail TOC -->
+      <aside class="toc-rail" aria-label="On this page">
+        <div class="label">On this page</div>
+        <ul>
+          <li><a href="#phases">§ 01 — Two phases</a></li>
+          <li><a href="#schema">§ 02 — Schema</a></li>
+          <li><a href="#example">§ 03 — Example</a></li>
+          <li><a href="#operations">§ 04 — Operating notes</a></li>
+          <li><a href="#see-also">§ 05 — See also</a></li>
+        </ul>
+      </aside>
+    </div>
+  </main>
+</div>
+
+</body>
+</html>

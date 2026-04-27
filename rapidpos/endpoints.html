@@ -1,0 +1,558 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>Endpoints — Canary RapidPOS</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,wght@0,300;0,400;0,600;0,700;1,400&family=Inter:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;600&display=swap" rel="stylesheet">
+<!-- Shared design system — verbatim from index.html / architecture.html -->
+<style>
+:root {
+  --bg: #F5F0E8; --bg-alt: #EAE4D6; --surface: #FFFFFF;
+  --green-dark: #1C3A2B; --green-mid: #2A5240; --green-light: #4CAF7D; --green-faint: rgba(76,175,125,0.10);
+  --gold: #BF8700; --gold-light: #E8A800; --gold-faint: rgba(191,135,0,0.12);
+  --text-primary: #1C3A2B; --text-secondary:#3A3A3A; --text-muted: #6B6B6B; --text-on-dark: #F5F0E8;
+  --border: #D0C9BB; --border-subtle: rgba(28,58,43,0.10);
+  --code-bg: #1C3A2B; --code-text: #4CAF7D; --code-comment: rgba(76,175,125,0.55);
+  --max: 960px; --pad: 32px;
+}
+*, *::before, *::after { box-sizing: border-box; }
+html, body { margin: 0; padding: 0; }
+body { font-family: 'Inter', system-ui, sans-serif; font-size: 16px; line-height: 1.7; color: var(--text-primary); background: var(--bg); -webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale; }
+a { color: var(--green-mid); text-decoration: none; border-bottom: 1px solid var(--border-subtle); transition: color .15s ease, border-color .15s ease; }
+a:hover { color: var(--gold); border-bottom-color: var(--gold); }
+h1, h2, h3, h4 { font-family: 'Source Serif 4', Georgia, serif; color: var(--text-primary); margin: 0; }
+h1 { font-size: 48px; font-weight: 700; line-height: 1.08; letter-spacing: -0.02em; }
+h2 { font-size: 32px; font-weight: 600; line-height: 1.2; letter-spacing: -0.01em; }
+h3 { font-size: 20px; font-weight: 600; line-height: 1.3; }
+p { margin: 0 0 1em; }
+.eyebrow, .callout-label, .stat-label, .section-label { font-family: 'Inter', sans-serif; font-size: 11px; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; color: var(--gold); }
+code, pre, .mono { font-family: 'IBM Plex Mono', ui-monospace, SFMono-Regular, Menlo, monospace; }
+code { font-size: 0.92em; padding: 1px 5px; background: var(--green-faint); border-radius: 3px; color: var(--green-dark); }
+pre code { background: none; padding: 0; color: inherit; font-size: inherit; }
+.container { max-width: var(--max); margin: 0 auto; padding: 0 var(--pad); }
+
+.nav { background: var(--green-dark); height: 56px; position: sticky; top: 0; z-index: 50; border-bottom: 1px solid rgba(0,0,0,0.2); }
+.nav-inner { max-width: 1200px; margin: 0 auto; padding: 0 24px; height: 100%; display: flex; align-items: center; gap: 32px; }
+.nav-brand { color: var(--text-on-dark); border: none; display: flex; align-items: baseline; gap: 8px; }
+.nav-brand .wordmark { font-family: 'Source Serif 4', serif; font-style: italic; font-weight: 600; font-size: 19px; color: var(--text-on-dark); }
+.nav-brand .slash { color: rgba(245,240,232,0.4); font-size: 13px; }
+.nav-brand .product { font-family: 'Inter', sans-serif; font-size: 13px; font-weight: 400; color: rgba(245,240,232,0.65); letter-spacing: 0.04em; }
+.nav-links { display: flex; align-items: center; gap: 28px; margin-left: 24px; }
+.nav-links a { color: rgba(245,240,232,0.78); border: none; font-size: 13px; font-weight: 500; padding: 4px 0; position: relative; }
+.nav-links a:hover { color: var(--text-on-dark); }
+.nav-links a.active { color: var(--text-on-dark); }
+.nav-links a.active::after { content: ""; position: absolute; left: 0; right: 0; bottom: -19px; height: 2px; background: var(--gold); }
+.nav-right { margin-left: auto; display: flex; align-items: center; gap: 18px; }
+.nav-right .gold-link { color: var(--gold-light); border: none; font-size: 13px; font-weight: 600; }
+.nav-right .gold-link:hover { color: #ffce4d; }
+.btn-nav { border: 1px solid var(--gold); color: var(--gold-light); padding: 7px 14px; border-radius: 4px; font-size: 12px; font-weight: 600; letter-spacing: 0.04em; background: transparent; display: inline-flex; align-items: center; gap: 6px; }
+.btn-nav:hover { background: var(--gold); color: var(--green-dark); border-color: var(--gold); }
+@media (max-width: 860px) { .nav-links, .nav-right .gold-link { display: none; } }
+
+.hero { background: var(--green-dark); color: var(--text-on-dark); border-bottom: 4px solid var(--gold); padding: 64px 0 56px; }
+.hero .eyebrow { color: var(--gold-light); margin-bottom: 18px; display: block; }
+.hero h1 { color: var(--text-on-dark); margin-bottom: 18px; max-width: 780px; }
+.hero .subhead { color: rgba(245,240,232,0.72); font-size: 18px; line-height: 1.55; max-width: 700px; margin: 0; }
+
+section { padding: 80px 0; }
+section.tight { padding: 56px 0; }
+section.alt { background: var(--bg-alt); }
+
+.callout { background: var(--gold-faint); border-left: 2px solid var(--gold); border-radius: 6px; padding: 22px 26px; }
+.callout .callout-label { display: block; margin-bottom: 6px; color: var(--gold); }
+.callout p { margin: 0; font-family: 'Source Serif 4', serif; font-size: 19px; line-height: 1.5; color: var(--text-primary); }
+
+.code-block { background: var(--code-bg); color: var(--code-text); border-left: 3px solid var(--green-light); border-radius: 8px; padding: 20px 24px; overflow-x: auto; font-family: 'IBM Plex Mono', monospace; font-size: 13px; line-height: 1.65; margin: 0; }
+.code-block .c { color: var(--code-comment); }
+.code-block .k { color: #E8A800; }
+.code-block .s { color: #C8E8A8; }
+.code-block .n { color: #F5F0E8; }
+
+.tag { display: inline-block; background: var(--green-faint); color: var(--green-dark); border: 1px solid var(--green-light); padding: 3px 10px; border-radius: 12px; font-size: 11px; font-weight: 600; }
+.tag.gold { background: var(--gold-faint); color: var(--gold); border-color: var(--gold); }
+.tag.read { background: var(--green-faint); color: var(--green-mid); border-color: var(--green-light); }
+.tag.write { background: var(--gold-faint); color: var(--gold); border-color: var(--gold); }
+.tag-row { display: flex; flex-wrap: wrap; gap: 8px; }
+
+.footer { background: var(--green-dark); color: rgba(245,240,232,0.7); padding: 48px 0 36px; font-size: 13px; }
+.footer .container { display: flex; flex-wrap: wrap; gap: 24px; align-items: baseline; justify-content: space-between; }
+.footer a { color: rgba(245,240,232,0.85); border-bottom-color: rgba(245,240,232,0.2); }
+.footer a:hover { color: var(--gold-light); border-bottom-color: var(--gold-light); }
+.footer .footer-brand { font-family: 'Source Serif 4', serif; font-style: italic; font-size: 16px; color: var(--text-on-dark); }
+.footer .footer-meta { color: rgba(245,240,232,0.45); font-size: 12px; }
+
+/* Page-specific */
+.docs-grid { display: grid; grid-template-columns: 220px 1fr; gap: 56px; align-items: start; }
+@media (max-width: 900px) { .docs-grid { grid-template-columns: 1fr; gap: 32px; } }
+.toc { position: sticky; top: 80px; border-left: 1px solid var(--border); padding: 4px 0 4px 16px; }
+.toc .toc-label { font-family: 'Inter', sans-serif; font-size: 10px; font-weight: 700; letter-spacing: 0.14em; text-transform: uppercase; color: var(--text-muted); display: block; margin-bottom: 12px; }
+.toc ol { list-style: none; padding: 0; margin: 0; counter-reset: toc; }
+.toc li { counter-increment: toc; margin: 0 0 6px; }
+.toc a { display: flex; align-items: baseline; gap: 8px; border: none; font-family: 'IBM Plex Mono', monospace; font-size: 12.5px; color: var(--text-secondary); padding: 4px 0; line-height: 1.4; }
+.toc a::before { content: counter(toc, decimal-leading-zero); font-size: 10px; font-weight: 600; color: var(--text-muted); letter-spacing: 0.06em; }
+.toc a:hover { color: var(--gold); }
+.toc a:hover::before { color: var(--gold); }
+@media (max-width: 900px) { .toc { position: static; } }
+
+.tool { border-top: 1px solid var(--border); padding: 48px 0; scroll-margin-top: 80px; }
+.tool:first-of-type { border-top: none; padding-top: 0; }
+.tool-head { display: flex; align-items: center; gap: 12px; flex-wrap: wrap; margin-bottom: 8px; }
+.tool-name { font-family: 'IBM Plex Mono', monospace; font-weight: 600; font-size: 22px; color: var(--green-dark); letter-spacing: -0.005em; }
+.tool-num { font-family: 'IBM Plex Mono', monospace; font-size: 11px; font-weight: 600; color: var(--text-muted); background: var(--bg-alt); border: 1px solid var(--border); padding: 2px 8px; border-radius: 3px; letter-spacing: 0.06em; }
+.tool-desc { color: var(--text-secondary); font-size: 16px; margin: 0 0 24px; max-width: 680px; }
+
+.schema { display: grid; grid-template-columns: 1fr 1fr; gap: 0; background: var(--surface); border: 1px solid var(--border-subtle); border-radius: 6px; overflow: hidden; margin-bottom: 20px; }
+@media (max-width: 720px) { .schema { grid-template-columns: 1fr; } }
+.schema-col { padding: 18px 20px; }
+.schema-col + .schema-col { border-left: 1px solid var(--border-subtle); }
+@media (max-width: 720px) { .schema-col + .schema-col { border-left: none; border-top: 1px solid var(--border-subtle); } }
+.schema-col .schema-label { font-family: 'Inter', sans-serif; font-size: 10px; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase; color: var(--gold); display: block; margin-bottom: 12px; }
+.schema-col dl { margin: 0; font-family: 'IBM Plex Mono', monospace; font-size: 13px; line-height: 1.7; }
+.schema-col dt { color: var(--green-dark); font-weight: 600; display: inline; }
+.schema-col dt + dd { display: block; margin: -4px 0 10px; padding-left: 0; color: var(--text-muted); font-size: 12px; line-height: 1.5; font-family: 'Inter', sans-serif; }
+.schema-col .typ { color: var(--text-muted); font-weight: 400; font-size: 12px; }
+.schema-col .req { color: var(--gold); font-weight: 600; font-size: 11px; letter-spacing: 0.04em; }
+
+.tool-note { background: var(--green-faint); border-left: 2px solid var(--green-light); padding: 12px 16px; border-radius: 4px; font-size: 13.5px; color: var(--text-secondary); margin: 0 0 20px; }
+.tool-note strong { color: var(--green-dark); }
+
+.code-pair { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+@media (max-width: 820px) { .code-pair { grid-template-columns: 1fr; } }
+.code-wrap .code-label { font-family: 'IBM Plex Mono', monospace; font-size: 10px; font-weight: 600; letter-spacing: 0.12em; text-transform: uppercase; color: var(--text-muted); margin-bottom: 8px; display: block; }
+
+.legend { background: var(--surface); border: 1px solid var(--border-subtle); border-radius: 6px; padding: 18px 22px; display: flex; flex-wrap: wrap; gap: 28px; align-items: center; margin-bottom: 56px; }
+.legend-item { display: flex; align-items: center; gap: 8px; font-size: 13px; color: var(--text-secondary); }
+
+.endpoint-url { background: var(--green-dark); color: var(--text-on-dark); padding: 14px 20px; border-radius: 6px; font-family: 'IBM Plex Mono', monospace; font-size: 14px; display: flex; gap: 16px; align-items: center; flex-wrap: wrap; margin-bottom: 24px; }
+.endpoint-url .meth { background: var(--gold); color: var(--green-dark); padding: 3px 9px; border-radius: 3px; font-size: 11px; font-weight: 700; letter-spacing: 0.08em; }
+.endpoint-url .path { color: var(--gold-light); }
+
+.consent { display: inline-flex; align-items: center; gap: 6px; font-family: 'IBM Plex Mono', monospace; font-size: 11px; font-weight: 600; color: var(--gold); background: var(--gold-faint); padding: 3px 9px; border-radius: 3px; letter-spacing: 0.04em; }
+</style>
+</head>
+<body>
+
+<nav class="nav" aria-label="Primary">
+  <div class="nav-inner">
+    <a href="index.html" class="nav-brand">
+      <span class="wordmark">Canary</span><span class="slash">/</span><span class="product">RapidPOS</span>
+    </a>
+    <div class="nav-links">
+      <a href="index.html">Overview</a>
+      <a href="architecture.html">Architecture</a>
+      <a href="endpoints.html" class="active">Endpoints</a>
+      <a href="integrate.html">Quickstart</a>
+    </div>
+    <div class="nav-right">
+      <a href="store-2030.html" class="gold-link">Store of the Future →</a>
+      <a href="mailto:canary@growdirect.io" class="btn-nav">Book a Call</a>
+    </div>
+  </div>
+</nav>
+
+<header class="hero">
+  <div class="container">
+    <span class="eyebrow">MCP Tool Reference</span>
+    <h1>Endpoints.</h1>
+    <p class="subhead">All tools exposed by the RapidPOS MCP Server. JSON-RPC 2.0. Read-only tools return immediately; transactional tools require customer consent scope.</p>
+  </div>
+</header>
+
+<section>
+  <div class="container">
+    <div class="endpoint-url">
+      <span class="meth">POST</span>
+      <span class="path">https://&lt;tenant&gt;.rapidpos.growdirect.io/mcp</span>
+      <span style="color:rgba(245,240,232,0.5); font-size:12px; margin-left:auto;">jsonrpc: 2.0 · auth: bearer</span>
+    </div>
+
+    <div class="legend">
+      <div class="legend-item"><span class="tag read">Read</span><span>Returns immediately. No side effects.</span></div>
+      <div class="legend-item"><span class="tag write">Transactional</span><span>Requires customer consent scope.</span></div>
+      <div class="legend-item"><span class="tag">Knowledge</span><span>Domain vault. Does not hit Counterpoint.</span></div>
+    </div>
+
+    <div class="docs-grid">
+      <aside class="toc" aria-label="Tool index">
+        <span class="toc-label">Tools</span>
+        <ol>
+          <li><a href="#inventory_lookup">inventory_lookup</a></li>
+          <li><a href="#customer_profile">customer_profile</a></li>
+          <li><a href="#loyalty_balance">loyalty_balance</a></li>
+          <li><a href="#place_hold">place_hold</a></li>
+          <li><a href="#price_lookup">price_lookup</a></li>
+          <li><a href="#plant_diagnostic">plant_diagnostic</a></li>
+        </ol>
+      </aside>
+
+      <div class="tool-list">
+
+        <article class="tool" id="inventory_lookup">
+          <div class="tool-head">
+            <span class="tool-num">01</span>
+            <h3 class="tool-name">inventory_lookup</h3>
+            <span class="tag read">Read</span>
+          </div>
+          <p class="tool-desc">Real-time stock query across one or more store locations.</p>
+          <div class="schema">
+            <div class="schema-col">
+              <span class="schema-label">Input</span>
+              <dl>
+                <dt>sku <span class="typ">string</span> <span class="req">REQUIRED</span></dt>
+                <dd>Counterpoint SKU identifier.</dd>
+                <dt>store_ids <span class="typ">string[]</span></dt>
+                <dd>Array of store IDs. Omit for all stores.</dd>
+                <dt>include_holds <span class="typ">bool</span></dt>
+                <dd>Include current holds in availability calc. Default <code>false</code>.</dd>
+              </dl>
+            </div>
+            <div class="schema-col">
+              <span class="schema-label">Output</span>
+              <dl>
+                <dt>sku <span class="typ">string</span></dt>
+                <dt>stores[] <span class="typ">array</span></dt>
+                <dd>Per-store: <code>id</code>, <code>on_hand</code>, <code>on_hold</code>, <code>available</code>.</dd>
+                <dt>cache_age_seconds <span class="typ">int</span></dt>
+                <dd>How stale the cached value is.</dd>
+              </dl>
+            </div>
+          </div>
+          <p class="tool-note"><strong>Note.</strong> Cached via Redis. Cache TTL 60s in Phase 1; event-invalidated in Phase 2.</p>
+          <div class="code-pair">
+            <div class="code-wrap">
+              <span class="code-label">Request</span>
+<pre class="code-block"><code>{
+  <span class="k">"jsonrpc"</span>: <span class="s">"2.0"</span>,
+  <span class="k">"method"</span>: <span class="s">"tools/call"</span>,
+  <span class="k">"params"</span>: {
+    <span class="k">"name"</span>: <span class="s">"inventory_lookup"</span>,
+    <span class="k">"arguments"</span>: {
+      <span class="k">"sku"</span>: <span class="s">"AGAVE-BLU-5G"</span>,
+      <span class="k">"store_ids"</span>: [<span class="s">"PAS"</span>, <span class="s">"LAG"</span>],
+      <span class="k">"include_holds"</span>: <span class="n">true</span>
+    }
+  },
+  <span class="k">"id"</span>: <span class="n">1</span>
+}</code></pre>
+            </div>
+            <div class="code-wrap">
+              <span class="code-label">Response</span>
+<pre class="code-block"><code>{
+  <span class="k">"sku"</span>: <span class="s">"AGAVE-BLU-5G"</span>,
+  <span class="k">"stores"</span>: [
+    { <span class="k">"id"</span>: <span class="s">"PAS"</span>,
+      <span class="k">"on_hand"</span>: <span class="n">4</span>,
+      <span class="k">"on_hold"</span>: <span class="n">1</span>,
+      <span class="k">"available"</span>: <span class="n">3</span> },
+    { <span class="k">"id"</span>: <span class="s">"LAG"</span>,
+      <span class="k">"on_hand"</span>: <span class="n">7</span>,
+      <span class="k">"available"</span>: <span class="n">7</span> }
+  ],
+  <span class="k">"cache_age_seconds"</span>: <span class="n">18</span>
+}</code></pre>
+            </div>
+          </div>
+        </article>
+
+        <article class="tool" id="customer_profile">
+          <div class="tool-head">
+            <span class="tool-num">02</span>
+            <h3 class="tool-name">customer_profile</h3>
+            <span class="tag read">Read</span>
+            <span class="consent">consent: customer:read</span>
+          </div>
+          <p class="tool-desc">Retrieve customer record by email or loyalty ID.</p>
+          <div class="schema">
+            <div class="schema-col">
+              <span class="schema-label">Input</span>
+              <dl>
+                <dt>lookup_type <span class="typ">enum</span> <span class="req">REQUIRED</span></dt>
+                <dd>One of <code>email</code> or <code>loyalty_id</code>.</dd>
+                <dt>value <span class="typ">string</span> <span class="req">REQUIRED</span></dt>
+                <dd>The lookup value matching the chosen type.</dd>
+              </dl>
+            </div>
+            <div class="schema-col">
+              <span class="schema-label">Output</span>
+              <dl>
+                <dt>customer_id <span class="typ">string</span></dt>
+                <dt>name <span class="typ">string</span></dt>
+                <dt>loyalty_tier <span class="typ">string</span></dt>
+                <dt>points_balance <span class="typ">int</span></dt>
+                <dt>purchase_history_summary <span class="typ">object</span></dt>
+                <dt>garden_record <span class="typ">object</span></dt>
+                <dd>Vertical-specific. Plants, planting dates, zone.</dd>
+              </dl>
+            </div>
+          </div>
+          <p class="tool-note"><strong>Note.</strong> Requires <code>customer:read</code> consent scope on the active session.</p>
+          <div class="code-pair">
+            <div class="code-wrap">
+              <span class="code-label">Request</span>
+<pre class="code-block"><code>{
+  <span class="k">"name"</span>: <span class="s">"customer_profile"</span>,
+  <span class="k">"arguments"</span>: {
+    <span class="k">"lookup_type"</span>: <span class="s">"email"</span>,
+    <span class="k">"value"</span>: <span class="s">"j.rivera@example.com"</span>
+  }
+}</code></pre>
+            </div>
+            <div class="code-wrap">
+              <span class="code-label">Response</span>
+<pre class="code-block"><code>{
+  <span class="k">"customer_id"</span>: <span class="s">"C-018241"</span>,
+  <span class="k">"name"</span>: <span class="s">"Jasmine Rivera"</span>,
+  <span class="k">"loyalty_tier"</span>: <span class="s">"Cultivator"</span>,
+  <span class="k">"points_balance"</span>: <span class="n">2840</span>,
+  <span class="k">"garden_record"</span>: {
+    <span class="k">"sunset_zone"</span>: <span class="n">22</span>,
+    <span class="k">"plants"</span>: <span class="n">14</span>,
+    <span class="k">"last_planted"</span>: <span class="s">"2025-09-18"</span>
+  }
+}</code></pre>
+            </div>
+          </div>
+        </article>
+
+        <article class="tool" id="loyalty_balance">
+          <div class="tool-head">
+            <span class="tool-num">03</span>
+            <h3 class="tool-name">loyalty_balance</h3>
+            <span class="tag read">Read</span>
+          </div>
+          <p class="tool-desc">Point balance and tier for a known customer.</p>
+          <div class="schema">
+            <div class="schema-col">
+              <span class="schema-label">Input</span>
+              <dl>
+                <dt>customer_id <span class="typ">string</span> <span class="req">REQUIRED</span></dt>
+              </dl>
+            </div>
+            <div class="schema-col">
+              <span class="schema-label">Output</span>
+              <dl>
+                <dt>points <span class="typ">int</span></dt>
+                <dt>tier <span class="typ">string</span></dt>
+                <dt>next_tier_threshold <span class="typ">int</span></dt>
+                <dt>expiry_date <span class="typ">date</span></dt>
+              </dl>
+            </div>
+          </div>
+          <div class="code-pair">
+            <div class="code-wrap">
+              <span class="code-label">Request</span>
+<pre class="code-block"><code>{
+  <span class="k">"name"</span>: <span class="s">"loyalty_balance"</span>,
+  <span class="k">"arguments"</span>: { <span class="k">"customer_id"</span>: <span class="s">"C-018241"</span> }
+}</code></pre>
+            </div>
+            <div class="code-wrap">
+              <span class="code-label">Response</span>
+<pre class="code-block"><code>{
+  <span class="k">"points"</span>: <span class="n">2840</span>,
+  <span class="k">"tier"</span>: <span class="s">"Cultivator"</span>,
+  <span class="k">"next_tier_threshold"</span>: <span class="n">5000</span>,
+  <span class="k">"expiry_date"</span>: <span class="s">"2026-12-31"</span>
+}</code></pre>
+            </div>
+          </div>
+        </article>
+
+        <article class="tool" id="place_hold">
+          <div class="tool-head">
+            <span class="tool-num">04</span>
+            <h3 class="tool-name">place_hold</h3>
+            <span class="tag write">Transactional</span>
+            <span class="consent">consent: transactions:write</span>
+          </div>
+          <p class="tool-desc">Reserve an item at a specific store for a customer.</p>
+          <div class="schema">
+            <div class="schema-col">
+              <span class="schema-label">Input</span>
+              <dl>
+                <dt>sku <span class="typ">string</span> <span class="req">REQUIRED</span></dt>
+                <dt>store_id <span class="typ">string</span> <span class="req">REQUIRED</span></dt>
+                <dt>customer_id <span class="typ">string</span> <span class="req">REQUIRED</span></dt>
+                <dt>quantity <span class="typ">int</span></dt>
+                <dd>Default <code>1</code>.</dd>
+                <dt>hold_duration_hours <span class="typ">int</span></dt>
+                <dd>Default <code>48</code>.</dd>
+              </dl>
+            </div>
+            <div class="schema-col">
+              <span class="schema-label">Output</span>
+              <dl>
+                <dt>hold_id <span class="typ">string</span></dt>
+                <dt>expires_at <span class="typ">datetime</span></dt>
+                <dt>confirmation <span class="typ">string</span></dt>
+                <dd>Human-readable confirmation code for in-store pickup.</dd>
+              </dl>
+            </div>
+          </div>
+          <p class="tool-note"><strong>Note.</strong> Requires <code>transactions:write</code> consent scope. Creates a Counterpoint hold record. Idempotent on <code>(customer_id, sku, store_id)</code> within 60s.</p>
+          <div class="code-pair">
+            <div class="code-wrap">
+              <span class="code-label">Request</span>
+<pre class="code-block"><code>{
+  <span class="k">"name"</span>: <span class="s">"place_hold"</span>,
+  <span class="k">"arguments"</span>: {
+    <span class="k">"sku"</span>: <span class="s">"AGAVE-BLU-5G"</span>,
+    <span class="k">"store_id"</span>: <span class="s">"PAS"</span>,
+    <span class="k">"customer_id"</span>: <span class="s">"C-018241"</span>,
+    <span class="k">"quantity"</span>: <span class="n">1</span>
+  }
+}</code></pre>
+            </div>
+            <div class="code-wrap">
+              <span class="code-label">Response</span>
+<pre class="code-block"><code>{
+  <span class="k">"hold_id"</span>: <span class="s">"H-2026-04-26-01142"</span>,
+  <span class="k">"expires_at"</span>: <span class="s">"2026-04-28T19:00:00Z"</span>,
+  <span class="k">"confirmation"</span>: <span class="s">"PAS-1142"</span>
+}</code></pre>
+            </div>
+          </div>
+        </article>
+
+        <article class="tool" id="price_lookup">
+          <div class="tool-head">
+            <span class="tool-num">05</span>
+            <h3 class="tool-name">price_lookup</h3>
+            <span class="tag read">Read</span>
+          </div>
+          <p class="tool-desc">Current POS price for a SKU, including active promotions.</p>
+          <div class="schema">
+            <div class="schema-col">
+              <span class="schema-label">Input</span>
+              <dl>
+                <dt>sku <span class="typ">string</span> <span class="req">REQUIRED</span></dt>
+                <dt>store_id <span class="typ">string</span> <span class="req">REQUIRED</span></dt>
+                <dt>customer_id <span class="typ">string</span></dt>
+                <dd>Optional. If provided, applies loyalty pricing.</dd>
+              </dl>
+            </div>
+            <div class="schema-col">
+              <span class="schema-label">Output</span>
+              <dl>
+                <dt>regular_price <span class="typ">decimal</span></dt>
+                <dt>sale_price <span class="typ">decimal</span></dt>
+                <dt>promotion_name <span class="typ">string</span></dt>
+                <dt>loyalty_price <span class="typ">decimal</span></dt>
+              </dl>
+            </div>
+          </div>
+          <div class="code-pair">
+            <div class="code-wrap">
+              <span class="code-label">Request</span>
+<pre class="code-block"><code>{
+  <span class="k">"name"</span>: <span class="s">"price_lookup"</span>,
+  <span class="k">"arguments"</span>: {
+    <span class="k">"sku"</span>: <span class="s">"AGAVE-BLU-5G"</span>,
+    <span class="k">"store_id"</span>: <span class="s">"PAS"</span>,
+    <span class="k">"customer_id"</span>: <span class="s">"C-018241"</span>
+  }
+}</code></pre>
+            </div>
+            <div class="code-wrap">
+              <span class="code-label">Response</span>
+<pre class="code-block"><code>{
+  <span class="k">"regular_price"</span>: <span class="n">39.99</span>,
+  <span class="k">"sale_price"</span>: <span class="n">34.99</span>,
+  <span class="k">"promotion_name"</span>: <span class="s">"Spring Native Plants"</span>,
+  <span class="k">"loyalty_price"</span>: <span class="n">31.49</span>
+}</code></pre>
+            </div>
+          </div>
+        </article>
+
+        <article class="tool" id="plant_diagnostic">
+          <div class="tool-head">
+            <span class="tool-num">06</span>
+            <h3 class="tool-name">plant_diagnostic</h3>
+            <span class="tag">Knowledge</span>
+          </div>
+          <p class="tool-desc">Symptom-to-treatment lookup from the domain knowledge vault.</p>
+          <div class="schema">
+            <div class="schema-col">
+              <span class="schema-label">Input</span>
+              <dl>
+                <dt>symptoms <span class="typ">string[]</span> <span class="req">REQUIRED</span></dt>
+                <dd>Free-text or coded symptom labels.</dd>
+                <dt>plant_type <span class="typ">string</span></dt>
+                <dd>Optional. Species or common name.</dd>
+                <dt>sunset_zone <span class="typ">int</span></dt>
+                <dd>Optional. Sunset climate zone.</dd>
+              </dl>
+            </div>
+            <div class="schema-col">
+              <span class="schema-label">Output</span>
+              <dl>
+                <dt>diagnosis <span class="typ">string</span></dt>
+                <dt>confidence <span class="typ">float</span></dt>
+                <dt>treatment_steps <span class="typ">string[]</span></dt>
+                <dt>recommended_products <span class="typ">array</span></dt>
+                <dd>SKUs from current inventory matching the treatment.</dd>
+                <dt>care_notes <span class="typ">string</span></dt>
+              </dl>
+            </div>
+          </div>
+          <p class="tool-note"><strong>Note.</strong> Knowledge layer tool. Does not hit Counterpoint — returns from the domain vault. Recommended SKUs are reconciled against live inventory before being returned.</p>
+          <div class="code-pair">
+            <div class="code-wrap">
+              <span class="code-label">Request</span>
+<pre class="code-block"><code>{
+  <span class="k">"name"</span>: <span class="s">"plant_diagnostic"</span>,
+  <span class="k">"arguments"</span>: {
+    <span class="k">"symptoms"</span>: [
+      <span class="s">"yellowing leaves"</span>,
+      <span class="s">"powdery white spots"</span>
+    ],
+    <span class="k">"plant_type"</span>: <span class="s">"rose"</span>,
+    <span class="k">"sunset_zone"</span>: <span class="n">22</span>
+  }
+}</code></pre>
+            </div>
+            <div class="code-wrap">
+              <span class="code-label">Response</span>
+<pre class="code-block"><code>{
+  <span class="k">"diagnosis"</span>: <span class="s">"Powdery mildew"</span>,
+  <span class="k">"confidence"</span>: <span class="n">0.91</span>,
+  <span class="k">"treatment_steps"</span>: [
+    <span class="s">"Improve air circulation"</span>,
+    <span class="s">"Apply potassium bicarbonate spray"</span>
+  ],
+  <span class="k">"recommended_products"</span>: [
+    { <span class="k">"sku"</span>: <span class="s">"FUNG-PB-32"</span>,
+      <span class="k">"name"</span>: <span class="s">"Bonide Remedy 32oz"</span> }
+  ]
+}</code></pre>
+            </div>
+          </div>
+        </article>
+
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="alt tight">
+  <div class="container">
+    <div class="callout">
+      <span class="callout-label">More tools, on request</span>
+      <p>The MCP surface is versioned and additive. New tools — replenishment, wayfinding, associate routing — ship as the corresponding Canary modules go live for a given retailer. <a href="mailto:vars@growdirect.io" style="color:var(--gold);">Contact the VAR team</a> for the full spec.</p>
+    </div>
+  </div>
+</section>
+
+<footer class="footer">
+  <div class="container">
+    <div><span class="footer-brand">Canary</span> · RapidPOS MCP Server · A GrowDirect LLC product</div>
+    <div class="footer-meta"><a href="mailto:canary@growdirect.io">canary@growdirect.io</a> &nbsp;·&nbsp; canary.growdirect.io/rapidpos</div>
+  </div>
+</footer>
+
+</body>
+</html>

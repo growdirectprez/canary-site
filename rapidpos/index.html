@@ -1,0 +1,656 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>Overview — Canary RapidPOS</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,wght@0,300;0,400;0,600;0,700;1,400&family=Inter:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;600&display=swap" rel="stylesheet">
+<style>
+/* ==========================================================================
+   Canary RapidPOS — shared design system
+   This stylesheet is the source-of-truth. Copy verbatim into every page.
+   ========================================================================== */
+
+:root {
+  /* Base */
+  --bg:           #F5F0E8;
+  --bg-alt:       #EAE4D6;
+  --surface:      #FFFFFF;
+
+  /* Green */
+  --green-dark:   #1C3A2B;
+  --green-mid:    #2A5240;
+  --green-light:  #4CAF7D;
+  --green-faint:  rgba(76,175,125,0.10);
+
+  /* Gold */
+  --gold:         #BF8700;
+  --gold-light:   #E8A800;
+  --gold-faint:   rgba(191,135,0,0.12);
+
+  /* Text */
+  --text-primary:  #1C3A2B;
+  --text-secondary:#3A3A3A;
+  --text-muted:    #6B6B6B;
+  --text-on-dark:  #F5F0E8;
+
+  /* Borders */
+  --border:        #D0C9BB;
+  --border-subtle: rgba(28,58,43,0.10);
+
+  /* Code */
+  --code-bg:       #1C3A2B;
+  --code-text:     #4CAF7D;
+  --code-comment:  rgba(76,175,125,0.55);
+
+  /* Layout */
+  --max:           960px;
+  --pad:           32px;
+}
+
+/* Reset */
+*, *::before, *::after { box-sizing: border-box; }
+html, body { margin: 0; padding: 0; }
+body {
+  font-family: 'Inter', system-ui, -apple-system, Segoe UI, sans-serif;
+  font-size: 16px;
+  line-height: 1.7;
+  color: var(--text-primary);
+  background: var(--bg);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+img { max-width: 100%; display: block; }
+a { color: var(--green-mid); text-decoration: none; border-bottom: 1px solid var(--border-subtle); transition: color .15s ease, border-color .15s ease; }
+a:hover { color: var(--gold); border-bottom-color: var(--gold); }
+
+/* Type scale */
+h1, h2, h3, h4 { font-family: 'Source Serif 4', Georgia, serif; color: var(--text-primary); margin: 0; }
+h1 { font-size: 48px; font-weight: 700; line-height: 1.08; letter-spacing: -0.02em; }
+h2 { font-size: 32px; font-weight: 600; line-height: 1.2; letter-spacing: -0.01em; }
+h3 { font-size: 20px; font-weight: 600; line-height: 1.3; }
+p  { margin: 0 0 1em; }
+
+.eyebrow,
+.callout-label,
+.stat-label,
+.section-label {
+  font-family: 'Inter', sans-serif;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--gold);
+}
+
+code, pre, .mono { font-family: 'IBM Plex Mono', ui-monospace, SFMono-Regular, Menlo, monospace; }
+code { font-size: 0.92em; padding: 1px 5px; background: var(--green-faint); border-radius: 3px; color: var(--green-dark); }
+pre code { background: none; padding: 0; color: inherit; font-size: inherit; }
+
+/* Container */
+.container { max-width: var(--max); margin: 0 auto; padding: 0 var(--pad); }
+
+/* ==========================================================================
+   NAV
+   ========================================================================== */
+.nav {
+  background: var(--green-dark);
+  height: 56px;
+  position: sticky; top: 0; z-index: 50;
+  border-bottom: 1px solid rgba(0,0,0,0.2);
+}
+.nav-inner {
+  max-width: 1200px; margin: 0 auto; padding: 0 24px;
+  height: 100%;
+  display: flex; align-items: center; gap: 32px;
+}
+.nav-brand {
+  color: var(--text-on-dark);
+  border: none;
+  display: flex; align-items: baseline; gap: 8px;
+  letter-spacing: 0.02em;
+}
+.nav-brand .wordmark {
+  font-family: 'Source Serif 4', serif;
+  font-style: italic;
+  font-weight: 600;
+  font-size: 19px;
+  color: var(--text-on-dark);
+}
+.nav-brand .slash {
+  color: rgba(245,240,232,0.4);
+  font-size: 13px;
+  font-weight: 400;
+}
+.nav-brand .product {
+  font-family: 'Inter', sans-serif;
+  font-size: 13px;
+  font-weight: 400;
+  color: rgba(245,240,232,0.65);
+  letter-spacing: 0.04em;
+}
+.nav-links {
+  display: flex; align-items: center; gap: 28px;
+  margin-left: 24px;
+}
+.nav-links a {
+  color: rgba(245,240,232,0.78);
+  border: none;
+  font-size: 13px;
+  font-weight: 500;
+  letter-spacing: 0.01em;
+  padding: 4px 0;
+  position: relative;
+}
+.nav-links a:hover { color: var(--text-on-dark); }
+.nav-links a.active { color: var(--text-on-dark); }
+.nav-links a.active::after {
+  content: ""; position: absolute; left: 0; right: 0; bottom: -19px;
+  height: 2px; background: var(--gold);
+}
+.nav-right { margin-left: auto; display: flex; align-items: center; gap: 18px; }
+.nav-right .gold-link {
+  color: var(--gold-light);
+  border: none;
+  font-size: 13px;
+  font-weight: 600;
+  letter-spacing: 0.01em;
+}
+.nav-right .gold-link:hover { color: #ffce4d; }
+.btn-nav {
+  border: 1px solid var(--gold);
+  color: var(--gold-light);
+  padding: 7px 14px;
+  border-radius: 4px;
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  background: transparent;
+  display: inline-flex; align-items: center; gap: 6px;
+}
+.btn-nav:hover { background: var(--gold); color: var(--green-dark); border-color: var(--gold); }
+
+.nav-toggle { display: none; }
+
+@media (max-width: 860px) {
+  .nav-links, .nav-right .gold-link { display: none; }
+  .nav-right { margin-left: auto; }
+}
+
+/* ==========================================================================
+   HERO (technical pages)
+   ========================================================================== */
+.hero {
+  background: var(--green-dark);
+  color: var(--text-on-dark);
+  border-bottom: 4px solid var(--gold);
+  padding: 64px 0 56px;
+}
+.hero .container { max-width: var(--max); }
+.hero .eyebrow { color: var(--gold-light); margin-bottom: 18px; display: block; }
+.hero h1 {
+  color: var(--text-on-dark);
+  font-family: 'Source Serif 4', serif;
+  margin-bottom: 18px;
+  max-width: 780px;
+}
+.hero .subhead {
+  color: rgba(245,240,232,0.72);
+  font-size: 18px;
+  line-height: 1.55;
+  max-width: 700px;
+  margin: 0;
+}
+
+/* ==========================================================================
+   SECTIONS
+   ========================================================================== */
+section { padding: 80px 0; }
+section.tight { padding: 56px 0; }
+section.alt   { background: var(--bg-alt); }
+section.green { background: var(--green-dark); color: var(--text-on-dark); }
+section.green h2, section.green h3 { color: var(--text-on-dark); }
+
+.section-label {
+  display: inline-block;
+  margin-bottom: 14px;
+}
+.section-head {
+  margin-bottom: 40px;
+  max-width: 720px;
+}
+.section-head h2 { margin-bottom: 12px; }
+.section-head .lede { color: var(--text-secondary); font-size: 17px; line-height: 1.65; margin: 0; }
+
+/* Split layout (text + visual) */
+.split-layout {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 64px;
+  align-items: start;
+}
+@media (max-width: 820px) {
+  .split-layout { grid-template-columns: 1fr; gap: 40px; }
+}
+.split-text p { color: var(--text-secondary); }
+.split-text p + p { margin-top: 1em; }
+
+/* ==========================================================================
+   LAYER DIAGRAM
+   ========================================================================== */
+.layers {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+.layer {
+  position: relative;
+  background: var(--green-dark);
+  color: var(--text-on-dark);
+  border: 1px solid transparent;
+  border-radius: 6px;
+  padding: 16px 20px;
+  display: flex; flex-direction: column; gap: 4px;
+}
+.layer .layer-num {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  color: rgba(245,240,232,0.45);
+}
+.layer .layer-title {
+  font-family: 'Inter', sans-serif;
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--text-on-dark);
+}
+.layer .layer-meta {
+  font-size: 12px;
+  color: rgba(245,240,232,0.55);
+  font-weight: 400;
+}
+.layer.unowned {
+  background: transparent;
+  border: 1px dashed var(--border);
+  color: var(--text-muted);
+}
+.layer.unowned .layer-title { color: var(--text-secondary); }
+.layer.unowned .layer-num { color: var(--text-muted); }
+.layer.unowned .layer-meta { color: var(--text-muted); }
+
+.layer.prize {
+  background: var(--green-dark);
+  border: 2px solid var(--gold);
+  box-shadow: 0 0 0 4px var(--gold-faint);
+}
+.layer.prize .prize-tag {
+  position: absolute; top: 12px; right: 16px;
+  font-family: 'Inter', sans-serif;
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--gold-light);
+  background: var(--green-mid);
+  padding: 3px 8px;
+  border-radius: 3px;
+}
+.layer.prize .layer-meta { color: var(--gold-light); }
+
+.layer-caption {
+  margin-top: 18px;
+  font-size: 13px;
+  font-style: italic;
+  color: var(--text-muted);
+  line-height: 1.55;
+  border-left: 2px solid var(--border);
+  padding-left: 14px;
+}
+
+/* ==========================================================================
+   CARD GRID (capabilities)
+   ========================================================================== */
+.card-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 20px;
+}
+@media (max-width: 820px) { .card-grid { grid-template-columns: 1fr; } }
+.card {
+  background: var(--surface);
+  border: 1px solid var(--border-subtle);
+  border-top: 2px solid var(--green-light);
+  border-radius: 6px;
+  padding: 28px 26px;
+  transition: transform .2s ease, box-shadow .2s ease;
+}
+.card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 24px -12px rgba(28,58,43,0.18);
+}
+.card .eyebrow { display: block; margin-bottom: 12px; }
+.card h3 { margin-bottom: 10px; font-family: 'Source Serif 4', serif; }
+.card p { margin: 0; color: var(--text-secondary); font-size: 15px; line-height: 1.6; }
+
+/* ==========================================================================
+   STATS
+   ========================================================================== */
+.stat-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 24px;
+  border-top: 1px solid var(--border);
+  border-bottom: 1px solid var(--border);
+  padding: 40px 0;
+}
+@media (max-width: 700px) { .stat-grid { grid-template-columns: 1fr; gap: 28px; } }
+.stat { display: flex; flex-direction: column; gap: 6px; }
+.stat-number {
+  font-family: 'Source Serif 4', serif;
+  font-size: 56px;
+  font-weight: 700;
+  line-height: 1;
+  letter-spacing: -0.02em;
+  color: var(--green-dark);
+}
+.stat-number.gold { color: var(--gold); }
+.stat-label {
+  color: var(--text-muted);
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+
+/* ==========================================================================
+   CALLOUT
+   ========================================================================== */
+.callout {
+  background: var(--gold-faint);
+  border-left: 2px solid var(--gold);
+  border-radius: 6px;
+  padding: 22px 26px;
+}
+.callout .callout-label { display: block; margin-bottom: 6px; color: var(--gold); }
+.callout p {
+  margin: 0;
+  font-family: 'Source Serif 4', serif;
+  font-size: 19px;
+  line-height: 1.5;
+  color: var(--text-primary);
+}
+.callout p em { font-style: italic; color: var(--green-mid); }
+
+/* ==========================================================================
+   CODE BLOCK
+   ========================================================================== */
+.code-block {
+  background: var(--code-bg);
+  color: var(--code-text);
+  border-left: 3px solid var(--green-light);
+  border-radius: 8px;
+  padding: 20px 24px;
+  overflow-x: auto;
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 13px;
+  line-height: 1.65;
+  margin: 0;
+}
+.code-block .c { color: var(--code-comment); }
+.code-block .k { color: #E8A800; }
+.code-block .s { color: #C8E8A8; }
+.code-block .n { color: #F5F0E8; }
+.code-caption {
+  font-size: 12px;
+  color: var(--text-muted);
+  margin: 8px 0 0;
+  font-family: 'IBM Plex Mono', monospace;
+  letter-spacing: 0.02em;
+}
+
+/* ==========================================================================
+   TAG / BADGE
+   ========================================================================== */
+.tag {
+  display: inline-block;
+  background: var(--green-faint);
+  color: var(--green-dark);
+  border: 1px solid var(--green-light);
+  padding: 3px 10px;
+  border-radius: 12px;
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+}
+.tag.gold { background: var(--gold-faint); color: var(--gold); border-color: var(--gold); }
+.tag-row { display: flex; flex-wrap: wrap; gap: 8px; }
+
+/* ==========================================================================
+   BUTTONS
+   ========================================================================== */
+.btn {
+  display: inline-flex; align-items: center; gap: 8px;
+  padding: 12px 22px;
+  border-radius: 5px;
+  font-family: 'Inter', sans-serif;
+  font-size: 14px;
+  font-weight: 600;
+  letter-spacing: 0.01em;
+  border: 1px solid transparent;
+  cursor: pointer;
+  transition: all .15s ease;
+}
+.btn-primary { background: var(--gold); color: #fff; border-color: var(--gold); }
+.btn-primary:hover { background: var(--gold-light); border-color: var(--gold-light); color: #fff; }
+.btn-ghost { background: transparent; color: var(--green-dark); border-color: var(--green-dark); }
+.btn-ghost:hover { background: var(--green-dark); color: var(--text-on-dark); }
+a.btn { border-bottom-color: transparent; }
+a.btn:hover { border-bottom-color: transparent; }
+
+.cta-row {
+  display: flex; flex-wrap: wrap; gap: 16px; align-items: center;
+  margin-top: 32px;
+}
+.cta-row .arrow-link {
+  color: var(--green-dark);
+  font-weight: 600;
+  font-size: 14px;
+  border-bottom: 1px solid var(--green-light);
+}
+.cta-row .arrow-link:hover { color: var(--gold); border-bottom-color: var(--gold); }
+
+/* ==========================================================================
+   FOOTER
+   ========================================================================== */
+.footer {
+  background: var(--green-dark);
+  color: rgba(245,240,232,0.7);
+  padding: 48px 0 36px;
+  font-size: 13px;
+}
+.footer .container { display: flex; flex-wrap: wrap; gap: 24px; align-items: baseline; justify-content: space-between; }
+.footer a { color: rgba(245,240,232,0.85); border-bottom-color: rgba(245,240,232,0.2); }
+.footer a:hover { color: var(--gold-light); border-bottom-color: var(--gold-light); }
+.footer .footer-brand { font-family: 'Source Serif 4', serif; font-style: italic; font-size: 16px; color: var(--text-on-dark); }
+.footer .footer-meta { color: rgba(245,240,232,0.45); font-size: 12px; }
+
+/* ==========================================================================
+   SHARED PAGE-SPECIFIC HELPERS (used across pages)
+   ========================================================================== */
+.toc-rule {
+  display: block;
+  height: 1px;
+  background: var(--border);
+  border: none;
+  margin: 0;
+}
+</style>
+</head>
+<body>
+
+<!-- ============ NAV ============ -->
+<nav class="nav" aria-label="Primary">
+  <div class="nav-inner">
+    <a href="index.html" class="nav-brand" aria-label="Canary RapidPOS">
+      <span class="wordmark">Canary</span>
+      <span class="slash">/</span>
+      <span class="product">RapidPOS</span>
+    </a>
+    <div class="nav-links">
+      <a href="index.html" class="active">Overview</a>
+      <a href="architecture.html">Architecture</a>
+      <a href="endpoints.html">Endpoints</a>
+      <a href="integrate.html">Quickstart</a>
+    </div>
+    <div class="nav-right">
+      <a href="store-2030.html" class="gold-link">Store of the Future →</a>
+      <a href="mailto:canary@growdirect.io" class="btn-nav">Book a Call</a>
+    </div>
+  </div>
+</nav>
+
+<!-- ============ HERO ============ -->
+<header class="hero">
+  <div class="container">
+    <span class="eyebrow">Canary · RapidPOS MCP Server</span>
+    <h1>The missing layer between your POS and the AI economy.</h1>
+    <p class="subhead">NCR Counterpoint retailers now have a direct API connection to every AI agent their customers use. RapidPOS delivers it. GrowDirect built it.</p>
+  </div>
+</header>
+
+<!-- ============ SECTION 1 — What it is ============ -->
+<section>
+  <div class="container">
+    <div class="split-layout">
+      <div class="split-text">
+        <span class="section-label">What it is</span>
+        <h2>An MCP-native API layer for the NCR Counterpoint channel.</h2>
+        <p>The customer's AI agent wants to query your inventory, check a price, look up their loyalty points, and put something on hold — right now, from wherever they are. RapidPOS is the VAR. GrowDirect built the MCP Server that sits between RapidPOS's existing NCR Counterpoint integration and every AI agent channel your retailer operates.</p>
+        <p>This is not a chatbot integration. It is an MCP-native API layer that speaks JSON-RPC 2.0 over HTTPS + SSE — the same protocol Claude, GPT-4o, and every major AI assistant uses natively. The retailer's data stays in Counterpoint. The intelligence lives in the CRDM. The connection point is RapidPOS MCP Server.</p>
+      </div>
+      <div class="split-visual">
+        <div class="layers" aria-label="Five-layer stack diagram">
+          <div class="layer unowned">
+            <span class="layer-num">Layer 5</span>
+            <span class="layer-title">Customer AI Agent</span>
+            <span class="layer-meta">Claude · GPT-4o · Gemini · custom</span>
+          </div>
+          <div class="layer prize">
+            <span class="prize-tag">The Prize</span>
+            <span class="layer-num">Layer 4</span>
+            <span class="layer-title">RapidPOS MCP Server</span>
+            <span class="layer-meta">GrowDirect · the layer nobody owns yet</span>
+          </div>
+          <div class="layer">
+            <span class="layer-num">Layer 3</span>
+            <span class="layer-title">NCR Counterpoint REST API</span>
+            <span class="layer-meta">Vendor-managed</span>
+          </div>
+          <div class="layer">
+            <span class="layer-num">Layer 2</span>
+            <span class="layer-title">Counterpoint POS</span>
+            <span class="layer-meta">Retailer-managed</span>
+          </div>
+          <div class="layer">
+            <span class="layer-num">Layer 1</span>
+            <span class="layer-title">Store Hardware / Terminals</span>
+            <span class="layer-meta">In-store</span>
+          </div>
+        </div>
+        <p class="layer-caption">Layer 4 is the only layer nobody owns yet. Whoever builds it across 22,000+ NCR retailers controls the agent interface for every store on the platform.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ SECTION 2 — Three capabilities ============ -->
+<section class="alt">
+  <div class="container">
+    <div class="section-head">
+      <span class="section-label">Capabilities</span>
+      <h2>Three things the agent can now do.</h2>
+      <p class="lede">Every tool is a thin layer over Counterpoint primitives. No new schemas to learn for the retailer. No new system to maintain.</p>
+    </div>
+
+    <div class="card-grid">
+      <article class="card">
+        <span class="eyebrow">01 · Read</span>
+        <h3>Inventory Intelligence</h3>
+        <p>Real-time stock lookup across all store locations. <em>"Is the Blue Agave in stock in Pasadena?"</em> — answered in under 2 seconds via Counterpoint API + Redis cache.</p>
+      </article>
+      <article class="card">
+        <span class="eyebrow">02 · Identify</span>
+        <h3>Customer &amp; Loyalty</h3>
+        <p>Customer profile, purchase history, and loyalty balance — surfaced via MCP tool. The agent knows the customer before they speak.</p>
+      </article>
+      <article class="card">
+        <span class="eyebrow">03 · Act</span>
+        <h3>Transactional</h3>
+        <p>Holds, layaways, account payments. The agent doesn't just answer — it acts. On behalf of the customer, through the same Counterpoint transaction flow.</p>
+      </article>
+    </div>
+  </div>
+</section>
+
+<!-- ============ SECTION 3 — Stats ============ -->
+<section class="tight">
+  <div class="container">
+    <div class="stat-grid">
+      <div class="stat">
+        <span class="stat-number">22,000<span style="font-size:36px;">+</span></span>
+        <span class="stat-label">Active NCR Counterpoint retailers</span>
+      </div>
+      <div class="stat">
+        <span class="stat-number">13</span>
+        <span class="stat-label">Canary platform modules on the CRDM spine</span>
+      </div>
+      <div class="stat">
+        <span class="stat-number gold">0</span>
+        <span class="stat-label">Specialty retailers with a live MCP endpoint today</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ SECTION 4 — Callout ============ -->
+<section class="tight">
+  <div class="container">
+    <div class="callout">
+      <span class="callout-label">The moat</span>
+      <p><strong>CRDM</strong> — NCR doesn't have it. RapidPOS doesn't have it. <em>Canary does.</em> It is the moat.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ============ SECTION 5 — CTA ============ -->
+<section>
+  <div class="container">
+    <div class="section-head" style="margin-bottom: 0;">
+      <span class="section-label">Next</span>
+      <h2>Read the architecture, or talk to the team.</h2>
+      <p class="lede">The technical pages document the CRDM, the MCP tool surface, and a 15-minute VAR Quickstart. Everything is real. The protocol is live.</p>
+      <div class="cta-row">
+        <a href="architecture.html" class="arrow-link">Read the architecture →</a>
+        <a href="mailto:canary@growdirect.io?subject=RapidPOS%20technical%20call" class="btn btn-primary">Book a technical call</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ FOOTER ============ -->
+<footer class="footer">
+  <div class="container">
+    <div>
+      <span class="footer-brand">Canary</span> · RapidPOS MCP Server · A GrowDirect LLC product
+    </div>
+    <div class="footer-meta">
+      <a href="mailto:canary@growdirect.io">canary@growdirect.io</a> &nbsp;·&nbsp; canary.growdirect.io/rapidpos
+    </div>
+  </div>
+</footer>
+
+</body>
+</html>

@@ -1,0 +1,575 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>Armstrong Garden Centers — Canary RapidPOS</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,wght@0,300;0,400;0,600;0,700;1,400&family=Inter:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;600&display=swap" rel="stylesheet">
+<!--
+  Canary RapidPOS — Armstrong applied pitch.
+  Alternate layout: no doc nav, minimal top stripe.
+  Tokens copied verbatim from index.html / store-2030.html.
+-->
+<style>
+:root {
+  --bg: #F5F0E8; --bg-alt: #EAE4D6; --surface: #FFFFFF;
+  --green-dark: #1C3A2B; --green-mid: #2A5240; --green-light: #4CAF7D; --green-faint: rgba(76,175,125,0.10);
+  --gold: #BF8700; --gold-light: #E8A800; --gold-faint: rgba(191,135,0,0.12);
+  --text-primary: #1C3A2B; --text-secondary:#3A3A3A; --text-muted: #6B6B6B; --text-on-dark: #F5F0E8;
+  --border: #D0C9BB; --border-subtle: rgba(28,58,43,0.10);
+  --code-bg: #1C3A2B; --code-text: #4CAF7D;
+}
+*, *::before, *::after { box-sizing: border-box; }
+html, body { margin: 0; padding: 0; }
+body { font-family: 'Inter', system-ui, sans-serif; font-size: 17px; line-height: 1.7; color: var(--text-primary); background: var(--bg); -webkit-font-smoothing: antialiased; }
+a { color: var(--green-mid); text-decoration: none; border-bottom: 1px solid var(--border-subtle); transition: color .15s, border-color .15s; }
+a:hover { color: var(--gold); border-bottom-color: var(--gold); }
+h1, h2, h3 { font-family: 'Source Serif 4', Georgia, serif; color: var(--text-primary); margin: 0; }
+p { margin: 0 0 1em; }
+.eyebrow { font-family: 'Inter', sans-serif; font-size: 11px; font-weight: 700; letter-spacing: 0.16em; text-transform: uppercase; color: var(--gold); }
+code { font-family: 'IBM Plex Mono', monospace; font-size: 0.92em; padding: 1px 5px; background: var(--green-faint); border-radius: 3px; color: var(--green-dark); }
+
+/* Minimal top stripe */
+.stripe { background: var(--green-dark); height: 44px; display: flex; align-items: center; padding: 0 28px; color: var(--text-on-dark); font-size: 13px; letter-spacing: 0.04em; }
+.stripe .left { font-family: 'Source Serif 4', serif; font-style: italic; font-size: 14px; color: var(--text-on-dark); border: none; }
+.stripe .left .small { font-family: 'Inter', sans-serif; font-style: normal; color: rgba(245,240,232,0.5); font-size: 12px; margin-left: 8px; letter-spacing: 0.06em; }
+.stripe .right { margin-left: auto; }
+.stripe .right a { color: var(--gold-light); border: none; font-size: 12px; letter-spacing: 0.06em; }
+.stripe .right a:hover { color: #ffce4d; }
+
+/* Hero (full width, dark green) */
+.cover { background: var(--green-dark); color: var(--text-on-dark); padding: 110px 32px 96px; position: relative; }
+.cover::after { content: ""; position: absolute; left: 0; right: 0; bottom: 0; height: 4px; background: var(--gold); }
+.cover-inner { max-width: 1180px; margin: 0 auto; }
+.cover .eyebrow { color: var(--gold-light); display: block; margin-bottom: 28px; }
+.cover h1 {
+  font-family: 'Source Serif 4', serif;
+  font-weight: 600;
+  font-size: clamp(36px, 5.2vw, 64px);
+  line-height: 1.08;
+  letter-spacing: -0.02em;
+  color: var(--text-on-dark);
+  max-width: 1080px;
+  margin: 0 0 28px;
+}
+.cover h1 .em { color: var(--gold-light); font-style: italic; font-weight: 400; }
+.cover h1 .plus { color: rgba(245,240,232,0.45); font-weight: 300; padding: 0 4px; }
+.cover .lede {
+  font-family: 'Source Serif 4', serif;
+  font-weight: 300;
+  font-style: italic;
+  font-size: 20px;
+  line-height: 1.55;
+  color: rgba(245,240,232,0.78);
+  max-width: 760px;
+  margin: 0;
+}
+.cover .meta {
+  margin-top: 56px;
+  display: flex; gap: 56px; flex-wrap: wrap;
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 11px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: rgba(245,240,232,0.55);
+}
+.cover .meta div span { display: block; color: var(--gold-light); margin-bottom: 4px; font-size: 10px; }
+.cover .meta div strong { color: var(--text-on-dark); font-family: 'Source Serif 4', serif; font-weight: 600; font-size: 16px; letter-spacing: -0.01em; text-transform: none; font-style: normal; }
+
+/* Sections */
+.section { padding: 100px 0; }
+.section-narrow { max-width: 1080px; margin: 0 auto; padding: 0 32px; }
+.section.alt { background: var(--bg-alt); }
+.section.dark { background: var(--green-dark); color: var(--text-on-dark); }
+.section.dark h2 { color: var(--text-on-dark); }
+.section.dark p { color: rgba(245,240,232,0.78); }
+
+.section-head { margin-bottom: 56px; }
+.section-head .eyebrow { display: block; margin-bottom: 14px; }
+.section-head h2 {
+  font-family: 'Source Serif 4', serif;
+  font-weight: 600;
+  font-size: clamp(28px, 3.4vw, 40px);
+  line-height: 1.18;
+  letter-spacing: -0.015em;
+  max-width: 820px;
+}
+.section-head.center { text-align: center; }
+.section-head.center h2 { margin-left: auto; margin-right: auto; }
+
+hr.gold-rule { height: 2px; background: var(--gold); border: none; width: 80px; margin: 0 0 40px; }
+hr.gold-rule.center { margin: 0 auto 56px; }
+
+/* Section 1 — The gap */
+.gap-prose {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 72px;
+  align-items: start;
+}
+.gap-prose p {
+  font-family: 'Source Serif 4', serif;
+  font-weight: 300;
+  font-size: 20px;
+  line-height: 1.6;
+  color: var(--text-primary);
+  margin: 0;
+}
+.gap-prose p .em { color: var(--gold); font-style: italic; }
+@media (max-width: 880px) { .gap-prose { grid-template-columns: 1fr; gap: 32px; } }
+
+/* Section 2 — What ALX is (split layout) */
+.split-alx {
+  display: grid;
+  grid-template-columns: 1.1fr 1fr;
+  gap: 72px;
+  align-items: center;
+}
+@media (max-width: 880px) { .split-alx { grid-template-columns: 1fr; gap: 48px; } }
+.split-alx .text p {
+  font-family: 'Source Serif 4', serif;
+  font-weight: 300;
+  font-size: 19px;
+  line-height: 1.6;
+  margin: 0 0 18px;
+}
+.split-alx .text .footnote {
+  font-family: 'Inter', sans-serif;
+  font-size: 12px;
+  color: var(--text-muted);
+  font-style: normal;
+}
+.alx-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-top: 3px solid var(--green-light);
+  border-radius: 8px;
+  padding: 36px 36px 32px;
+  box-shadow: 0 1px 0 rgba(28,58,43,0.04);
+}
+.alx-card .alx-name {
+  font-family: 'Source Serif 4', serif;
+  font-weight: 700;
+  font-size: 32px;
+  letter-spacing: -0.02em;
+  color: var(--green-dark);
+  display: inline-block;
+  margin-bottom: 4px;
+}
+.alx-card .alx-name sup { font-size: 13px; vertical-align: super; color: var(--gold); font-weight: 600; }
+.alx-card .alx-tag {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  color: var(--gold);
+  margin-bottom: 22px;
+}
+.alx-card .alx-cap-label { font-size: 11px; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase; color: var(--text-muted); margin-bottom: 14px; }
+.tag-list { display: flex; flex-wrap: wrap; gap: 8px; }
+.tag {
+  display: inline-block;
+  background: var(--green-faint);
+  color: var(--green-dark);
+  border: 1px solid var(--green-light);
+  padding: 5px 12px;
+  border-radius: 14px;
+  font-size: 12px;
+  font-weight: 600;
+  font-family: 'Inter', sans-serif;
+}
+
+/* Section 3 — Vault */
+.vault-wrap { background: var(--bg-alt); }
+.vault-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 64px;
+  align-items: start;
+}
+@media (max-width: 880px) { .vault-grid { grid-template-columns: 1fr; gap: 40px; } }
+.vault-grid .lede {
+  font-family: 'Source Serif 4', serif;
+  font-weight: 300;
+  font-size: 20px;
+  line-height: 1.6;
+  margin: 0;
+}
+.vault-list { list-style: none; padding: 0; margin: 0; display: grid; gap: 18px; }
+.vault-list li {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-left: 3px solid var(--gold);
+  padding: 18px 22px;
+  border-radius: 6px;
+  display: grid;
+  grid-template-columns: 80px 1fr;
+  gap: 18px;
+  align-items: baseline;
+}
+.vault-list .stat-num {
+  font-family: 'Source Serif 4', serif;
+  font-weight: 700;
+  font-size: 28px;
+  color: var(--green-dark);
+  letter-spacing: -0.02em;
+}
+.vault-list .stat-num.text {
+  font-size: 18px;
+  font-weight: 600;
+  font-style: italic;
+  color: var(--gold);
+}
+.vault-list .stat-text {
+  font-size: 14px;
+  line-height: 1.5;
+  color: var(--text-secondary);
+}
+.vault-list .stat-text strong { color: var(--green-dark); }
+
+/* Section 4 — Two-phase */
+.phase-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 32px; }
+@media (max-width: 880px) { .phase-grid { grid-template-columns: 1fr; } }
+.phase {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 36px 36px 32px;
+  position: relative;
+  overflow: hidden;
+}
+.phase::before {
+  content: "";
+  position: absolute; top: 0; left: 0; right: 0;
+  height: 3px;
+  background: var(--green-light);
+}
+.phase.phase-2::before { background: var(--gold); }
+.phase .phase-num {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--gold);
+  margin-bottom: 4px;
+  display: block;
+}
+.phase h3 {
+  font-family: 'Source Serif 4', serif;
+  font-weight: 600;
+  font-size: 22px;
+  margin: 0 0 16px;
+  color: var(--green-dark);
+  letter-spacing: -0.01em;
+}
+.phase p { font-size: 15.5px; line-height: 1.65; color: var(--text-secondary); margin: 0; }
+.phase .phase-tag {
+  display: inline-block;
+  margin-top: 18px;
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 11px;
+  letter-spacing: 0.1em;
+  color: var(--green-mid);
+  background: var(--green-faint);
+  padding: 4px 10px;
+  border-radius: 12px;
+}
+.phase-arrow {
+  display: flex; align-items: center; justify-content: center;
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 11px;
+  letter-spacing: 0.18em;
+  color: var(--gold);
+  margin: 24px 0;
+  text-transform: uppercase;
+}
+.phase-arrow .line { flex: 1; height: 1px; background: var(--border); margin: 0 16px; }
+
+/* Section 5 — Stat block (5 stats, dark) */
+.stat-row {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 0;
+}
+@media (max-width: 980px) { .stat-row { grid-template-columns: repeat(2, 1fr); } }
+@media (max-width: 540px) { .stat-row { grid-template-columns: 1fr; } }
+.stat-cell {
+  padding: 8px 28px;
+  border-left: 1px solid rgba(245,240,232,0.18);
+}
+.stat-cell:first-child { border-left: none; }
+@media (max-width: 980px) {
+  .stat-cell { padding: 18px 24px; border-left: none; border-top: 1px solid rgba(245,240,232,0.18); }
+  .stat-cell:first-child, .stat-cell:nth-child(2) { border-top: none; }
+}
+@media (max-width: 540px) {
+  .stat-cell { border-top: 1px solid rgba(245,240,232,0.18); }
+  .stat-cell:first-child { border-top: none; }
+}
+.stat-cell .num {
+  font-family: 'Source Serif 4', serif;
+  font-weight: 700;
+  font-size: clamp(48px, 5vw, 68px);
+  line-height: 1;
+  letter-spacing: -0.03em;
+  color: var(--gold-light);
+  display: block;
+  margin-bottom: 12px;
+}
+.stat-cell .lab {
+  font-size: 13px;
+  color: rgba(245,240,232,0.78);
+  font-family: 'Inter', sans-serif;
+  letter-spacing: 0.01em;
+  line-height: 1.45;
+}
+
+/* Section 6 — Channel callout */
+.channel-wrap { padding: 100px 32px; }
+.channel {
+  max-width: 920px; margin: 0 auto;
+  background: var(--surface);
+  border: 1px solid var(--gold);
+  border-left: 6px solid var(--gold);
+  border-radius: 6px;
+  padding: 48px 56px;
+}
+.channel .eyebrow { display: block; margin-bottom: 14px; }
+.channel p {
+  font-family: 'Source Serif 4', serif;
+  font-weight: 400;
+  font-size: clamp(20px, 2.4vw, 26px);
+  line-height: 1.45;
+  letter-spacing: -0.005em;
+  margin: 0;
+  color: var(--text-primary);
+}
+.channel p strong { color: var(--green-dark); font-weight: 700; }
+
+/* Closing CTA */
+.cta-block { padding: 72px 32px 110px; text-align: center; }
+.cta-block .eyebrow { display: block; margin-bottom: 20px; }
+.cta-block .contact {
+  font-family: 'Source Serif 4', serif;
+  font-weight: 400;
+  font-size: clamp(28px, 3.2vw, 38px);
+  letter-spacing: -0.015em;
+  margin: 0 0 32px;
+  color: var(--green-dark);
+}
+.cta-block .contact a { border: none; color: var(--gold); }
+.cta-block .contact a:hover { color: var(--gold-light); }
+.cta-buttons { display: inline-flex; gap: 16px; flex-wrap: wrap; justify-content: center; }
+.btn { display: inline-flex; align-items: center; gap: 8px; padding: 14px 26px; border-radius: 5px; font-family: 'Inter', sans-serif; font-size: 14px; font-weight: 600; letter-spacing: 0.02em; border: 1px solid transparent; cursor: pointer; transition: all .15s ease; }
+a.btn { border-bottom-color: transparent; }
+.btn-primary { background: var(--gold); color: #fff; border-color: var(--gold); }
+.btn-primary:hover { background: var(--gold-light); border-color: var(--gold-light); }
+.btn-ghost { background: transparent; color: var(--green-dark); border-color: var(--green-dark); }
+.btn-ghost:hover { background: var(--green-dark); color: var(--text-on-dark); }
+
+/* Footer */
+.footer { background: var(--green-dark); color: rgba(245,240,232,0.7); padding: 36px 28px; font-size: 13px; display: flex; flex-wrap: wrap; gap: 24px; align-items: baseline; justify-content: space-between; border-top: 1px solid rgba(245,240,232,0.08); }
+.footer .footer-brand { font-family: 'Source Serif 4', serif; font-style: italic; font-size: 16px; color: var(--text-on-dark); }
+.footer a { color: rgba(245,240,232,0.85); border-bottom-color: rgba(245,240,232,0.2); }
+.footer a:hover { color: var(--gold-light); border-bottom-color: var(--gold-light); }
+</style>
+</head>
+<body>
+
+<div class="stripe">
+  <a href="index.html" class="left"><span style="font-style:italic;">Canary</span><span class="small">· RapidPOS</span></a>
+  <div class="right"><a href="index.html">← Back to docs</a></div>
+</div>
+
+<!-- ============ HERO ============ -->
+<section class="cover">
+  <div class="cover-inner">
+    <span class="eyebrow">Armstrong Garden Centers · Applied Pitch</span>
+    <h1>Armstrong <span class="plus">+</span> RapidPOS <span class="plus">=</span><br /><span class="em">The first MCP-native specialty retailer in America.</span></h1>
+    <p class="lede">31 stores. 136 years of horticultural expertise. NCR Counterpoint live. The CRDM is being built. ALX goes live when it is.</p>
+
+    <div class="meta">
+      <div><span>Retailer</span><strong>Armstrong Garden Centers</strong></div>
+      <div><span>Footprint</span><strong>Southern California — Sunset Zones 21–24</strong></div>
+      <div><span>Status</span><strong>NCR Counterpoint live · CRDM in build</strong></div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ S1 — THE GAP ============ -->
+<section class="section">
+  <div class="section-narrow">
+    <div class="section-head">
+      <span class="eyebrow">§ 01 — The gap</span>
+      <hr class="gold-rule" />
+      <h2>The expertise stops at the parking lot.</h2>
+    </div>
+
+    <div class="gap-prose">
+      <p>Armstrong has 31 stores, 136 years of SoCal horticultural expertise, and a 100% ESOP structure that makes every associate a stakeholder in the outcome. Three structural advantages no competitor can replicate: <em>local knowledge encoded in its horticulturists, a supply chain that grows native plants at scale, and the trust of a customer base that drives 40 minutes for the right plant.</em></p>
+
+      <p>The gap is that none of it travels beyond the store floor. The horticulturist's expertise ends when the customer leaves. <span class="em">ALX closes the gap</span> — not as a chatbot, as a persistent, zone-aware, inventory-connected garden horticulturist available 24 hours a day across every AI channel Armstrong operates.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ============ S2 — WHAT ALX IS ============ -->
+<section class="section alt">
+  <div class="section-narrow">
+    <div class="section-head">
+      <span class="eyebrow">§ 02 — What ALX is</span>
+      <hr class="gold-rule" />
+      <h2>A persistent garden horticulturist, configured against years of Armstrong data.</h2>
+    </div>
+
+    <div class="split-alx">
+      <div class="text">
+        <p>ALX is the VSM persona running on Canary's CRDM. It knows the customer's <em>Sunset zone</em>. It remembers what they planted last September. It checks whether the agave is in stock at Pasadena before they make the drive.</p>
+        <p>It follows up in August to say it's time to plant.</p>
+        <p class="footnote" style="margin-top:24px;">ALX™ is a trademark of GrowDirect LLC.</p>
+      </div>
+
+      <div class="alx-card">
+        <span class="alx-name">ALX<sup>™</sup></span>
+        <div class="alx-tag">VSM persona · Canary CRDM</div>
+        <div class="alx-cap-label">Capabilities</div>
+        <div class="tag-list">
+          <span class="tag">Inventory Lookup</span>
+          <span class="tag">Customer Garden Record</span>
+          <span class="tag">Plant Diagnostics</span>
+          <span class="tag">Seasonal Calendar</span>
+          <span class="tag">Loyalty &amp; Pricing</span>
+          <span class="tag">Store Wayfinding</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ S3 — THE VAULT ============ -->
+<section class="section vault-wrap" style="background: var(--bg);">
+  <div class="section-narrow">
+    <div class="section-head">
+      <span class="eyebrow">§ 03 — The Armstrong Horticulture Vault</span>
+      <hr class="gold-rule" />
+      <h2>Generic AI starts with training data and specializes later. ALX starts with the Vault.</h2>
+    </div>
+
+    <div class="vault-grid">
+      <p class="lede">Every other retail AI solution starts with generic training data and specializes later. ALX starts with the Vault — a structured knowledge base built from <em>Armstrong's 136 years of SoCal horticultural expertise</em>. Day-one ground truth, not a fine-tuning experiment.</p>
+
+      <ul class="vault-list">
+        <li>
+          <div class="stat-num">21–24</div>
+          <div class="stat-text"><strong>Sunset zone matrix.</strong> Every recommendation routed to the customer's actual zone.</div>
+        </li>
+        <li>
+          <div class="stat-num">86+</div>
+          <div class="stat-text"><strong>Diagnostic conditions.</strong> Symptom → diagnosis → treatment → product, with SKUs.</div>
+        </li>
+        <li>
+          <div class="stat-num text">12 mo</div>
+          <div class="stat-text"><strong>SoCal seasonal calendar.</strong> Month-by-month, zone-specific planting windows.</div>
+        </li>
+        <li>
+          <div class="stat-num text">Full</div>
+          <div class="stat-text"><strong>Species library.</strong> Provenance, care notes, replacement &amp; companion plants.</div>
+        </li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<!-- ============ S4 — TWO-PHASE DELIVERY ============ -->
+<section class="section alt">
+  <div class="section-narrow">
+    <div class="section-head">
+      <span class="eyebrow">§ 04 — Two-phase delivery</span>
+      <hr class="gold-rule" />
+      <h2>Build the foundation. Then turn on the modules.</h2>
+    </div>
+
+    <div class="phase-grid">
+      <div class="phase phase-1">
+        <span class="phase-num">Phase 01 · Foundation</span>
+        <h3>Stand up the CRDM.</h3>
+        <p>The three-database PostgreSQL architecture connected to the NCR Counterpoint transaction stream. Every sale, return, hold, and markdown from every terminal flows into one canonical data warehouse. <strong>This phase ends when the data is clean, current, and unified across all 31 stores.</strong></p>
+        <span class="phase-tag">canary_app · canary_sales · canary_metrics</span>
+      </div>
+
+      <div class="phase phase-2">
+        <span class="phase-num">Phase 02 · Activation</span>
+        <h3>Configure the modules. Go live.</h3>
+        <p>With the CRDM live, each of the 13 Canary modules is configured against real Armstrong transaction history. The RapidPOS MCP Server goes live. <strong>ALX is not installed cold</strong> — it is configured against years of actual Armstrong data, which means it is useful on day one.</p>
+        <span class="phase-tag">13 modules · MCP Server · ALX</span>
+      </div>
+    </div>
+
+    <div class="phase-arrow"><span class="line"></span>Foundation → Activation<span class="line"></span></div>
+  </div>
+</section>
+
+<!-- ============ S5 — STAT BLOCK (DARK) ============ -->
+<section class="section dark">
+  <div class="section-narrow">
+    <div class="section-head" style="margin-bottom:48px;">
+      <span class="eyebrow" style="color: var(--gold-light);">§ 05 — Armstrong at a glance</span>
+      <hr class="gold-rule" />
+      <h2 style="color: var(--text-on-dark);">The proof of concept has the scale to prove the model.</h2>
+    </div>
+
+    <div class="stat-row">
+      <div class="stat-cell">
+        <span class="num">31</span>
+        <span class="lab">Stores across Southern California</span>
+      </div>
+      <div class="stat-cell">
+        <span class="num">136</span>
+        <span class="lab">Years of horticultural expertise</span>
+      </div>
+      <div class="stat-cell">
+        <span class="num">1,184</span>
+        <span class="lab">Employee-owners (100% ESOP)</span>
+      </div>
+      <div class="stat-cell">
+        <span class="num">13</span>
+        <span class="lab">Canary modules on the CRDM spine</span>
+      </div>
+      <div class="stat-cell">
+        <span class="num">0</span>
+        <span class="lab">MCP endpoints among specialty garden retailers today</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ S6 — CHANNEL OPPORTUNITY ============ -->
+<div class="channel-wrap">
+  <div class="channel">
+    <span class="eyebrow">§ 06 — The channel opportunity</span>
+    <p>Armstrong is one of <strong>22,000+ retailers</strong> in the NCR Counterpoint VAR channel. The Armstrong Horticulture Vault is the template — domain-adapted for each vertical. The platform business is straightforward: <em>same CRDM architecture, same MCP server, new vault per vertical, distributed via RapidPOS's existing VAR relationships.</em> <strong>Armstrong proves the model.</strong></p>
+  </div>
+</div>
+
+<!-- ============ CLOSING CTA ============ -->
+<div class="cta-block">
+  <span class="eyebrow">Start the conversation</span>
+  <p class="contact"><a href="mailto:canary@growdirect.io">canary@growdirect.io</a></p>
+  <div class="cta-buttons">
+    <a class="btn btn-primary" href="architecture.html">Read the full architecture →</a>
+    <a class="btn btn-ghost" href="store-2030.html">See Store of the Future</a>
+  </div>
+</div>
+
+<!-- ============ FOOTER ============ -->
+<footer class="footer">
+  <div class="footer-brand">Canary <span style="font-style:normal; font-family:'Inter',sans-serif; color: rgba(245,240,232,0.5); font-size: 13px;">/ RapidPOS</span></div>
+  <div>A GrowDirect LLC product · ALX™ is a trademark of GrowDirect LLC</div>
+  <div><a href="index.html">Overview</a> · <a href="architecture.html">Architecture</a> · <a href="endpoints.html">Endpoints</a> · <a href="integrate.html">Quickstart</a></div>
+</footer>
+
+</body>
+</html>

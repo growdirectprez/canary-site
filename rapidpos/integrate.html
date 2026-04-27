@@ -1,0 +1,385 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>VAR Quickstart — Canary RapidPOS</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,wght@0,300;0,400;0,600;0,700;1,400&family=Inter:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;600&display=swap" rel="stylesheet">
+<!-- Shared design system — verbatim from index.html -->
+<style>
+:root {
+  --bg: #F5F0E8; --bg-alt: #EAE4D6; --surface: #FFFFFF;
+  --green-dark: #1C3A2B; --green-mid: #2A5240; --green-light: #4CAF7D; --green-faint: rgba(76,175,125,0.10);
+  --gold: #BF8700; --gold-light: #E8A800; --gold-faint: rgba(191,135,0,0.12);
+  --text-primary: #1C3A2B; --text-secondary:#3A3A3A; --text-muted: #6B6B6B; --text-on-dark: #F5F0E8;
+  --border: #D0C9BB; --border-subtle: rgba(28,58,43,0.10);
+  --code-bg: #1C3A2B; --code-text: #4CAF7D; --code-comment: rgba(76,175,125,0.55);
+  --max: 960px; --pad: 32px;
+}
+*, *::before, *::after { box-sizing: border-box; }
+html, body { margin: 0; padding: 0; }
+body { font-family: 'Inter', system-ui, sans-serif; font-size: 16px; line-height: 1.7; color: var(--text-primary); background: var(--bg); -webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale; }
+a { color: var(--green-mid); text-decoration: none; border-bottom: 1px solid var(--border-subtle); transition: color .15s ease, border-color .15s ease; }
+a:hover { color: var(--gold); border-bottom-color: var(--gold); }
+h1, h2, h3, h4 { font-family: 'Source Serif 4', Georgia, serif; color: var(--text-primary); margin: 0; }
+h1 { font-size: 48px; font-weight: 700; line-height: 1.08; letter-spacing: -0.02em; }
+h2 { font-size: 32px; font-weight: 600; line-height: 1.2; letter-spacing: -0.01em; }
+h3 { font-size: 20px; font-weight: 600; line-height: 1.3; }
+p { margin: 0 0 1em; }
+.eyebrow, .callout-label, .stat-label, .section-label { font-family: 'Inter', sans-serif; font-size: 11px; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; color: var(--gold); }
+code, pre { font-family: 'IBM Plex Mono', ui-monospace, SFMono-Regular, Menlo, monospace; }
+code { font-size: 0.92em; padding: 1px 5px; background: var(--green-faint); border-radius: 3px; color: var(--green-dark); }
+pre code { background: none; padding: 0; color: inherit; font-size: inherit; }
+.container { max-width: var(--max); margin: 0 auto; padding: 0 var(--pad); }
+
+.nav { background: var(--green-dark); height: 56px; position: sticky; top: 0; z-index: 50; border-bottom: 1px solid rgba(0,0,0,0.2); }
+.nav-inner { max-width: 1200px; margin: 0 auto; padding: 0 24px; height: 100%; display: flex; align-items: center; gap: 32px; }
+.nav-brand { color: var(--text-on-dark); border: none; display: flex; align-items: baseline; gap: 8px; }
+.nav-brand .wordmark { font-family: 'Source Serif 4', serif; font-style: italic; font-weight: 600; font-size: 19px; color: var(--text-on-dark); }
+.nav-brand .slash { color: rgba(245,240,232,0.4); font-size: 13px; }
+.nav-brand .product { font-family: 'Inter', sans-serif; font-size: 13px; font-weight: 400; color: rgba(245,240,232,0.65); letter-spacing: 0.04em; }
+.nav-links { display: flex; align-items: center; gap: 28px; margin-left: 24px; }
+.nav-links a { color: rgba(245,240,232,0.78); border: none; font-size: 13px; font-weight: 500; padding: 4px 0; position: relative; }
+.nav-links a:hover { color: var(--text-on-dark); }
+.nav-links a.active { color: var(--text-on-dark); }
+.nav-links a.active::after { content: ""; position: absolute; left: 0; right: 0; bottom: -19px; height: 2px; background: var(--gold); }
+.nav-right { margin-left: auto; display: flex; align-items: center; gap: 18px; }
+.nav-right .gold-link { color: var(--gold-light); border: none; font-size: 13px; font-weight: 600; }
+.nav-right .gold-link:hover { color: #ffce4d; }
+.btn-nav { border: 1px solid var(--gold); color: var(--gold-light); padding: 7px 14px; border-radius: 4px; font-size: 12px; font-weight: 600; letter-spacing: 0.04em; background: transparent; display: inline-flex; align-items: center; gap: 6px; }
+.btn-nav:hover { background: var(--gold); color: var(--green-dark); border-color: var(--gold); }
+@media (max-width: 860px) { .nav-links, .nav-right .gold-link { display: none; } }
+
+.hero { background: var(--green-dark); color: var(--text-on-dark); border-bottom: 4px solid var(--gold); padding: 64px 0 56px; }
+.hero .eyebrow { color: var(--gold-light); margin-bottom: 18px; display: block; }
+.hero h1 { color: var(--text-on-dark); margin-bottom: 18px; max-width: 780px; }
+.hero .subhead { color: rgba(245,240,232,0.72); font-size: 18px; line-height: 1.55; max-width: 700px; margin: 0; }
+.hero .meta-row { display: flex; gap: 28px; margin-top: 28px; flex-wrap: wrap; }
+.hero .meta-row .meta-pill { display: flex; flex-direction: column; gap: 2px; }
+.hero .meta-row .meta-key { font-family: 'IBM Plex Mono', monospace; font-size: 10px; font-weight: 600; letter-spacing: 0.12em; text-transform: uppercase; color: var(--gold-light); }
+.hero .meta-row .meta-val { color: var(--text-on-dark); font-size: 14px; font-family: 'IBM Plex Mono', monospace; }
+
+section { padding: 80px 0; }
+section.tight { padding: 56px 0; }
+section.alt { background: var(--bg-alt); }
+
+.callout { background: var(--gold-faint); border-left: 2px solid var(--gold); border-radius: 6px; padding: 22px 26px; }
+.callout .callout-label { display: block; margin-bottom: 6px; color: var(--gold); }
+.callout p { margin: 0; font-family: 'Source Serif 4', serif; font-size: 19px; line-height: 1.5; color: var(--text-primary); }
+
+.code-block { background: var(--code-bg); color: var(--code-text); border-left: 3px solid var(--green-light); border-radius: 8px; padding: 20px 24px; overflow-x: auto; font-family: 'IBM Plex Mono', monospace; font-size: 13px; line-height: 1.65; margin: 0; }
+.code-block .c { color: var(--code-comment); }
+.code-block .k { color: #E8A800; }
+.code-block .s { color: #C8E8A8; }
+.code-block .n { color: #F5F0E8; }
+.code-block .p { color: #F5F0E8; }
+
+.footer { background: var(--green-dark); color: rgba(245,240,232,0.7); padding: 48px 0 36px; font-size: 13px; }
+.footer .container { display: flex; flex-wrap: wrap; gap: 24px; align-items: baseline; justify-content: space-between; }
+.footer a { color: rgba(245,240,232,0.85); border-bottom-color: rgba(245,240,232,0.2); }
+.footer a:hover { color: var(--gold-light); border-bottom-color: var(--gold-light); }
+.footer .footer-brand { font-family: 'Source Serif 4', serif; font-style: italic; font-size: 16px; color: var(--text-on-dark); }
+.footer .footer-meta { color: rgba(245,240,232,0.45); font-size: 12px; }
+
+/* ===== Page-specific ===== */
+.steps { display: flex; flex-direction: column; gap: 0; }
+.step {
+  position: relative;
+  display: grid;
+  grid-template-columns: 80px 1fr;
+  gap: 32px;
+  padding: 40px 0;
+  border-top: 1px solid var(--border);
+}
+.step:first-child { border-top: none; padding-top: 0; }
+.step:last-child { padding-bottom: 0; }
+.step-num {
+  font-family: 'Source Serif 4', serif;
+  font-size: 48px;
+  font-weight: 700;
+  line-height: 1;
+  color: var(--gold);
+  letter-spacing: -0.02em;
+}
+.step-num .num-prefix {
+  display: block;
+  font-family: 'Inter', sans-serif;
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--text-muted);
+  margin-bottom: 4px;
+}
+.step-body h3 { margin: 4px 0 8px; font-size: 24px; }
+.step-body .step-lede { color: var(--text-secondary); font-size: 16px; margin-bottom: 18px; }
+.step-body .req-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex; flex-direction: column;
+}
+.step-body .req-list li {
+  padding: 10px 0;
+  border-bottom: 1px solid var(--border-subtle);
+  display: flex; align-items: baseline; gap: 12px;
+  font-size: 15px;
+  color: var(--text-secondary);
+}
+.step-body .req-list li::before {
+  content: "›";
+  color: var(--gold);
+  font-family: 'IBM Plex Mono', monospace;
+  font-weight: 700;
+  flex: 0 0 12px;
+}
+.step-body .req-list li:last-child { border-bottom: none; }
+.step-body .req-list .req-key { font-family: 'IBM Plex Mono', monospace; font-weight: 600; color: var(--green-dark); }
+
+.code-cap {
+  display: flex; align-items: center; justify-content: space-between;
+  background: #14291f;
+  border-radius: 8px 8px 0 0;
+  padding: 8px 16px;
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 11px;
+  color: rgba(245,240,232,0.55);
+  letter-spacing: 0.04em;
+  border-bottom: 1px solid rgba(76,175,125,0.18);
+}
+.code-cap + .code-block { border-radius: 0 0 8px 8px; border-left: 3px solid var(--green-light); }
+.code-cap .lang { color: var(--gold-light); }
+
+.tip {
+  margin-top: 14px;
+  padding: 10px 14px;
+  background: var(--green-faint);
+  border-left: 2px solid var(--green-light);
+  border-radius: 4px;
+  font-size: 13.5px;
+  color: var(--text-secondary);
+}
+.tip strong { color: var(--green-mid); }
+
+.checks {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 14px;
+  margin-top: 14px;
+}
+@media (max-width: 720px) { .checks { grid-template-columns: 1fr; } }
+.check {
+  background: var(--surface);
+  border: 1px solid var(--border-subtle);
+  border-radius: 6px;
+  padding: 14px 16px;
+  display: flex; align-items: center; gap: 10px;
+  font-size: 14px;
+  color: var(--text-secondary);
+}
+.check::before {
+  content: "";
+  width: 18px; height: 18px; border-radius: 50%;
+  background: var(--green-light);
+  flex: 0 0 18px;
+  display: inline-block;
+  position: relative;
+}
+.check::after {
+  content: "";
+  position: absolute;
+  margin-left: 5px;
+  width: 5px; height: 9px;
+  border: solid var(--green-dark);
+  border-width: 0 2px 2px 0;
+  transform: rotate(45deg) translate(2px, -3px);
+}
+.check { position: relative; }
+
+@media (max-width: 720px) {
+  .step { grid-template-columns: 1fr; gap: 12px; }
+  .step-num { font-size: 36px; }
+}
+
+.contact-card {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  gap: 24px;
+  align-items: center;
+  background: var(--surface);
+  border: 1px solid var(--border-subtle);
+  border-top: 2px solid var(--green-light);
+  border-radius: 6px;
+  padding: 22px 26px;
+}
+@media (max-width: 720px) { .contact-card { grid-template-columns: 1fr; } }
+.contact-card h3 { margin-bottom: 4px; font-size: 18px; }
+.contact-card p { margin: 0; color: var(--text-secondary); font-size: 14.5px; }
+.contact-card .mail {
+  font-family: 'IBM Plex Mono', monospace;
+  font-weight: 600;
+  font-size: 14px;
+  color: var(--gold);
+  border-bottom-color: var(--gold);
+}
+</style>
+</head>
+<body>
+
+<nav class="nav" aria-label="Primary">
+  <div class="nav-inner">
+    <a href="index.html" class="nav-brand">
+      <span class="wordmark">Canary</span><span class="slash">/</span><span class="product">RapidPOS</span>
+    </a>
+    <div class="nav-links">
+      <a href="index.html">Overview</a>
+      <a href="architecture.html">Architecture</a>
+      <a href="endpoints.html">Endpoints</a>
+      <a href="integrate.html" class="active">Quickstart</a>
+    </div>
+    <div class="nav-right">
+      <a href="store-2030.html" class="gold-link">Store of the Future →</a>
+      <a href="mailto:canary@growdirect.io" class="btn-nav">Book a Call</a>
+    </div>
+  </div>
+</nav>
+
+<header class="hero">
+  <div class="container">
+    <span class="eyebrow">VAR Quickstart</span>
+    <h1>First live call in 15 minutes.</h1>
+    <p class="subhead">Prerequisites, credentials, and a working <code style="background:rgba(245,240,232,0.08); color:var(--gold-light);">inventory_lookup</code> call against your Counterpoint instance.</p>
+    <div class="meta-row">
+      <div class="meta-pill"><span class="meta-key">Audience</span><span class="meta-val">RapidPOS VAR engineers</span></div>
+      <div class="meta-pill"><span class="meta-key">Time</span><span class="meta-val">~15 minutes</span></div>
+      <div class="meta-pill"><span class="meta-key">You'll need</span><span class="meta-val">Docker · CP API key</span></div>
+    </div>
+  </div>
+</header>
+
+<section>
+  <div class="container">
+    <div class="steps">
+
+      <article class="step">
+        <div class="step-num"><span class="num-prefix">Step</span>1</div>
+        <div class="step-body">
+          <h3>Prerequisites</h3>
+          <p class="step-lede">Confirm the retailer's environment and obtain credentials before continuing.</p>
+          <ul class="req-list">
+            <li><span class="req-key">NCR Counterpoint</span> 8.5.x or higher</li>
+            <li><span class="req-key">RapidPOS VAR account</span> contact <a href="mailto:vars@growdirect.io">vars@growdirect.io</a></li>
+            <li><span class="req-key">Docker</span> for local dev, or access to your deployment environment</li>
+            <li><span class="req-key">Counterpoint API key</span> with inventory read permissions</li>
+          </ul>
+        </div>
+      </article>
+
+      <article class="step">
+        <div class="step-num"><span class="num-prefix">Step</span>2</div>
+        <div class="step-body">
+          <h3>Environment</h3>
+          <p class="step-lede">Pull the server image and configure environment variables for your retailer's tenant.</p>
+          <div class="code-cap"><span>terminal</span><span class="lang">bash</span></div>
+<pre class="code-block"><code><span class="c"># Pull the server image</span>
+docker pull growdirect/rapidpos-mcp:latest
+
+<span class="c"># Configure environment</span>
+export COUNTERPOINT_API_URL=<span class="s">https://your-cp-instance.com/api</span>
+export COUNTERPOINT_API_KEY=<span class="s">your_key_here</span>
+export TENANT_ID=<span class="s">your_retailer_id</span>
+export REDIS_URL=<span class="s">redis://localhost:6379</span></code></pre>
+          <p class="tip"><strong>Tip.</strong> Keep <code>COUNTERPOINT_API_KEY</code> in your secret manager. The MCP layer never exposes it to the agent — it's used only on the server side to reach Counterpoint.</p>
+        </div>
+      </article>
+
+      <article class="step">
+        <div class="step-num"><span class="num-prefix">Step</span>3</div>
+        <div class="step-body">
+          <h3>Start the server</h3>
+          <p class="step-lede">Run the container with the environment you just exported. The server listens on port 3000 by default.</p>
+          <div class="code-cap"><span>terminal</span><span class="lang">bash</span></div>
+<pre class="code-block"><code>docker run -p 3000:3000 \
+  -e COUNTERPOINT_API_URL \
+  -e COUNTERPOINT_API_KEY \
+  -e TENANT_ID \
+  -e REDIS_URL \
+  growdirect/rapidpos-mcp:latest</code></pre>
+          <div class="checks">
+            <div class="check">Server logs <code>mcp listening :3000</code></div>
+            <div class="check">CP healthcheck <code>OK</code></div>
+            <div class="check">Redis connection <code>UP</code></div>
+            <div class="check">Tools manifest <code>6 registered</code></div>
+          </div>
+        </div>
+      </article>
+
+      <article class="step">
+        <div class="step-num"><span class="num-prefix">Step</span>4</div>
+        <div class="step-body">
+          <h3>First call</h3>
+          <p class="step-lede">Call <code>inventory_lookup</code> against a known SKU at one of your stores.</p>
+          <div class="code-cap"><span>request</span><span class="lang">curl</span></div>
+<pre class="code-block"><code>curl -X POST http://localhost:3000/mcp \
+  -H <span class="s">"Content-Type: application/json"</span> \
+  -H <span class="s">"Authorization: Bearer your_mcp_api_key"</span> \
+  -d <span class="s">'{
+    "jsonrpc": "2.0",
+    "method": "tools/call",
+    "params": {
+      "name": "inventory_lookup",
+      "arguments": { "sku": "TEST-SKU", "store_ids": ["STORE1"] }
+    },
+    "id": 1
+  }'</span></code></pre>
+          <p class="tip"><strong>Expected.</strong> A JSON-RPC 2.0 envelope with a <code>result</code> object containing per-store stock counts and a <code>cache_age_seconds</code> field. If you get a 401, your bearer is wrong; a 502 means the CP credentials in <code>COUNTERPOINT_API_KEY</code> can't reach Counterpoint.</p>
+        </div>
+      </article>
+
+      <article class="step">
+        <div class="step-num"><span class="num-prefix">Step</span>5</div>
+        <div class="step-body">
+          <h3>Connect an agent</h3>
+          <p class="step-lede">Any MCP-compatible agent connects by pointing at <code>http://localhost:3000/mcp</code> with a valid API key.</p>
+          <div class="code-cap"><span>claude · settings.json</span><span class="lang">json</span></div>
+<pre class="code-block"><code>{
+  <span class="k">"mcpServers"</span>: {
+    <span class="k">"rapidpos"</span>: {
+      <span class="k">"url"</span>: <span class="s">"http://localhost:3000/mcp"</span>,
+      <span class="k">"headers"</span>: {
+        <span class="k">"Authorization"</span>: <span class="s">"Bearer your_mcp_api_key"</span>
+      }
+    }
+  }
+}</code></pre>
+          <p class="tip"><strong>That's it.</strong> No custom integration layer required. Claude, any Claude Code session, or any custom agent built on the MCP SDK connects natively.</p>
+        </div>
+      </article>
+
+    </div>
+  </div>
+</section>
+
+<section class="alt tight">
+  <div class="container">
+    <div class="contact-card">
+      <div>
+        <h3>Need the full implementation guide?</h3>
+        <p>Or help with a retailer-specific Counterpoint config? The VAR team responds within one business day.</p>
+      </div>
+      <a class="mail" href="mailto:vars@growdirect.io">vars@growdirect.io →</a>
+    </div>
+  </div>
+</section>
+
+<footer class="footer">
+  <div class="container">
+    <div><span class="footer-brand">Canary</span> · RapidPOS MCP Server · A GrowDirect LLC product</div>
+    <div class="footer-meta"><a href="mailto:canary@growdirect.io">canary@growdirect.io</a> &nbsp;·&nbsp; canary.growdirect.io/rapidpos</div>
+  </div>
+</footer>
+
+</body>
+</html>
