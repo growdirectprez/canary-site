@@ -375,6 +375,34 @@ a.btn { border-bottom-color: transparent; }
 .footer .footer-brand { font-family: 'Source Serif 4', serif; font-style: italic; font-size: 16px; color: var(--text-on-dark); }
 .footer a { color: rgba(245,240,232,0.85); border-bottom-color: rgba(245,240,232,0.2); }
 .footer a:hover { color: var(--gold-light); border-bottom-color: var(--gold-light); }
+
+/* ===== WIKI SHELL + SIDEBAR (injected) ===== */
+.wiki-shell { display: grid; grid-template-columns: 240px 1fr; min-height: calc(100vh - 56px); }
+@media (max-width: 980px) { .wiki-shell { grid-template-columns: 1fr; } }
+.wiki-sidebar {
+  background: var(--green-dark, #1C3A2B); color: #F5F0E8;
+  padding: 28px 18px 28px;
+  position: sticky; top: 56px; align-self: start;
+  height: calc(100vh - 56px); overflow-y: auto;
+  border-right: 1px solid rgba(0,0,0,0.25); font-size: 13px;
+}
+.wiki-sidebar::-webkit-scrollbar { width: 4px; }
+.wiki-sidebar::-webkit-scrollbar-thumb { background: rgba(245,240,232,0.15); border-radius: 3px; }
+@media (max-width: 980px) { .wiki-sidebar { position: static; height: auto; border-right: none; border-bottom: 1px solid rgba(0,0,0,0.2); } }
+.vault-header { padding-bottom: 18px; border-bottom: 1px solid rgba(245,240,232,0.12); margin-bottom: 18px; }
+.vault-label { font-size: 10px; font-weight: 700; letter-spacing: 0.16em; text-transform: uppercase; color: #E8A800; display: block; margin-bottom: 5px; font-family: 'Inter', sans-serif; }
+.vault-title { font-family: 'Source Serif 4', Georgia, serif; font-style: italic; font-size: 18px; font-weight: 600; color: #F5F0E8; display: block; }
+.vault-sub { font-size: 11px; color: rgba(245,240,232,0.45); margin-top: 3px; display: block; }
+.sb-section { margin-bottom: 18px; }
+.sb-label { font-size: 10px; font-weight: 700; letter-spacing: 0.13em; text-transform: uppercase; color: rgba(245,240,232,0.38); margin-bottom: 6px; display: block; font-family: 'Inter', sans-serif; }
+.sb-link { display: block; padding: 5px 8px; border-radius: 4px; color: rgba(245,240,232,0.72); font-size: 13px; border: none; transition: background .12s, color .12s; text-decoration: none; }
+.sb-link:hover { background: rgba(245,240,232,0.08); color: #F5F0E8; }
+.sb-link.active { background: rgba(191,135,0,0.18); color: #E8A800; }
+.sb-link .mono { font-size: 10px; font-family: 'IBM Plex Mono', monospace; color: #BF8700; margin-right: 4px; }
+.sb-link.dim { color: rgba(245,240,232,0.32); font-size: 11.5px; }
+.sb-divider { border: none; border-top: 1px solid rgba(245,240,232,0.1); margin: 12px 0; }
+.wiki-content { min-width: 0; }
+
 </style>
 </head>
 <body>
