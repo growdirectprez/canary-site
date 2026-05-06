@@ -1,0 +1,237 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Coding Standards — Canary Go</title>
+<meta name="description" content="Service scaffold, commit conventions, and dispatch protocol for Canary Go contributors.">
+<link rel="canonical" href="https://canary.growdirect.io/coding-standards">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  :root {
+    --bg: #0D1117;
+    --surface: #161B22;
+    --border: #21262D;
+    --text: #E6EDF3;
+    --muted: #8B949E;
+    --dim: #4B5563;
+    --amber: #FBBF24;
+    --green: #34D399;
+    --blue: #60A5FA;
+  }
+  body {
+    font-family: 'Space Grotesk', system-ui, sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    min-height: 100vh;
+    -webkit-font-smoothing: antialiased;
+  }
+  .page { max-width: 820px; margin: 0 auto; padding: 56px 24px 96px; }
+  .breadcrumb { font-size: 13px; font-family: 'JetBrains Mono', monospace; color: var(--dim); margin-bottom: 40px; }
+  .breadcrumb a { color: var(--dim); text-decoration: none; }
+  .breadcrumb a:hover { color: var(--amber); }
+  h1 { font-size: 26px; font-weight: 700; margin-bottom: 8px; }
+  .subtitle { font-size: 14px; color: var(--muted); margin-bottom: 56px; line-height: 1.5; }
+
+  h2 {
+    font-size: 15px; font-weight: 600;
+    font-family: 'JetBrains Mono', monospace;
+    color: var(--amber);
+    text-transform: uppercase; letter-spacing: 0.1em;
+    margin: 48px 0 20px;
+    padding-top: 48px;
+    border-top: 1px solid var(--border);
+  }
+  h2:first-of-type { margin-top: 0; padding-top: 0; border-top: none; }
+  h3 {
+    font-size: 14px; font-weight: 600;
+    color: var(--text);
+    margin: 28px 0 10px;
+  }
+
+  p { font-size: 14px; color: var(--muted); line-height: 1.7; margin-bottom: 14px; }
+  strong { color: var(--text); }
+
+  /* File tree */
+  .tree {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    padding: 20px 24px;
+    margin: 16px 0 24px;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 13px;
+    line-height: 2;
+  }
+  .tree-dir { color: var(--blue); }
+  .tree-file { color: var(--text); }
+  .tree-comment { color: var(--dim); font-size: 12px; margin-left: 8px; }
+
+  /* Code blocks */
+  pre {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    padding: 18px 22px;
+    overflow-x: auto;
+    margin: 12px 0 24px;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 13px;
+    line-height: 1.65;
+    color: var(--muted);
+  }
+  code { font-family: 'JetBrains Mono', monospace; font-size: 12px; color: var(--amber); }
+  pre code { color: var(--muted); }
+
+  /* Tables */
+  table { width: 100%; border-collapse: collapse; margin: 16px 0 24px; font-size: 13px; }
+  th {
+    text-align: left; font-family: 'JetBrains Mono', monospace;
+    font-size: 11px; text-transform: uppercase; letter-spacing: 0.08em;
+    color: var(--dim); padding: 10px 14px;
+    border-bottom: 1px solid var(--border);
+  }
+  td { padding: 10px 14px; vertical-align: top; border-bottom: 1px solid var(--border); color: var(--muted); line-height: 1.55; }
+  td:first-child { color: var(--text); font-family: 'JetBrains Mono', monospace; font-size: 12px; white-space: nowrap; }
+  tr:last-child td { border-bottom: none; }
+
+  /* Rule callout */
+  .rule {
+    border-left: 2px solid var(--amber);
+    padding: 12px 18px;
+    background: rgba(251,191,36,0.04);
+    margin: 16px 0 24px;
+    font-size: 13px;
+    color: var(--muted);
+    line-height: 1.6;
+  }
+  .rule strong { color: var(--text); }
+
+  footer { margin-top: 80px; padding-top: 24px; border-top: 1px solid var(--border); font-size: 13px; color: var(--dim); }
+  footer a { color: var(--dim); text-decoration: none; }
+  footer a:hover { color: var(--amber); }
+</style>
+</head>
+<body>
+<div class="page">
+  <div class="breadcrumb"><a href="/">canary.growdirect.io</a> / coding-standards</div>
+  <h1>Coding Standards</h1>
+  <p class="subtitle">Service scaffold · commit conventions · dispatch protocol.<br>
+  Source: <code>CanaryGo/docs/conventions.md</code> — if this page disagrees with that file, the file wins.</p>
+
+  <!-- ── Service Scaffold ─────────────────────────────────────── -->
+  <h2>Service Scaffold</h2>
+
+  <p>Every domain module lives under <code>internal/&lt;module&gt;/</code>. Standard layout:</p>
+
+  <div class="tree">
+    <div><span class="tree-dir">internal/&lt;module&gt;/</span></div>
+    <div>&nbsp;&nbsp;<span class="tree-file">handler.go</span><span class="tree-comment">— HTTP layer: parse → delegate → render. No business logic.</span></div>
+    <div>&nbsp;&nbsp;<span class="tree-file">handler_test.go</span><span class="tree-comment">— Table-driven unit tests for every route.</span></div>
+    <div>&nbsp;&nbsp;<span class="tree-file">store.go</span><span class="tree-comment">— pgxpool-backed DB access. Concrete *Store + interfaces for DI.</span></div>
+    <div>&nbsp;&nbsp;<span class="tree-file">dto.go</span><span class="tree-comment">— Wire-shape types: request/response structs with JSON tags.</span></div>
+    <div>&nbsp;&nbsp;<span class="tree-file">types.go</span><span class="tree-comment">— Domain types when DTO ↔ entity shapes diverge.</span></div>
+    <div>&nbsp;&nbsp;<span class="tree-file">integration_test.go</span><span class="tree-comment">— //go:build integration — runs against real Docker postgres.</span></div>
+  </div>
+
+  <div class="tree">
+    <div><span class="tree-dir">cmd/&lt;service&gt;/</span></div>
+    <div>&nbsp;&nbsp;<span class="tree-file">main.go</span><span class="tree-comment">— Binary entry point: config, pool, router wiring, http.ListenAndServe.</span></div>
+  </div>
+
+  <h3>Mount pattern</h3>
+  <p>Every domain package exposes a single <code>Mount(r chi.Router)</code> that registers its routes. The binary's <code>main.go</code> calls each module's Mount in sequence. No route registration outside of the module that owns it.</p>
+
+  <h3>Handler conventions</h3>
+  <table>
+    <tr><th>Concern</th><th>Convention</th></tr>
+    <tr><td>Path style</td><td><code>/v1/&lt;resource&gt;[/{id}]</code> — lower-snake-case segments. Most-specific routes first.</td></tr>
+    <tr><td>Pagination</td><td><code>?page=N&amp;size=M</code> — 1-indexed, 50 default / 200 max.</td></tr>
+    <tr><td>Success envelope</td><td><code>{"items":[…],"page":1,"size":50,"count":17}</code> for collections. Single resource returned directly.</td></tr>
+    <tr><td>Error envelope</td><td><code>{"code":"snake_case_error","message":"detail"}</code> — code is the stable wire identifier; message is advisory.</td></tr>
+    <tr><td>Body limit</td><td><code>http.MaxBytesReader(w, r.Body, 1&lt;&lt;20)</code> — 1 MiB unless the handler documents otherwise.</td></tr>
+  </table>
+
+  <h3>Error mapping</h3>
+  <table>
+    <tr><th>Sentinel</th><th>HTTP status</th><th>Code</th></tr>
+    <tr><td>ErrNotFound</td><td>404</td><td>not_found</td></tr>
+    <tr><td>ErrConflict</td><td>409</td><td>conflict</td></tr>
+    <tr><td>ErrValidation</td><td>400</td><td>invalid_request</td></tr>
+    <tr><td>(other)</td><td>500</td><td>internal_error — message redacted, error logged via zap</td></tr>
+  </table>
+
+  <h3>Store interface pattern</h3>
+  <p>The store exposes a concrete <code>*Store</code> (constructed via <code>NewStore(pool)</code>) and one or more narrow interfaces (<code>Reader</code>, <code>Writer</code>, or method-named). Handlers accept the interface — tests substitute a stub. Sentinel errors are package-scoped; no shared <code>errs</code> package.</p>
+
+  <h3>sqlc rule</h3>
+  <div class="rule">
+    <strong>Read paths:</strong> direct pgx + inline SQL is acceptable.<br>
+    <strong>Simple writes</strong> (single INSERT/UPDATE/DELETE): direct pgx is acceptable.<br>
+    <strong>Complex writes</strong> (multi-statement tx, cross-table, ≥3 callers): use sqlc.<br>
+    Queries go in <code>internal/db/sqlc/&lt;module&gt;.sql</code>. Generated output in <code>internal/db/query/&lt;module&gt;/</code> — do not hand-edit. Regenerate with <code>make sqlc-gen</code>.
+  </div>
+
+  <h3>Decimal standard</h3>
+  <p>All money fields use <code>github.com/shopspring/decimal</code> against <code>numeric(14,4)</code> columns. Wire format is string (<code>"12.34"</code>). Currency travels as a separate <code>string</code> field — no <code>Money</code> wrapper struct.</p>
+
+  <!-- ── Commit Conventions ──────────────────────────────────── -->
+  <h2>Commit Conventions</h2>
+
+  <p>Commits follow a structured format so the log is machine-readable and dispatch-traceable.</p>
+
+  <pre><code>&lt;type&gt;(&lt;scope&gt;): &lt;description&gt; — &lt;ticket&gt;
+
+Optional body: what changed and why. Bullet list preferred for multi-point changes.
+
+Co-Authored-By: Claude Sonnet 4.x &lt;noreply@anthropic.com&gt;</code></pre>
+
+  <table>
+    <tr><th>Type</th><th>When to use</th></tr>
+    <tr><td>feat</td><td>New capability — a route, a store method, a migration that adds surface.</td></tr>
+    <tr><td>fix</td><td>Bug fix. Scope is the affected module.</td></tr>
+    <tr><td>demo</td><td>Work scoped to the GRO-802 demo workstream (Square OAuth, vault, discovery).</td></tr>
+    <tr><td>chore</td><td>Non-functional: dependency updates, gitignore changes, file moves.</td></tr>
+    <tr><td>test</td><td>Tests only — no production code change.</td></tr>
+    <tr><td>docs</td><td>Documentation only.</td></tr>
+    <tr><td>refactor</td><td>Code change with no behavior change — naming, extraction, restructure.</td></tr>
+  </table>
+
+  <p>One dispatch per commit series. A commit that touches three modules to deliver one ticket is correct. Three commits across three dispatches that all land in the same PR is a process error.</p>
+
+  <!-- ── Dispatch Protocol ───────────────────────────────────── -->
+  <h2>Dispatch Protocol</h2>
+
+  <p>All work in this repo is Linear-dispatch-driven. There are no free-form commits to <code>main</code> without a corresponding ticket. The dispatch is the unit of accountability — it carries the brief, the target, the priority, and the completion record.</p>
+
+  <h3>Lifecycle</h3>
+  <table>
+    <tr><th>Step</th><th>Action</th></tr>
+    <tr><td>1 — Create</td><td>Open a Linear issue in the <strong>Dispatch</strong> project. Imperative title (<code>add location filter to inventory handler</code>). Description carries the full brief — expected inputs, expected outputs, acceptance criteria.</td></tr>
+    <tr><td>2 — Pick up</td><td>Set status → <strong>In Progress</strong>. Post a comment confirming pickup and estimated completion.</td></tr>
+    <tr><td>3 — Execute</td><td>Code, test, commit per the conventions above. Outputs land in the repo at the paths named in the dispatch.</td></tr>
+    <tr><td>4 — Complete</td><td>Set status → <strong>Done</strong>. Post a closing comment: artifact paths, commit SHA, one-paragraph summary, any follow-on tickets recommended.</td></tr>
+    <tr><td>Failure</td><td>Set status → <strong>Cancelled</strong> with a reason comment. Do not leave issues In Progress indefinitely.</td></tr>
+  </table>
+
+  <h3>Targets and agents</h3>
+  <p>Issues carry <code>Target/laptop</code> or <code>Target/any</code> labels and optionally an <code>Agent/&lt;name&gt;</code> label. Priority is Linear's native field. Do not duplicate priority in labels.</p>
+
+  <h3>What stays in Linear vs the repo</h3>
+  <div class="rule">
+    <strong>Linear</strong> — dispatch status, pickup confirmation, completion record, mid-flight conversation.<br>
+    <strong>Repo</strong> — all artifacts a dispatch produces: specs, plans, SDDs, Brain wiki cards, code.<br>
+    Linear references repo paths. The repo does not track Linear status. These are two separate planes.
+  </div>
+
+  <h3>First dispatch for new contributors</h3>
+  <p>The first dispatch for any new contributor is: <em>walk the onboarding path and propose patches via PR for any confusing surfaces or gaps.</em> This is the right first task — it exercises the full dispatch lifecycle while producing genuine value (fixing the thing that was confusing is better than any contrived starter task).</p>
+
+  <footer>
+    <a href="/">← canary.growdirect.io</a> &nbsp;·&nbsp; <a href="/sdds/">SDD Index</a> &nbsp;·&nbsp; <a href="https://github.com/growdirect-llc/canary-go">Source</a> &nbsp;·&nbsp; Apache-2.0
+  </footer>
+</div>
+</body>
+</html>
