@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SDD Index — Canary Go</title>
+<meta name="description" content="Design document index for the Canary Go platform. 12 SDDs in recommended reading order.">
+<link rel="canonical" href="https://canary.growdirect.io/sdds/">
+<meta property="og:title" content="SDD Index — Canary Go">
+<meta property="og:type" content="website">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  :root {
+    --bg: #0D1117; --surface: #161B22; --border: #21262D;
+    --text: #E6EDF3; --muted: #8B949E; --dim: #4B5563;
+    --amber: #FBBF24; --amber-dim: #F59E0B;
+  }
+  body { font-family: 'Space Grotesk', system-ui, sans-serif; background: var(--bg); color: var(--text); min-height: 100vh; -webkit-font-smoothing: antialiased; }
+  .page { max-width: 820px; margin: 0 auto; padding: 56px 24px 96px; }
+  .breadcrumb { font-size: 13px; font-family: 'JetBrains Mono', monospace; color: var(--dim); margin-bottom: 40px; }
+  .breadcrumb a { color: var(--dim); text-decoration: none; }
+  .breadcrumb a:hover { color: var(--amber); }
+  h1 { font-size: 26px; font-weight: 700; margin-bottom: 8px; }
+  .subtitle { font-size: 14px; color: var(--muted); margin-bottom: 48px; line-height: 1.5; }
+
+  .group-title {
+    font-size: 11px; font-family: 'JetBrains Mono', monospace;
+    color: var(--amber); text-transform: uppercase; letter-spacing: 0.1em;
+    margin: 40px 0 12px;
+  }
+  .group-title:first-of-type { margin-top: 0; }
+
+  .sdd-table { width: 100%; border-collapse: collapse; margin-bottom: 8px; }
+  .sdd-table tr { border-bottom: 1px solid var(--border); }
+  .sdd-table tr:last-child { border-bottom: none; }
+  .sdd-table td { padding: 14px 16px; vertical-align: top; }
+  .sdd-table td:first-child { width: 28px; font-size: 11px; font-family: 'JetBrains Mono', monospace; color: var(--dim); padding-right: 0; }
+  .sdd-name { font-size: 14px; font-weight: 600; color: var(--text); white-space: nowrap; min-width: 200px; }
+  .sdd-slug { font-size: 11px; font-family: 'JetBrains Mono', monospace; color: var(--dim); margin-top: 2px; }
+  .sdd-desc { font-size: 13px; color: var(--muted); line-height: 1.55; }
+  .sdd-tag { display: inline-block; font-size: 10px; font-family: 'JetBrains Mono', monospace; padding: 2px 6px; border-radius: 3px; margin-top: 6px; margin-right: 4px; background: rgba(251,191,36,0.1); color: var(--amber); }
+  .sdd-tag.green { background: rgba(52,211,153,0.1); color: #34D399; }
+  .sdd-tag.blue { background: rgba(96,165,250,0.1); color: #60A5FA; }
+  .sdd-tag.red { background: rgba(248,113,113,0.1); color: #F87171; }
+
+  .note { font-size: 13px; color: var(--muted); border-left: 2px solid var(--border); padding-left: 16px; margin-top: 48px; line-height: 1.6; }
+
+  footer { margin-top: 80px; padding-top: 24px; border-top: 1px solid var(--border); font-size: 13px; color: var(--dim); }
+  footer a { color: var(--dim); text-decoration: none; }
+  footer a:hover { color: var(--amber); }
+</style>
+</head>
+<body>
+<div class="page">
+  <div class="breadcrumb"><a href="/">canary.growdirect.io</a> / sdds</div>
+  <h1>Design Documents</h1>
+  <p class="subtitle">12 SDDs in recommended reading order. Start at 01 if you're new to the codebase.<br>Source: <code style="font-family:'JetBrains Mono',monospace;font-size:12px;color:var(--dim)">GrowDirect/docs/sdds/go-handoff/</code></p>
+
+  <!-- Group 1 -->
+  <div class="group-title">Orientation — Read First</div>
+  <table class="sdd-table">
+    <tr id="platform-overview">
+      <td>01</td>
+      <td>
+        <div class="sdd-name">Platform Overview</div>
+        <div class="sdd-slug">platform-overview.md</div>
+        <span class="sdd-tag">product</span>
+      </td>
+      <td class="sdd-desc">What Canary is and who it serves. Covers the ICP (independent specialty retailer, 1–30 locations), the three accountability rails, the module roadmap, and the security and compliance posture. Narrative layer — read before the architecture SDD.</td>
+    </tr>
+    <tr id="architecture">
+      <td>02</td>
+      <td>
+        <div class="sdd-name">Architecture</div>
+        <div class="sdd-slug">architecture.md</div>
+        <span class="sdd-tag">platform</span>
+      </td>
+      <td class="sdd-desc">Service topology across 29 modules. Chi HTTP, pgx/v5, Valkey streams, GCP Cloud Run. Shows how the protocol pipeline (Node 1–4), the module stores, and the MCP surface hang together. Start here for the wiring picture.</td>
+    </tr>
+    <tr id="go-module-layout">
+      <td>03</td>
+      <td>
+        <div class="sdd-name">Go Module Layout</div>
+        <div class="sdd-slug">go-module-layout.md</div>
+        <span class="sdd-tag">conventions</span>
+        <span class="sdd-tag green">required</span>
+      </td>
+      <td class="sdd-desc">Read before creating any file. Defines the single go.mod, package naming, service boundary conventions, port assignments, and cmd/* binary layout. Consistency across 29 services is enforced here.</td>
+    </tr>
+  </table>
+
+  <!-- Group 2 -->
+  <div class="group-title">Data Layer</div>
+  <table class="sdd-table">
+    <tr id="canonical-data-model">
+      <td>04</td>
+      <td>
+        <div class="sdd-name">Canonical Data Model</div>
+        <div class="sdd-slug">canonical-data-model.md</div>
+        <span class="sdd-tag">data</span>
+        <span class="sdd-tag green">active</span>
+      </td>
+      <td class="sdd-desc">ARTS-anchored, SMB-2030 scoped master data contract. Supersedes data-model.md. Nine domains: Item, Customer, Transaction, Inventory, Receiving, Party, Finance, Operations, Device. GSLM provenance from Walmart International. The schema all services write against.</td>
+    </tr>
+    <tr id="identity">
+      <td>05</td>
+      <td>
+        <div class="sdd-name">Identity</div>
+        <div class="sdd-slug">identity.md</div>
+        <span class="sdd-tag">auth</span>
+      </td>
+      <td class="sdd-desc">Merchant identity and the tenant model. API key auth for agent clients, federated identity path via GCP Cloud Identity. Covers the company_alias namespace, source_code scoping, and the .jeffe namespace registration flow.</td>
+    </tr>
+    <tr id="microservice-architecture">
+      <td>06</td>
+      <td>
+        <div class="sdd-name">Microservice Architecture</div>
+        <div class="sdd-slug">microservice-architecture.md</div>
+        <span class="sdd-tag">platform</span>
+      </td>
+      <td class="sdd-desc">Inter-service communication contracts, Valkey stream event schemas, error handling conventions, and the audit middleware contract. How 29 services stay consistent without tight coupling.</td>
+    </tr>
+  </table>
+
+  <!-- Group 3 -->
+  <div class="group-title">Protocol Pipeline</div>
+  <table class="sdd-table">
+    <tr id="webhook-pipeline">
+      <td>07</td>
+      <td>
+        <div class="sdd-name">Webhook Pipeline</div>
+        <div class="sdd-slug">webhook-pipeline.md</div>
+        <span class="sdd-tag">ingestion</span>
+        <span class="sdd-tag green">live</span>
+      </td>
+      <td class="sdd-desc">Node 2 of the protocol pipeline. HMAC-SHA256 validation, nonce replay protection, payload hash computation, publish to Valkey stream. The front door for all external events (POS, Square, DriftPOS).</td>
+    </tr>
+    <tr id="tsp">
+      <td>08</td>
+      <td>
+        <div class="sdd-name">TSP — Transaction Stream Processor</div>
+        <div class="sdd-slug">tsp.md</div>
+        <span class="sdd-tag">pipeline</span>
+        <span class="sdd-tag green">live</span>
+      </td>
+      <td class="sdd-desc">Three-subscriber pipeline: Sub1 hash-seal, Sub2 parse-route, Sub3 Merkle-ordinal anchor. Each is an independent consumer group on the Valkey stream. The ordinal anchor is the Evidentiary rail in code.</td>
+    </tr>
+    <tr id="chirp">
+      <td>09</td>
+      <td>
+        <div class="sdd-name">Chirp Detection Engine</div>
+        <div class="sdd-slug">chirp.md</div>
+        <span class="sdd-tag">detection</span>
+      </td>
+      <td class="sdd-desc">37 detection rules across 10 categories. Rule threshold tuning, alert routing to hawk case management, and the reserved ILDWAC cost-anomaly rule family (Category 11). The signal layer of the Operational rail.</td>
+    </tr>
+  </table>
+
+  <!-- Group 4 -->
+  <div class="group-title">Integration &amp; Billing</div>
+  <table class="sdd-table">
+    <tr id="mcp-service-junctions">
+      <td>10</td>
+      <td>
+        <div class="sdd-name">MCP Service Junctions</div>
+        <div class="sdd-slug">mcp-service-junctions.md</div>
+        <span class="sdd-tag blue">mcp</span>
+        <span class="sdd-tag green">live</span>
+      </td>
+      <td class="sdd-desc">26 MCP tools across 7 domain modules (alert, analytics, asset, customer, employee, returns, report). The junction inventory — every event traverses here, which is also where billing and the evidentiary record are created. The agent interface to the platform.</td>
+    </tr>
+    <tr id="driftpos-integration">
+      <td>11</td>
+      <td>
+        <div class="sdd-name">DriftPOS Integration Contract</div>
+        <div class="sdd-slug">driftpos-integration.md</div>
+        <span class="sdd-tag blue">integration</span>
+      </td>
+      <td class="sdd-desc">CAN-DESIGN-001. Wire protocol between Canary and RapidPOS (DriftPOS). Event types, auth model, delivery guarantees, and the retry/DLQ contract. The primary channel delivery spec for the VAR partnership.</td>
+    </tr>
+    <tr id="satoshi-cost-rollup">
+      <td>12</td>
+      <td>
+        <div class="sdd-name">Satoshi Cost Rollup</div>
+        <div class="sdd-slug">satoshi-cost-rollup.md</div>
+        <span class="sdd-tag red">billing</span>
+      </td>
+      <td class="sdd-desc">Go types, database schema, calibration loader, metering pipeline, and settlement choreography for satoshi-denominated billing. The Financial rail in code. Every junction traversal pays a toll; the payment IS the audit record.</td>
+    </tr>
+  </table>
+
+  <p class="note">
+    These 12 SDDs are the recommended reading set for new engineers. The full library in <code style="font-family:'JetBrains Mono',monospace;font-size:12px">docs/sdds/go-handoff/</code> contains additional service-level specs (fox, owl, bull, hawk, analytics, receiving, pricing, and others) and operational docs (go-errors, go-observability, go-testing, go-security). Start with the 12 above; reach for the others when you're working in a specific service.
+  </p>
+
+  <footer>
+    <a href="/">← canary.growdirect.io</a> &nbsp;·&nbsp; <a href="https://github.com/growdirect-llc/canary-go">Source</a> &nbsp;·&nbsp; Apache-2.0
+  </footer>
+</div>
+</body>
+</html>

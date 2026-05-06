@@ -3,11 +3,11 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Canary — Loss Prevention for Square</title>
-<meta name="description" content="Real-time fraud detection, case management, and immutable audit trails for Square merchants.">
+<title>Canary Go — Store Operations Platform</title>
+<meta name="description" content="Go implementation of the Canary retail operations platform. Three accountability rails: Operational, Financial, Evidentiary.">
 <link rel="canonical" href="https://canary.growdirect.io/">
-<meta property="og:title" content="Canary — Loss Prevention for Square">
-<meta property="og:description" content="Real-time fraud detection, case management, and immutable audit trails for Square merchants.">
+<meta property="og:title" content="Canary Go — Store Operations Platform">
+<meta property="og:description" content="Go implementation of the Canary retail operations platform. Three accountability rails: Operational, Financial, Evidentiary.">
 <meta property="og:type" content="website">
 <meta property="og:url" content="https://canary.growdirect.io/">
 <meta name="twitter:card" content="summary">
@@ -21,122 +21,212 @@
 </script>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
 <style>
   *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  :root {
+    --bg: #0D1117;
+    --surface: #161B22;
+    --border: #21262D;
+    --text: #E6EDF3;
+    --muted: #8B949E;
+    --dim: #4B5563;
+    --amber: #FBBF24;
+    --amber-dim: #F59E0B;
+    --green: #34D399;
+  }
   body {
     font-family: 'Space Grotesk', system-ui, sans-serif;
-    background: #0D1117;
-    color: #E6EDF3;
-    display: flex;
-    align-items: center;
-    justify-content: center;
+    background: var(--bg);
+    color: var(--text);
     min-height: 100vh;
-    text-align: center;
     -webkit-font-smoothing: antialiased;
   }
-  .splash { max-width: 480px; padding: 24px; }
-  .bird { margin-bottom: 32px; filter: drop-shadow(0 0 32px rgba(251,191,36,0.25)); }
-  h1 {
-    font-size: clamp(28px, 5vw, 40px);
-    font-weight: 700;
-    line-height: 1.15;
-    margin-bottom: 12px;
-  }
-  .sub {
+  .page { max-width: 760px; margin: 0 auto; padding: 64px 24px 96px; }
+
+  /* Header */
+  .header { display: flex; align-items: center; gap: 20px; margin-bottom: 56px; }
+  .bird { flex-shrink: 0; filter: drop-shadow(0 0 20px rgba(251,191,36,0.2)); }
+  .header-text h1 { font-size: 28px; font-weight: 700; line-height: 1.2; }
+  .header-text .tagline { font-size: 14px; color: var(--muted); margin-top: 4px; font-family: 'JetBrains Mono', monospace; }
+
+  /* Intro */
+  .intro {
     font-size: 17px;
-    color: #8B949E;
-    line-height: 1.5;
-    margin-bottom: 36px;
+    line-height: 1.65;
+    color: var(--text);
+    border-left: 2px solid var(--amber);
+    padding-left: 20px;
+    margin-bottom: 48px;
   }
-  .cta {
-    display: inline-flex;
-    align-items: center;
-    gap: 8px;
-    padding: 16px 36px;
-    border: none;
-    border-radius: 12px;
-    background: linear-gradient(135deg, #FBBF24, #F59E0B);
-    color: #0a0a0a;
-    font-size: 17px;
-    font-weight: 700;
-    font-family: inherit;
+
+  /* Rails */
+  .rails { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; margin-bottom: 48px; }
+  .rail {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 20px;
+  }
+  .rail-label { font-size: 11px; font-family: 'JetBrains Mono', monospace; color: var(--amber); text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 8px; }
+  .rail-name { font-size: 15px; font-weight: 600; margin-bottom: 6px; }
+  .rail-desc { font-size: 13px; color: var(--muted); line-height: 1.5; }
+
+  /* Links */
+  .links { display: flex; gap: 12px; flex-wrap: wrap; margin-bottom: 64px; }
+  .link-btn {
+    display: inline-flex; align-items: center; gap: 8px;
+    padding: 12px 22px;
+    border-radius: 8px;
+    font-size: 14px; font-weight: 600;
     text-decoration: none;
-    cursor: pointer;
-    transition: transform 0.1s, box-shadow 0.2s;
-    box-shadow: 0 0 24px rgba(251,191,36,0.15);
+    transition: opacity 0.15s;
   }
-  .cta:hover { transform: translateY(-1px); box-shadow: 0 0 40px rgba(251,191,36,0.25); }
-  .trust {
-    margin-top: 20px;
-    font-size: 13px;
-    color: #6B7280;
+  .link-btn:hover { opacity: 0.85; }
+  .link-primary {
+    background: linear-gradient(135deg, var(--amber), var(--amber-dim));
+    color: #0a0a0a;
   }
-  .byline {
-    margin-top: 48px;
-    font-size: 13px;
-    color: #30363D;
+  .link-secondary {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    color: var(--text);
   }
-  .byline a { color: #30363D; text-decoration: none; }
-  .byline a:hover { color: #FBBF24; }
+
+  /* SDD index preview */
+  .section-title {
+    font-size: 12px;
+    font-family: 'JetBrains Mono', monospace;
+    color: var(--muted);
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    margin-bottom: 16px;
+  }
+  .sdd-list { list-style: none; border: 1px solid var(--border); border-radius: 8px; overflow: hidden; }
+  .sdd-list li { border-bottom: 1px solid var(--border); }
+  .sdd-list li:last-child { border-bottom: none; }
+  .sdd-list a {
+    display: flex; gap: 12px; align-items: baseline;
+    padding: 14px 20px;
+    text-decoration: none;
+    color: var(--text);
+    background: var(--surface);
+    transition: background 0.1s;
+  }
+  .sdd-list a:hover { background: #1c2128; }
+  .sdd-num { font-size: 11px; font-family: 'JetBrains Mono', monospace; color: var(--dim); min-width: 24px; }
+  .sdd-name { font-size: 14px; font-weight: 500; flex: 0 0 auto; min-width: 200px; }
+  .sdd-desc { font-size: 13px; color: var(--muted); line-height: 1.4; }
+  .see-all { margin-top: 12px; }
+  .see-all a { font-size: 13px; color: var(--amber); text-decoration: none; }
+  .see-all a:hover { text-decoration: underline; }
+
+  /* Footer */
+  .footer { margin-top: 80px; padding-top: 24px; border-top: 1px solid var(--border); font-size: 13px; color: var(--dim); }
+  .footer a { color: var(--dim); text-decoration: none; }
+  .footer a:hover { color: var(--amber); }
+
+  @media (max-width: 600px) {
+    .rails { grid-template-columns: 1fr; }
+    .header { flex-direction: column; align-items: flex-start; gap: 12px; }
+    .sdd-name { min-width: unset; }
+    .sdd-desc { display: none; }
+  }
 
   @media (prefers-reduced-motion: no-preference) {
     @keyframes gentle-bob {
       0%, 100% { transform: translateY(0); }
-      50% { transform: translateY(-4px); }
-    }
-    @keyframes beak-open {
-      0%, 40%, 100% { transform: rotate(0deg); }
-      10%, 30% { transform: rotate(-8deg); }
-    }
-    @keyframes beak-close {
-      0%, 40%, 100% { transform: rotate(0deg); }
-      10%, 30% { transform: rotate(6deg); }
+      50% { transform: translateY(-3px); }
     }
     @keyframes wave-pulse {
       0% { opacity: 0; transform: scale(0.7); }
-      30% { opacity: 0.8; }
+      30% { opacity: 0.7; }
       100% { opacity: 0; transform: scale(1.3); }
     }
-    .bird svg > g.bird-body { animation: gentle-bob 3s ease-in-out infinite; }
-    .beak-upper { animation: beak-open 2.2s ease-in-out infinite; }
-    .beak-lower { animation: beak-close 2.2s ease-in-out infinite; }
-    .sound-wave { animation: wave-pulse 2.2s ease-out infinite; }
-    .sound-wave:nth-child(2) { animation-delay: 0.15s; }
-    .sound-wave:nth-child(3) { animation-delay: 0.3s; }
+    .bird-body { animation: gentle-bob 3.5s ease-in-out infinite; }
+    .sound-wave { animation: wave-pulse 2.4s ease-out infinite; }
+    .sound-wave:nth-child(2) { animation-delay: 0.18s; }
+    .sound-wave:nth-child(3) { animation-delay: 0.36s; }
   }
 </style>
 </head>
 <body>
-<div class="splash">
-  <div class="bird">
-    <svg width="120" height="100" viewBox="0 0 160 100" fill="none">
-      <g class="bird-body">
-        <circle cx="42" cy="33" r="18" fill="#FBBF24"/>
-        <ellipse cx="50" cy="58" rx="25" ry="19" fill="#FBBF24"/>
-        <path d="M36 47 Q16 56 26 74 Q38 66 48 54 Z" fill="#F59E0B"/>
-        <circle cx="48" cy="30" r="4" fill="#0D1117"/>
-        <circle cx="46.5" cy="28.8" r="1.5" fill="#FBBF24"/>
-        <g class="beak-upper" transform-origin="58 34">
+<div class="page">
+
+  <header class="header">
+    <div class="bird">
+      <svg width="72" height="60" viewBox="0 0 160 100" fill="none">
+        <g class="bird-body">
+          <circle cx="42" cy="33" r="18" fill="#FBBF24"/>
+          <ellipse cx="50" cy="58" rx="25" ry="19" fill="#FBBF24"/>
+          <path d="M36 47 Q16 56 26 74 Q38 66 48 54 Z" fill="#F59E0B"/>
+          <circle cx="48" cy="30" r="4" fill="#0D1117"/>
+          <circle cx="46.5" cy="28.8" r="1.5" fill="#FBBF24"/>
           <path d="M58 30 L73 24 L63 34 Z" fill="#E8A317"/>
+          <path d="M28 66 Q12 78 18 88 Q28 80 36 72 Z" fill="#F59E0B"/>
         </g>
-        <g class="beak-lower" transform-origin="58 36">
-          <path d="M58 37 L71 40 L63 37 Z" fill="#D97706"/>
+        <g transform="translate(78, 28)">
+          <path class="sound-wave" d="M0 0 Q8 -6 8 0 Q8 6 0 0" fill="none" stroke="#FBBF24" stroke-width="2.5" stroke-linecap="round" opacity="0"/>
+          <path class="sound-wave" d="M6 -4 Q18 -12 18 0 Q18 12 6 4" fill="none" stroke="#F59E0B" stroke-width="2" stroke-linecap="round" opacity="0"/>
+          <path class="sound-wave" d="M12 -8 Q28 -18 28 0 Q28 18 12 8" fill="none" stroke="#059669" stroke-width="1.5" stroke-linecap="round" opacity="0"/>
         </g>
-        <path d="M28 66 Q12 78 18 88 Q28 80 36 72 Z" fill="#F59E0B"/>
-      </g>
-      <g class="sound-waves" transform="translate(78, 28)">
-        <path class="sound-wave" d="M0 0 Q8 -6 8 0 Q8 6 0 0" fill="none" stroke="#FBBF24" stroke-width="2.5" stroke-linecap="round" opacity="0"/>
-        <path class="sound-wave" d="M6 -4 Q18 -12 18 0 Q18 12 6 4" fill="none" stroke="#F59E0B" stroke-width="2" stroke-linecap="round" opacity="0"/>
-        <path class="sound-wave" d="M12 -8 Q28 -18 28 0 Q28 18 12 8" fill="none" stroke="#059669" stroke-width="1.5" stroke-linecap="round" opacity="0"/>
-      </g>
-    </svg>
+      </svg>
+    </div>
+    <div class="header-text">
+      <h1>Canary Go</h1>
+      <div class="tagline">github.com/growdirect-llc/rapidpos</div>
+    </div>
+  </header>
+
+  <p class="intro">
+    Canary is a store operations platform for independent specialty retailers — the kind running NCR Counterpoint or RapidPOS, one to thirty locations, owner-operator. It sits above the POS and connects inventory, receiving, replenishment, and task management to the intelligence layer those merchants have never had access to. The platform enforces three accountability rails that don't exist in any off-the-shelf retail software: Operational (no unknown inventory loss), Financial (L402-gated open-to-buy), and Evidentiary (L2 blockchain hash-anchoring on every state-mutating event). This is the Go implementation — 29 services, GCP, ARTS-native data model, built for the RapidPOS channel.
+  </p>
+
+  <div class="rails">
+    <div class="rail">
+      <div class="rail-label">Rail 1</div>
+      <div class="rail-name">Operational</div>
+      <div class="rail-desc">No unknown inventory loss. Every receiving, transfer, and adjustment is reconciled before it clears the store ledger.</div>
+    </div>
+    <div class="rail">
+      <div class="rail-label">Rail 2</div>
+      <div class="rail-name">Financial</div>
+      <div class="rail-desc">L402-gated open-to-buy. Purchase authority is metered in satoshis — the budget is provable, not just promised.</div>
+    </div>
+    <div class="rail">
+      <div class="rail-label">Rail 3</div>
+      <div class="rail-name">Evidentiary</div>
+      <div class="rail-desc">Every state-mutating event is hash-anchored to a Bitcoin L2 chain. The audit trail is not a log — it's a ledger.</div>
+    </div>
   </div>
-  <h1>Canary</h1>
-  <p class="sub">Loss prevention for Square merchants. Real-time detection, case management, and immutable audit trails.</p>
-  <a href="https://growdirect.io/canary/" class="cta">See How It Works</a>
-  <p class="trust">Built on Square APIs · 37 detection rules live</p>
-  <div class="byline"><a href="https://growdirect.io">GrowDirect</a></div>
+
+  <div class="links">
+    <a href="https://demo.growdirect.io" class="link-btn link-primary">Live Demo ↗</a>
+    <a href="https://github.com/growdirect-llc/canary-go" class="link-btn link-secondary">Source →</a>
+    <a href="/sdds/" class="link-btn link-secondary">SDD Index →</a>
+  </div>
+
+  <div class="section-title">Design Documents — Reading Order</div>
+  <ul class="sdd-list">
+    <li><a href="/sdds/#platform-overview"><span class="sdd-num">01</span><span class="sdd-name">Platform Overview</span><span class="sdd-desc">What Canary is, who it serves, and why the three accountability rails matter</span></a></li>
+    <li><a href="/sdds/#architecture"><span class="sdd-num">02</span><span class="sdd-name">Architecture</span><span class="sdd-desc">Service topology: 29 modules, Chi HTTP, pgx, Valkey streams</span></a></li>
+    <li><a href="/sdds/#go-module-layout"><span class="sdd-num">03</span><span class="sdd-name">Go Module Layout</span><span class="sdd-desc">Read this before touching any file — repo structure, naming, service boundaries</span></a></li>
+    <li><a href="/sdds/#canonical-data-model"><span class="sdd-num">04</span><span class="sdd-name">Canonical Data Model</span><span class="sdd-desc">ARTS-anchored, SMB-2030 scoped, GSLM provenance — the master data contract</span></a></li>
+    <li><a href="/sdds/#identity"><span class="sdd-num">05</span><span class="sdd-name">Identity</span><span class="sdd-desc">Merchant identity, tenant model, API key auth, federated identity path</span></a></li>
+    <li><a href="/sdds/#webhook-pipeline"><span class="sdd-num">06</span><span class="sdd-name">Webhook Pipeline</span><span class="sdd-desc">HMAC-validated event ingestion gateway — Node 2 of the protocol pipeline</span></a></li>
+    <li><a href="/sdds/#tsp"><span class="sdd-num">07</span><span class="sdd-name">TSP</span><span class="sdd-desc">Transaction Stream Processor: hash-seal → parse-route → Merkle-ordinal pipeline</span></a></li>
+    <li><a href="/sdds/#chirp"><span class="sdd-num">08</span><span class="sdd-name">Chirp Detection Engine</span><span class="sdd-desc">37 detection rules, threshold tuning, alert routing</span></a></li>
+    <li><a href="/sdds/#mcp-service-junctions"><span class="sdd-num">09</span><span class="sdd-name">MCP Service Junctions</span><span class="sdd-desc">26 MCP tools across 7 modules — the agent interface to the platform</span></a></li>
+    <li><a href="/sdds/#driftpos-integration"><span class="sdd-num">10</span><span class="sdd-name">DriftPOS Integration</span><span class="sdd-desc">Wire protocol between Canary and RapidPOS (CAN-DESIGN-001)</span></a></li>
+    <li><a href="/sdds/#satoshi-cost-rollup"><span class="sdd-num">11</span><span class="sdd-name">Satoshi Cost Rollup</span><span class="sdd-desc">Go types, DB schema, calibration, and settlement for satoshi-denominated billing</span></a></li>
+    <li><a href="/sdds/#microservice-architecture"><span class="sdd-num">12</span><span class="sdd-name">Microservice Architecture</span><span class="sdd-desc">Inter-service communication contracts, event schemas, error handling conventions</span></a></li>
+  </ul>
+  <div class="see-all"><a href="/sdds/">View full SDD index →</a></div>
+
+  <footer class="footer">
+    <a href="https://growdirect.io">GrowDirect LLC</a> · Apache-2.0
+  </footer>
+
 </div>
 </body>
 </html>
