@@ -280,7 +280,7 @@
         <div class="sdd-slug">tsp-merkle.md</div>
         <span class="sdd-tag">pipeline</span>
       </td>
-      <td class="sdd-desc">Converts a stream of sealed event hashes into a compact, blockchain-verifiable commitment. The ordinal anchor is the Evidentiary rail in code — hash batch on-chain, individual hashes stay off-chain.</td>
+      <td class="sdd-desc">Converts a stream of sealed event hashes into a compact, cryptographically verifiable commitment. The ordinal anchor is the Evidentiary rail in code — hash batch on-chain, individual hashes stay off-chain.</td>
     </tr>
     <tr id="tsp-detect">
       <td>21</td>
@@ -397,7 +397,7 @@
         <div class="sdd-slug">satoshi-cost-rollup.md</div>
         <span class="sdd-tag red">billing</span>
       </td>
-      <td class="sdd-desc">Go types, database schema, calibration loader, metering pipeline, and settlement choreography for satoshi-denominated billing. Every junction traversal pays a toll; the payment IS the audit record.</td>
+      <td class="sdd-desc">Go types, database schema, calibration loader, metering pipeline, and settlement choreography for per-event metered billing. Every junction traversal pays a toll; the payment IS the audit record.</td>
     </tr>
     <tr id="blockchain-anchor">
       <td>32</td>
@@ -406,7 +406,7 @@
         <div class="sdd-slug">blockchain-anchor.md</div>
         <span class="sdd-tag red">billing</span>
       </td>
-      <td class="sdd-desc">Publishes RaaS chain hashes and ILDWAC RIB batch seals to an L2 Bitcoin chain. The S4 permanence tier — merchant holds the S3 encryption key, Canary holds the ciphertext, the chain holds the hash.</td>
+      <td class="sdd-desc">Publishes RaaS chain hashes and ILDWAC RIB batch seals to a cryptographic ledger. The S4 permanence tier — merchant holds the S3 encryption key, Canary holds the ciphertext, the ledger holds the hash.</td>
     </tr>
     <tr id="ildwac">
       <td>33</td>
@@ -415,7 +415,7 @@
         <div class="sdd-slug">ildwac.md</div>
         <span class="sdd-tag red">billing</span>
       </td>
-      <td class="sdd-desc">Item × Location × Device × MCP × Port × Weighted Average Cost. Provenance-weighted cost model denominated in satoshis. Five dimensions that replace the seat-pricing conversation with a verifiable cost-to-serve.</td>
+      <td class="sdd-desc">Item × Location × Device × MCP × Port × Weighted Average Cost. Provenance-weighted cost model for per-event billing. Five dimensions that replace the seat-pricing conversation with a verifiable cost-to-serve.</td>
     </tr>
     <tr id="l402-otb">
       <td>34</td>
@@ -424,7 +424,7 @@
         <div class="sdd-slug">l402-otb.md</div>
         <span class="sdd-tag red">billing</span>
       </td>
-      <td class="sdd-desc">Bitcoin L402 payment-gated purchase authorization. Enforces open-to-buy budgets at the protocol level — the Financial rail in code. Budget exhaustion blocks purchase requests cryptographically.</td>
+      <td class="sdd-desc">L402 payment-gated purchase authorization. Enforces open-to-buy budgets at the protocol level — the Financial rail in code. Budget exhaustion blocks purchase requests cryptographically.</td>
     </tr>
     <tr id="feed-tier-contract">
       <td>35</td>

@@ -179,7 +179,7 @@
   </header>
 
   <p class="intro">
-    Canary is a store operations platform for independent specialty retailers — the kind running NCR Counterpoint or RapidPOS, one to thirty locations, owner-operator. It sits above the POS and connects inventory, receiving, replenishment, and task management to the intelligence layer those merchants have never had access to. The platform enforces three accountability rails that don't exist in any off-the-shelf retail software: Operational (no unknown inventory loss), Financial (L402-gated open-to-buy), and Evidentiary (L2 blockchain hash-anchoring on every state-mutating event). This is the Go implementation — 29 services, GCP, ARTS-native data model, built for the RapidPOS channel.
+    Canary is a store operations platform for independent specialty retailers — the kind running NCR Counterpoint or RapidPOS, one to thirty locations, owner-operator. It sits above the POS and connects inventory, receiving, replenishment, and task management to the intelligence layer those merchants have never had access to. The platform enforces three accountability rails that don't exist in any off-the-shelf retail software: Operational (no unknown inventory loss), Financial (L402-gated open-to-buy), and Evidentiary (cryptographic hash-anchoring on every state-mutating event). This is the Go implementation — 29 services, GCP, ARTS-native data model, built for the RapidPOS channel.
   </p>
 
   <div class="rails">
@@ -191,12 +191,12 @@
     <div class="rail">
       <div class="rail-label">Rail 2</div>
       <div class="rail-name">Financial</div>
-      <div class="rail-desc">L402-gated open-to-buy. Purchase authority is metered in satoshis — the budget is provable, not just promised.</div>
+      <div class="rail-desc">L402-gated open-to-buy. Purchase authority is metered and enforced at the protocol level — the budget is provable, not just promised.</div>
     </div>
     <div class="rail">
       <div class="rail-label">Rail 3</div>
       <div class="rail-name">Evidentiary</div>
-      <div class="rail-desc">Every state-mutating event is hash-anchored to a Bitcoin L2 chain. The audit trail is not a log — it's a ledger.</div>
+      <div class="rail-desc">Every state-mutating event is hash-anchored and cryptographically sealed. The audit trail is not a log — it's a ledger.</div>
     </div>
   </div>
 
@@ -219,7 +219,7 @@
     <li><a href="/sdds/#chirp"><span class="sdd-num">08</span><span class="sdd-name">Chirp Detection Engine</span><span class="sdd-desc">37 detection rules, threshold tuning, alert routing</span></a></li>
     <li><a href="/sdds/#mcp-service-junctions"><span class="sdd-num">09</span><span class="sdd-name">MCP Service Junctions</span><span class="sdd-desc">26 MCP tools across 7 modules — the agent interface to the platform</span></a></li>
     <li><a href="/sdds/#driftpos-integration"><span class="sdd-num">10</span><span class="sdd-name">DriftPOS Integration</span><span class="sdd-desc">Wire protocol between Canary and RapidPOS (CAN-DESIGN-001)</span></a></li>
-    <li><a href="/sdds/#satoshi-cost-rollup"><span class="sdd-num">11</span><span class="sdd-name">Satoshi Cost Rollup</span><span class="sdd-desc">Go types, DB schema, calibration, and settlement for satoshi-denominated billing</span></a></li>
+    <li><a href="/sdds/#satoshi-cost-rollup"><span class="sdd-num">11</span><span class="sdd-name">Satoshi Cost Rollup</span><span class="sdd-desc">Go types, DB schema, calibration, and settlement for per-event metered billing</span></a></li>
     <li><a href="/sdds/#microservice-architecture"><span class="sdd-num">12</span><span class="sdd-name">Microservice Architecture</span><span class="sdd-desc">Inter-service communication contracts, event schemas, error handling conventions</span></a></li>
   </ul>
   <div class="see-all"><a href="/sdds/">View full SDD index →</a></div>
