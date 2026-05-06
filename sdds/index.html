@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>SDD Index — Canary Go</title>
-<meta name="description" content="Design document index for the Canary Go platform. 12 SDDs in recommended reading order.">
+<meta name="description" content="Full design document library for the Canary Go platform. 60 SDDs across 12 domains.">
 <link rel="canonical" href="https://canary.growdirect.io/sdds/">
 <meta property="og:title" content="SDD Index — Canary Go">
 <meta property="og:type" content="website">
@@ -24,7 +24,11 @@
   .breadcrumb a { color: var(--dim); text-decoration: none; }
   .breadcrumb a:hover { color: var(--amber); }
   h1 { font-size: 26px; font-weight: 700; margin-bottom: 8px; }
-  .subtitle { font-size: 14px; color: var(--muted); margin-bottom: 48px; line-height: 1.5; }
+  .subtitle { font-size: 14px; color: var(--muted); margin-bottom: 40px; line-height: 1.5; }
+
+  .toc { font-size: 12px; font-family: 'JetBrains Mono', monospace; color: var(--dim); margin-bottom: 48px; line-height: 2.2; }
+  .toc a { color: var(--dim); text-decoration: none; margin-right: 20px; }
+  .toc a:hover { color: var(--amber); }
 
   .group-title {
     font-size: 11px; font-family: 'JetBrains Mono', monospace;
@@ -45,6 +49,7 @@
   .sdd-tag.green { background: rgba(52,211,153,0.1); color: #34D399; }
   .sdd-tag.blue { background: rgba(96,165,250,0.1); color: #60A5FA; }
   .sdd-tag.red { background: rgba(248,113,113,0.1); color: #F87171; }
+  .sdd-tag.gray { background: rgba(107,114,128,0.15); color: #6B7280; }
 
   .note { font-size: 13px; color: var(--muted); border-left: 2px solid var(--border); padding-left: 16px; margin-top: 48px; line-height: 1.6; }
 
@@ -57,10 +62,25 @@
 <div class="page">
   <div class="breadcrumb"><a href="/">canary.growdirect.io</a> / sdds</div>
   <h1>Design Documents</h1>
-  <p class="subtitle">12 SDDs in recommended reading order. Start at 01 if you're new to the codebase.<br>Source: <code style="font-family:'JetBrains Mono',monospace;font-size:12px;color:var(--dim)">GrowDirect/docs/sdds/go-handoff/</code></p>
+  <p class="subtitle">60 SDDs across 12 domain groups. Start at 01 if you're new to the codebase — 01–04 are the orientation set.<br>Source: <code style="font-family:'JetBrains Mono',monospace;font-size:12px;color:var(--dim)">GrowDirect/docs/sdds/go-handoff/</code></p>
 
-  <!-- Group 1 -->
-  <div class="group-title">Orientation — Read First</div>
+  <div class="toc">
+    <a href="#group-orientation">Orientation</a>
+    <a href="#group-data-model">Data Model</a>
+    <a href="#group-identity">Identity &amp; Party</a>
+    <a href="#group-pipeline">Protocol Pipeline</a>
+    <a href="#group-detection">Detection &amp; Cases</a>
+    <a href="#group-adapters">POS Adapters</a>
+    <a href="#group-integration">Integration &amp; Billing</a>
+    <a href="#group-inventory">Inventory &amp; Receiving</a>
+    <a href="#group-commerce">Commerce &amp; Compliance</a>
+    <a href="#group-intelligence">Intelligence &amp; Ops</a>
+    <a href="#group-devices">Devices &amp; Cloud</a>
+    <a href="#group-go">Go Platform</a>
+  </div>
+
+  <!-- Group 1: Orientation -->
+  <div class="group-title" id="group-orientation">Orientation — Read First</div>
   <table class="sdd-table">
     <tr id="platform-overview">
       <td>01</td>
@@ -80,8 +100,17 @@
       </td>
       <td class="sdd-desc">Service topology across 29 modules. Chi HTTP, pgx/v5, Valkey streams, GCP Cloud Run. Shows how the protocol pipeline (Node 1–4), the module stores, and the MCP surface hang together. Start here for the wiring picture.</td>
     </tr>
-    <tr id="go-module-layout">
+    <tr id="microservice-architecture">
       <td>03</td>
+      <td>
+        <div class="sdd-name">Microservice Architecture</div>
+        <div class="sdd-slug">microservice-architecture.md</div>
+        <span class="sdd-tag">platform</span>
+      </td>
+      <td class="sdd-desc">Inter-service communication contracts, Valkey stream event schemas, error handling conventions, and the audit middleware contract. How 29 services stay consistent without tight coupling.</td>
+    </tr>
+    <tr id="go-module-layout">
+      <td>04</td>
       <td>
         <div class="sdd-name">Go Module Layout</div>
         <div class="sdd-slug">go-module-layout.md</div>
@@ -92,21 +121,63 @@
     </tr>
   </table>
 
-  <!-- Group 2 -->
-  <div class="group-title">Data Layer</div>
+  <!-- Group 2: Canonical Data Model -->
+  <div class="group-title" id="group-data-model">Canonical Data Model</div>
   <table class="sdd-table">
     <tr id="canonical-data-model">
-      <td>04</td>
+      <td>05</td>
       <td>
         <div class="sdd-name">Canonical Data Model</div>
         <div class="sdd-slug">canonical-data-model.md</div>
         <span class="sdd-tag">data</span>
         <span class="sdd-tag green">active</span>
       </td>
-      <td class="sdd-desc">ARTS-anchored, SMB-2030 scoped master data contract. Supersedes data-model.md. Nine domains: Item, Customer, Transaction, Inventory, Receiving, Party, Finance, Operations, Device. GSLM provenance from Walmart International. The schema all services write against.</td>
+      <td class="sdd-desc">ARTS-anchored, SMB-2030 scoped master data contract. Nine domains: Item, Customer, Transaction, Inventory, Receiving, Party, Finance, Operations, Device. 65 designed entities across 11 schemas. GSLM provenance from Walmart International. The schema all services write against.</td>
     </tr>
+    <tr id="canonical-data-model-delta">
+      <td>06</td>
+      <td>
+        <div class="sdd-name">Canonical Data Model — Delta</div>
+        <div class="sdd-slug">canonical-data-model-delta.md</div>
+        <span class="sdd-tag">data</span>
+      </td>
+      <td class="sdd-desc">What changed from data-model.md v0 to canonical-data-model.md v1, and why. Tracks additions, removals, renames, and the rationale for each. Read alongside the main CDM spec when auditing schema changes.</td>
+    </tr>
+    <tr id="canonical-data-model-party-edits">
+      <td>07</td>
+      <td>
+        <div class="sdd-name">Canonical Data Model — Party Edits</div>
+        <div class="sdd-slug">canonical-data-model-party-edits.md</div>
+        <span class="sdd-tag">data</span>
+        <span class="sdd-tag gray">proposed</span>
+      </td>
+      <td class="sdd-desc">GRO-734 party identity edits to the canonical data model. Apply after design review — proposed, not yet merged into the main CDM spec.</td>
+    </tr>
+    <tr id="canonical-data-model-portability-review">
+      <td>08</td>
+      <td>
+        <div class="sdd-name">Canonical Data Model — Portability Review</div>
+        <div class="sdd-slug">canonical-data-model-portability-review.md</div>
+        <span class="sdd-tag">data</span>
+      </td>
+      <td class="sdd-desc">Audits the 65-entity canonical model for cloud provider lock-in. Confirms GCP-targeted architecture can exit without a schema rebuild — "target GCP, don't get hostage to it."</td>
+    </tr>
+    <tr id="data-model">
+      <td>09</td>
+      <td>
+        <div class="sdd-name">Data Model (v0)</div>
+        <div class="sdd-slug">data-model.md</div>
+        <span class="sdd-tag gray">legacy</span>
+      </td>
+      <td class="sdd-desc">Cross-schema reference document from the pre-CDM era. The original PII map anchor. Reference only — superseded by canonical-data-model.md for all new work.</td>
+    </tr>
+  </table>
+
+  <!-- Group 3: Identity & Party -->
+  <div class="group-title" id="group-identity">Identity &amp; Party</div>
+  <table class="sdd-table">
     <tr id="identity">
-      <td>05</td>
+      <td>10</td>
       <td>
         <div class="sdd-name">Identity</div>
         <div class="sdd-slug">identity.md</div>
@@ -114,22 +185,58 @@
       </td>
       <td class="sdd-desc">Merchant identity and the tenant model. API key auth for agent clients, federated identity path via GCP Cloud Identity. Covers the company_alias namespace, source_code scoping, and the .jeffe namespace registration flow.</td>
     </tr>
-    <tr id="microservice-architecture">
-      <td>06</td>
+    <tr id="raas">
+      <td>11</td>
       <td>
-        <div class="sdd-name">Microservice Architecture</div>
-        <div class="sdd-slug">microservice-architecture.md</div>
+        <div class="sdd-name">RaaS — Resolution as a Service</div>
+        <div class="sdd-slug">raas.md</div>
+        <span class="sdd-tag">auth</span>
+      </td>
+      <td class="sdd-desc">Namespace authority for the platform. Assigns canonical merchant identity tokens (raas:{merchant_id}), manages the source_code registry, and provides resolution services across all POS integrations.</td>
+    </tr>
+    <tr id="external-identities">
+      <td>12</td>
+      <td>
+        <div class="sdd-name">External Identities</div>
+        <div class="sdd-slug">external-identities.md</div>
+        <span class="sdd-tag">auth</span>
+      </td>
+      <td class="sdd-desc">Square OAuth and NCR Counterpoint external identity adapters. Different protocols, same outcome: stable Canary-native identifiers from external POS sources.</td>
+    </tr>
+    <tr id="party-identity-design">
+      <td>13</td>
+      <td>
+        <div class="sdd-name">Party Identity &amp; Householding</div>
+        <div class="sdd-slug">party-identity-design.md</div>
+        <span class="sdd-tag">data</span>
+      </td>
+      <td class="sdd-desc">Party resolution, fingerprinting, and householding. Matches anonymous payment identities to customer records without relying on the POS to stitch them. Required when Canary is the sole intelligence layer above the POS.</td>
+    </tr>
+    <tr id="settings">
+      <td>14</td>
+      <td>
+        <div class="sdd-name">Settings</div>
+        <div class="sdd-slug">settings.md</div>
         <span class="sdd-tag">platform</span>
       </td>
-      <td class="sdd-desc">Inter-service communication contracts, Valkey stream event schemas, error handling conventions, and the audit middleware contract. How 29 services stay consistent without tight coupling.</td>
+      <td class="sdd-desc">Configuration substrate for every other Canary module. An internal integration layer, not a standalone service — all merchant and system configuration reads flow through this domain.</td>
+    </tr>
+    <tr id="field-capture">
+      <td>15</td>
+      <td>
+        <div class="sdd-name">Field Capture</div>
+        <div class="sdd-slug">field-capture.md</div>
+        <span class="sdd-tag">ingestion</span>
+      </td>
+      <td class="sdd-desc">Maps arbitrary inbound field names to canonical Canary field registry names. The translation layer at the intake boundary — keeps the canonical model clean regardless of upstream POS naming conventions.</td>
     </tr>
   </table>
 
-  <!-- Group 3 -->
-  <div class="group-title">Protocol Pipeline</div>
+  <!-- Group 4: Protocol Pipeline -->
+  <div class="group-title" id="group-pipeline">Protocol Pipeline</div>
   <table class="sdd-table">
     <tr id="webhook-pipeline">
-      <td>07</td>
+      <td>16</td>
       <td>
         <div class="sdd-name">Webhook Pipeline</div>
         <div class="sdd-slug">webhook-pipeline.md</div>
@@ -139,17 +246,58 @@
       <td class="sdd-desc">Node 2 of the protocol pipeline. HMAC-SHA256 validation, nonce replay protection, payload hash computation, publish to Valkey stream. The front door for all external events (POS, Square, DriftPOS).</td>
     </tr>
     <tr id="tsp">
-      <td>08</td>
+      <td>17</td>
       <td>
         <div class="sdd-name">TSP — Transaction Stream Processor</div>
         <div class="sdd-slug">tsp.md</div>
         <span class="sdd-tag">pipeline</span>
         <span class="sdd-tag green">live</span>
       </td>
-      <td class="sdd-desc">Three-subscriber pipeline: Sub1 hash-seal, Sub2 parse-route, Sub3 Merkle-ordinal anchor. Each is an independent consumer group on the Valkey stream. The ordinal anchor is the Evidentiary rail in code.</td>
+      <td class="sdd-desc">Four-stage pipeline overview: seal → parse → Merkle batch → detect. Each stage is an independent consumer group on the Valkey stream. Read this SDD first, then the four stage-specific specs (18–21) when working on a stage.</td>
     </tr>
+    <tr id="tsp-seal">
+      <td>18</td>
+      <td>
+        <div class="sdd-name">TSP Stage 1 — Hash &amp; Seal</div>
+        <div class="sdd-slug">tsp-seal.md</div>
+        <span class="sdd-tag">pipeline</span>
+      </td>
+      <td class="sdd-desc">Transforms raw POS events into sealed, hash-anchored stream messages. Single responsibility: non-repudiation of every inbound event before it touches any domain logic.</td>
+    </tr>
+    <tr id="tsp-parse">
+      <td>19</td>
+      <td>
+        <div class="sdd-name">TSP Stage 2 — Parse &amp; Route</div>
+        <div class="sdd-slug">tsp-parse.md</div>
+        <span class="sdd-tag">pipeline</span>
+      </td>
+      <td class="sdd-desc">Translates sealed stream messages into canonical events and routes to domain consumers. Produces a structured payload for domain services and a source-attributed record for the Merkle batcher.</td>
+    </tr>
+    <tr id="tsp-merkle">
+      <td>20</td>
+      <td>
+        <div class="sdd-name">TSP Stage 3 — Merkle Batcher</div>
+        <div class="sdd-slug">tsp-merkle.md</div>
+        <span class="sdd-tag">pipeline</span>
+      </td>
+      <td class="sdd-desc">Converts a stream of sealed event hashes into a compact, blockchain-verifiable commitment. The ordinal anchor is the Evidentiary rail in code — hash batch on-chain, individual hashes stay off-chain.</td>
+    </tr>
+    <tr id="tsp-detect">
+      <td>21</td>
+      <td>
+        <div class="sdd-name">TSP Stage 4 — Chirp Detection</div>
+        <div class="sdd-slug">tsp-detect.md</div>
+        <span class="sdd-tag">pipeline</span>
+      </td>
+      <td class="sdd-desc">The detection engine that evaluates every canonical transaction event against the full Chirp rule set. Routes exceptions to hawk case management. Stage 4 is where sealed events become actionable intelligence.</td>
+    </tr>
+  </table>
+
+  <!-- Group 5: Detection & Cases -->
+  <div class="group-title" id="group-detection">Detection, Alerts &amp; Cases</div>
+  <table class="sdd-table">
     <tr id="chirp">
-      <td>09</td>
+      <td>22</td>
       <td>
         <div class="sdd-name">Chirp Detection Engine</div>
         <div class="sdd-slug">chirp.md</div>
@@ -157,43 +305,398 @@
       </td>
       <td class="sdd-desc">37 detection rules across 10 categories. Rule threshold tuning, alert routing to hawk case management, and the reserved ILDWAC cost-anomaly rule family (Category 11). The signal layer of the Operational rail.</td>
     </tr>
+    <tr id="alert">
+      <td>23</td>
+      <td>
+        <div class="sdd-name">Alert</div>
+        <div class="sdd-slug">alert.md</div>
+        <span class="sdd-tag">detection</span>
+      </td>
+      <td class="sdd-desc">Terminal consumer of the detection pipeline. Chirp writes alert rows; Alert owns routing, delivery SLAs, acknowledgement, and lifecycle management. The operator-facing surface of the detection engine.</td>
+    </tr>
+    <tr id="fox">
+      <td>24</td>
+      <td>
+        <div class="sdd-name">Fox — Case Management &amp; Evidence Locker</div>
+        <div class="sdd-slug">fox.md</div>
+        <span class="sdd-tag">detection</span>
+      </td>
+      <td class="sdd-desc">Bridges automated anomaly detection to human review. "The Vault" — a case carries the full evidence trail: triggering alert, sealed event chain, attached media, and investigator notes.</td>
+    </tr>
+    <tr id="hawk-case-management">
+      <td>25</td>
+      <td>
+        <div class="sdd-name">Hawk — Square Adapter &amp; Incident Cases</div>
+        <div class="sdd-slug">hawk-case-management.md</div>
+        <span class="sdd-tag">detection</span>
+        <span class="sdd-tag blue">integration</span>
+      </td>
+      <td class="sdd-desc">Square POS adapter and incident-typed case management. Extends Fox with transaction-aware cases for Square-sourced events. Reference implementation of the POS adapter substrate alongside Bull (NCR).</td>
+    </tr>
   </table>
 
-  <!-- Group 4 -->
-  <div class="group-title">Integration &amp; Billing</div>
+  <!-- Group 6: POS Adapters -->
+  <div class="group-title" id="group-adapters">POS Adapters</div>
+  <table class="sdd-table">
+    <tr id="pos-adapter-substrate">
+      <td>26</td>
+      <td>
+        <div class="sdd-name">POS Adapter Substrate</div>
+        <div class="sdd-slug">pos-adapter-substrate.md</div>
+        <span class="sdd-tag blue">integration</span>
+        <span class="sdd-tag green">required</span>
+      </td>
+      <td class="sdd-desc">The substrate that makes Canary genuinely multi-POS. Defines the interface all POS integrations implement — current (Square, NCR Counterpoint) and future. Swap the adapter; keep the platform.</td>
+    </tr>
+    <tr id="bull">
+      <td>27</td>
+      <td>
+        <div class="sdd-name">Bull — NCR Counterpoint Adapter</div>
+        <div class="sdd-slug">bull.md</div>
+        <span class="sdd-tag blue">integration</span>
+      </td>
+      <td class="sdd-desc">Reference implementation of the POS adapter substrate for RapidPOS / NCR Counterpoint REST API. Covers Distribution Intelligence Layer event mapping and the Counterpoint auth model.</td>
+    </tr>
+    <tr id="multi-pos-architecture-proof">
+      <td>28</td>
+      <td>
+        <div class="sdd-name">Multi-POS Architecture Proof</div>
+        <div class="sdd-slug">multi-pos-architecture-proof.md</div>
+        <span class="sdd-tag blue">integration</span>
+      </td>
+      <td class="sdd-desc">Demonstrates adapter pattern isolation and canonical event conversion across Square and NCR. Proof that the abstraction layer holds — same detection pipeline regardless of POS source.</td>
+    </tr>
+  </table>
+
+  <!-- Group 7: Integration & Billing -->
+  <div class="group-title" id="group-integration">Integration &amp; Billing</div>
   <table class="sdd-table">
     <tr id="mcp-service-junctions">
-      <td>10</td>
+      <td>29</td>
       <td>
         <div class="sdd-name">MCP Service Junctions</div>
         <div class="sdd-slug">mcp-service-junctions.md</div>
         <span class="sdd-tag blue">mcp</span>
         <span class="sdd-tag green">live</span>
       </td>
-      <td class="sdd-desc">26 MCP tools across 7 domain modules (alert, analytics, asset, customer, employee, returns, report). The junction inventory — every event traverses here, which is also where billing and the evidentiary record are created. The agent interface to the platform.</td>
+      <td class="sdd-desc">28 MCP tools across 7 domain modules (alert, analytics, asset, customer, employee, returns, report). The junction inventory — every event traverses here, which is also where billing and the evidentiary record are created. The agent interface to the platform.</td>
     </tr>
     <tr id="driftpos-integration">
-      <td>11</td>
+      <td>30</td>
       <td>
         <div class="sdd-name">DriftPOS Integration Contract</div>
         <div class="sdd-slug">driftpos-integration.md</div>
         <span class="sdd-tag blue">integration</span>
       </td>
-      <td class="sdd-desc">CAN-DESIGN-001. Wire protocol between Canary and RapidPOS (DriftPOS). Event types, auth model, delivery guarantees, and the retry/DLQ contract. The primary channel delivery spec for the VAR partnership.</td>
+      <td class="sdd-desc">CAN-DESIGN-001. Wire protocol between Canary and RapidPOS (DriftPOS). 47 endpoints across 9 domains, 38 ARTS-aligned wire entities. The primary channel delivery spec for the VAR partnership.</td>
     </tr>
     <tr id="satoshi-cost-rollup">
-      <td>12</td>
+      <td>31</td>
       <td>
         <div class="sdd-name">Satoshi Cost Rollup</div>
         <div class="sdd-slug">satoshi-cost-rollup.md</div>
         <span class="sdd-tag red">billing</span>
       </td>
-      <td class="sdd-desc">Go types, database schema, calibration loader, metering pipeline, and settlement choreography for satoshi-denominated billing. The Financial rail in code. Every junction traversal pays a toll; the payment IS the audit record.</td>
+      <td class="sdd-desc">Go types, database schema, calibration loader, metering pipeline, and settlement choreography for satoshi-denominated billing. Every junction traversal pays a toll; the payment IS the audit record.</td>
+    </tr>
+    <tr id="blockchain-anchor">
+      <td>32</td>
+      <td>
+        <div class="sdd-name">Blockchain Anchor</div>
+        <div class="sdd-slug">blockchain-anchor.md</div>
+        <span class="sdd-tag red">billing</span>
+      </td>
+      <td class="sdd-desc">Publishes RaaS chain hashes and ILDWAC RIB batch seals to an L2 Bitcoin chain. The S4 permanence tier — merchant holds the S3 encryption key, Canary holds the ciphertext, the chain holds the hash.</td>
+    </tr>
+    <tr id="ildwac">
+      <td>33</td>
+      <td>
+        <div class="sdd-name">ILDWAC — Provenance-Weighted Cost</div>
+        <div class="sdd-slug">ildwac.md</div>
+        <span class="sdd-tag red">billing</span>
+      </td>
+      <td class="sdd-desc">Item × Location × Device × MCP × Port × Weighted Average Cost. Provenance-weighted cost model denominated in satoshis. Five dimensions that replace the seat-pricing conversation with a verifiable cost-to-serve.</td>
+    </tr>
+    <tr id="l402-otb">
+      <td>34</td>
+      <td>
+        <div class="sdd-name">L402-OTB — Open-to-Buy Enforcement</div>
+        <div class="sdd-slug">l402-otb.md</div>
+        <span class="sdd-tag red">billing</span>
+      </td>
+      <td class="sdd-desc">Bitcoin L402 payment-gated purchase authorization. Enforces open-to-buy budgets at the protocol level — the Financial rail in code. Budget exhaustion blocks purchase requests cryptographically.</td>
+    </tr>
+    <tr id="feed-tier-contract">
+      <td>35</td>
+      <td>
+        <div class="sdd-name">Feed-Tier Contract</div>
+        <div class="sdd-slug">feed-tier-contract.md</div>
+        <span class="sdd-tag blue">integration</span>
+      </td>
+      <td class="sdd-desc">Buildable spec for the cadence ladder. Per-tier weights, delivery SLAs, retry contracts, and the YAML calibration format that translates the feed tier card into deployable configuration.</td>
+    </tr>
+  </table>
+
+  <!-- Group 8: Inventory & Receiving -->
+  <div class="group-title" id="group-inventory">Inventory &amp; Receiving</div>
+  <table class="sdd-table">
+    <tr id="item">
+      <td>36</td>
+      <td>
+        <div class="sdd-name">Item</div>
+        <div class="sdd-slug">item.md</div>
+        <span class="sdd-tag">domain</span>
+      </td>
+      <td class="sdd-desc">Item master — canonical source of truth for what a merchant sells. 34 attributes, multi-location pricing, supplier cross-references, and UPC/PLU/SKU normalization. Foundation of the data model.</td>
+    </tr>
+    <tr id="inventory-as-a-service">
+      <td>37</td>
+      <td>
+        <div class="sdd-name">IaaS — Inventory as a Service</div>
+        <div class="sdd-slug">inventory-as-a-service.md</div>
+        <span class="sdd-tag">domain</span>
+      </td>
+      <td class="sdd-desc">Shared inventory position engine for the platform. Not embedded per-module — a platform service that answers inventory position queries for all consumers with a consistent, event-sourced view.</td>
+    </tr>
+    <tr id="receiving">
+      <td>38</td>
+      <td>
+        <div class="sdd-name">Receiving</div>
+        <div class="sdd-slug">receiving.md</div>
+        <span class="sdd-tag">domain</span>
+      </td>
+      <td class="sdd-desc">PO-to-dock reconciliation. ASN handling, variance capture, three-way match trigger, and the damage/shortage exception workflow. Where vendor promises meet physical reality.</td>
+    </tr>
+    <tr id="three-way-match">
+      <td>39</td>
+      <td>
+        <div class="sdd-name">Three-Way Match</div>
+        <div class="sdd-slug">three-way-match.md</div>
+        <span class="sdd-tag">domain</span>
+      </td>
+      <td class="sdd-desc">PO quantity, received quantity, and vendor invoice quantity reconciliation. The oldest control in procurement — implemented as a platform service so every module gets the control without re-implementing the logic.</td>
+    </tr>
+    <tr id="store-network-integrity">
+      <td>40</td>
+      <td>
+        <div class="sdd-name">Store Network Integrity</div>
+        <div class="sdd-slug">store-network-integrity.md</div>
+        <span class="sdd-tag">domain</span>
+      </td>
+      <td class="sdd-desc">Cross-location correlation jobs that publish alerts when a single store deviates from its network peer group. Turns multi-store data into a signal that single-location systems can't produce.</td>
+    </tr>
+  </table>
+
+  <!-- Group 9: Commerce & Compliance -->
+  <div class="group-title" id="group-commerce">Commerce &amp; Compliance</div>
+  <table class="sdd-table">
+    <tr id="commercial">
+      <td>41</td>
+      <td>
+        <div class="sdd-name">Commercial</div>
+        <div class="sdd-slug">commercial.md</div>
+        <span class="sdd-tag">domain</span>
+      </td>
+      <td class="sdd-desc">Vendor relationship layer — contracts, payment terms, rebates, and chargebacks. The financial backbone of vendor relationships, distinct from inventory and receiving.</td>
+    </tr>
+    <tr id="pricing">
+      <td>42</td>
+      <td>
+        <div class="sdd-name">Pricing</div>
+        <div class="sdd-slug">pricing.md</div>
+        <span class="sdd-tag">domain</span>
+      </td>
+      <td class="sdd-desc">Single source of truth for what an item costs a customer at any given moment. Price history, promotions, zone pricing, and the time-aware price query interface. Deceptively complex when multi-location.</td>
+    </tr>
+    <tr id="ecom-channel">
+      <td>43</td>
+      <td>
+        <div class="sdd-name">Ecom Channel</div>
+        <div class="sdd-slug">ecom-channel.md</div>
+        <span class="sdd-tag">domain</span>
+        <span class="sdd-tag blue">integration</span>
+      </td>
+      <td class="sdd-desc">Ecommerce channel integration. Inventory reservation, BOPIS fulfillment coordination, and multi-channel position reconciliation. Built on IaaS — no per-channel inventory silo.</td>
+    </tr>
+    <tr id="returns">
+      <td>44</td>
+      <td>
+        <div class="sdd-name">Returns</div>
+        <div class="sdd-slug">returns.md</div>
+        <span class="sdd-tag">domain</span>
+        <span class="sdd-tag">detection</span>
+      </td>
+      <td class="sdd-desc">Return processing and fraud detection. Cashier override detection, receipt validation, return policy enforcement. Returns are the most fraud-prone transaction in retail — this domain owns the controls.</td>
+    </tr>
+    <tr id="compliance">
+      <td>45</td>
+      <td>
+        <div class="sdd-name">Compliance</div>
+        <div class="sdd-slug">compliance.md</div>
+        <span class="sdd-tag">domain</span>
+      </td>
+      <td class="sdd-desc">Item authorization and regulatory zone engine. Answers one question before any restricted-item transaction completes: is this item legally and operationally authorized here? Age verification, restricted-item zones, license enforcement.</td>
+    </tr>
+  </table>
+
+  <!-- Group 10: Intelligence & Operations -->
+  <div class="group-title" id="group-intelligence">Intelligence &amp; Operations</div>
+  <table class="sdd-table">
+    <tr id="analytics">
+      <td>46</td>
+      <td>
+        <div class="sdd-name">Analytics</div>
+        <div class="sdd-slug">analytics.md</div>
+        <span class="sdd-tag">domain</span>
+      </td>
+      <td class="sdd-desc">KPI dashboard orchestration, heatmap band scoring, velocity anomaly detection. The read-heavy metrics domain — aggregates signals from all services into the operator-facing performance surface.</td>
+    </tr>
+    <tr id="ops-dashboard">
+      <td>47</td>
+      <td>
+        <div class="sdd-name">Ops Dashboard</div>
+        <div class="sdd-slug">ops-dashboard.md</div>
+        <span class="sdd-tag">domain</span>
+      </td>
+      <td class="sdd-desc">Store NOC interface — single pane of glass for every device, alert, and operational event across a store network. The surface a store owner opens first when something is wrong.</td>
+    </tr>
+    <tr id="store-brain">
+      <td>48</td>
+      <td>
+        <div class="sdd-name">Store Brain</div>
+        <div class="sdd-slug">store-brain.md</div>
+        <span class="sdd-tag">domain</span>
+        <span class="sdd-tag blue">mcp</span>
+      </td>
+      <td class="sdd-desc">In-store AI context manager. Fires before any other interaction in a Canary-connected store — loads merchant context, recent alerts, inventory position, and open cases into the agent's working set.</td>
+    </tr>
+    <tr id="owl">
+      <td>49</td>
+      <td>
+        <div class="sdd-name">Owl — AI Analysis Engine</div>
+        <div class="sdd-slug">owl.md</div>
+        <span class="sdd-tag">domain</span>
+        <span class="sdd-tag blue">mcp</span>
+      </td>
+      <td class="sdd-desc">Personality-routed chat, health-check reports, and natural-language anomaly summaries. Translates platform signals into operator-legible narratives — the AI intelligence layer.</td>
+    </tr>
+    <tr id="agent-contracts">
+      <td>50</td>
+      <td>
+        <div class="sdd-name">Agent Smart Contracts</div>
+        <div class="sdd-slug">agent-contracts.md</div>
+        <span class="sdd-tag blue">mcp</span>
+      </td>
+      <td class="sdd-desc">Smart contract enforcement for the autonomous agent network. Defines the boundary conditions — what agents can decide, write, and trigger without human approval and what requires an escalation.</td>
+    </tr>
+  </table>
+
+  <!-- Group 11: Devices & Cloud -->
+  <div class="group-title" id="group-devices">Devices &amp; Cloud</div>
+  <table class="sdd-table">
+    <tr id="device-contracts">
+      <td>51</td>
+      <td>
+        <div class="sdd-name">Device Contracts</div>
+        <div class="sdd-slug">device-contracts.md</div>
+        <span class="sdd-tag">domain</span>
+      </td>
+      <td class="sdd-desc">Smart contract enforcement for cost and profit center devices. Tracks device operating spend against authorized budgets. Every POS terminal, scanner, and kiosk is a billable node with an authorized cost envelope.</td>
+    </tr>
+    <tr id="cloud-architecture-workload">
+      <td>52</td>
+      <td>
+        <div class="sdd-name">Cloud Architecture &amp; Workload</div>
+        <div class="sdd-slug">cloud-architecture-workload.md</div>
+        <span class="sdd-tag">platform</span>
+      </td>
+      <td class="sdd-desc">GCP Cloud Run, Cloud SQL, Pub/Sub, and workload identity. Why GCP is the fastest path to credible for an ARTS-aligned SMB platform — and where the portability exits are if that changes.</td>
+    </tr>
+    <tr id="factory-pipeline">
+      <td>53</td>
+      <td>
+        <div class="sdd-name">Document Factory Pipeline</div>
+        <div class="sdd-slug">factory-pipeline.md</div>
+        <span class="sdd-tag">platform</span>
+      </td>
+      <td class="sdd-desc">Knowledge ingestion layer. Accepts working papers, vendor specs, and research documents — converts to canonical form and routes to Brain. The intelligence supply chain behind the platform's memory.</td>
+    </tr>
+    <tr id="retail-lifecycle-test-data">
+      <td>54</td>
+      <td>
+        <div class="sdd-name">Retail Lifecycle Test Dataset</div>
+        <div class="sdd-slug">retail-lifecycle-test-data.md</div>
+        <span class="sdd-tag">platform</span>
+        <span class="sdd-tag green">required</span>
+      </td>
+      <td class="sdd-desc">Integration testing substrate covering the full transaction lifecycle from PO to return. Synthetic but realistic — seeded data that exercises every domain, every detection rule, and every edge case in the platform.</td>
+    </tr>
+  </table>
+
+  <!-- Group 12: Go Platform -->
+  <div class="group-title" id="group-go">Go Platform Conventions</div>
+  <table class="sdd-table">
+    <tr id="go-errors">
+      <td>55</td>
+      <td>
+        <div class="sdd-name">go-errors</div>
+        <div class="sdd-slug">go-errors.md</div>
+        <span class="sdd-tag">conventions</span>
+        <span class="sdd-tag green">required</span>
+      </td>
+      <td class="sdd-desc">Platform error taxonomy. Consistent, client-contract-grade error types across all 29 services. Consistent error handling is the boundary between an API clients can build against and one they work around.</td>
+    </tr>
+    <tr id="go-observability">
+      <td>56</td>
+      <td>
+        <div class="sdd-name">go-observability</div>
+        <div class="sdd-slug">go-observability.md</div>
+        <span class="sdd-tag">conventions</span>
+      </td>
+      <td class="sdd-desc">Structured logging, metrics, and tracing conventions. How 29 services emit consistent telemetry — field names, log levels, trace propagation, and the GCP Cloud Logging integration.</td>
+    </tr>
+    <tr id="go-runtime">
+      <td>57</td>
+      <td>
+        <div class="sdd-name">go-runtime</div>
+        <div class="sdd-slug">go-runtime.md</div>
+        <span class="sdd-tag">conventions</span>
+      </td>
+      <td class="sdd-desc">Platform lifecycle library — shared graceful shutdown, health check, and signal handling. Implemented once; all 29 services import it. Without it, every service re-implements shutdown and drifts.</td>
+    </tr>
+    <tr id="go-security">
+      <td>58</td>
+      <td>
+        <div class="sdd-name">go-security</div>
+        <div class="sdd-slug">go-security.md</div>
+        <span class="sdd-tag">conventions</span>
+        <span class="sdd-tag green">required</span>
+      </td>
+      <td class="sdd-desc">Authentication, encryption, and access control patterns. Security controls implemented once and enforced everywhere — key rotation, JWT validation, RBAC enforcement, and the API key lifecycle.</td>
+    </tr>
+    <tr id="go-testing">
+      <td>59</td>
+      <td>
+        <div class="sdd-name">go-testing</div>
+        <div class="sdd-slug">go-testing.md</div>
+        <span class="sdd-tag">conventions</span>
+        <span class="sdd-tag green">required</span>
+      </td>
+      <td class="sdd-desc">Test infrastructure and conventions. Unit, integration, and smoke layers; test database management; fixture patterns. A test suite that passes against mocks while the real DB migrates is worthless.</td>
+    </tr>
+    <tr id="data-classification-inventory">
+      <td>60</td>
+      <td>
+        <div class="sdd-name">Data Classification &amp; Governance</div>
+        <div class="sdd-slug">data-classification-inventory.md</div>
+        <span class="sdd-tag">conventions</span>
+      </td>
+      <td class="sdd-desc">Data classification inventory for multi-tenant retail SaaS. PII map, cardholder-adjacent data boundaries, data retention schedules, and breach notification scoping. The compliance input to the security architecture.</td>
     </tr>
   </table>
 
   <p class="note">
-    These 12 SDDs are the recommended reading set for new engineers. The full library in <code style="font-family:'JetBrains Mono',monospace;font-size:12px">docs/sdds/go-handoff/</code> contains additional service-level specs (fox, owl, bull, hawk, analytics, receiving, pricing, and others) and operational docs (go-errors, go-observability, go-testing, go-security). Start with the 12 above; reach for the others when you're working in a specific service.
+    01–04 are the recommended orientation set for new engineers. When working in a specific service, read the domain SDD for that service first, then the platform convention SDDs that apply (go-errors, go-testing, go-security are marked <strong style="color:#34D399">required</strong> for a reason). The go-module-layout SDD applies everywhere.
   </p>
 
   <footer>
